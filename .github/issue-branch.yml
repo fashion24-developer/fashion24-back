@@ -1,8 +1,8 @@
-branchName: '/#${issue.number}/${issue.title[0,25]}'
-gitSafeReplacementChar: '_'
-defaultBranch: 'develop'
+branchName: "/#${issue.number}/${issue.title[0,25]}"
+gitSafeReplacementChar: "_"
+defaultBranch: "develop"
 autoCloseIssue: true
-commentMessage: 'Branch ${branchName} created for issue: ${issue.title}'
+commentMessage: "Branch ${branchName} created for issue: ${issue.title}"
 branches:
   - label: Deploy
     prefix: deploy

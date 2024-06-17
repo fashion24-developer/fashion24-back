@@ -6,14 +6,6 @@ labels: ""
 assignees: ""
 ---
 
-name: Issue template
-about: This is an Issue template
-title: ''
-labels: ''
-assignees: ''
-
----
-
 ## 개요
 
 - 상품 게시판 작업을 위한 상품 공통 컴포넌트 작업 및 API 연동 진행

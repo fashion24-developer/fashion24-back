@@ -4,21 +4,21 @@ defaultBranch: "develop"
 autoCloseIssue: true
 commentMessage: "Branch ${branchName} created for issue: ${issue.title}"
 branches:
-  - label: Deploy
-    prefix: deploy
   - label: Setting
     prefix: setting
-  - label: Bugfix
-    prefix: bugfix
-  - label: Delete
-    prefix: delete
-  - label: Doc
-    prefix: doc
   - label: Feat
     prefix: feat
-  - label: Modify
-    prefix: modify
+  - label: Deploy
+    prefix: Deploy
+  - label: BugFix
+    prefix: bugfix
+  - label: Doc
+    prefix: doc
+  - label: API
+    prefix: api
   - label: Refactor
     prefix: refactor
+  - label: Modify
+    prefix: modify
   - label: Test
     prefix: test

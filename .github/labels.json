@@ -1,47 +1,47 @@
 [
-    {
-      "color": "002AE5",
-      "name": "Deploy",
-      "description": "배포 관련 작업"
-    },
-    {
-      "color": "F7DE00",
-      "name": "Setting",
-      "description": "설정 관련 작업"
-    },
-    {
-      "color": "CC3D10",
-      "name": "Bugfix",
-      "description": "버그 수정"
-    },
-    {
-      "color": "8B97E4",
-      "name": "Delete",
-      "description": "코드 삭제"
-    },
-    {
-      "color": "F3D197",
-      "name": "Doc",
-      "description": "문서 작업"
-    },
-    {
-      "color": "331AE4",
-      "name": "Feat",
-      "description": "새로운 기능 추가"
-    },
-    {
-      "color": "2AC582",
-      "name": "Modify",
-      "description": "코드 수정(기능상의 수정이 있는 경우)"
-    },
-    {
-      "color": "A9362A",
-      "name": "Refactor",
-      "description": "코드 수정(기능상의 수정이 없는 경우)"
-    },
-    {
-      "color": "EAEA38",
-      "name": "Test",
-      "description": "테스트코드 관련 작업"
-    }
-  ]
+  {
+    "name": "⚙ Setting",
+    "color": "e3dede",
+    "description": "개발 환경 세팅"
+  },
+  {
+    "name": "✨ Feat",
+    "color": "a2eeef",
+    "description": "기능 개발"
+  },
+  {
+    "name": "🌏 Deploy",
+    "color": "C2E0C6",
+    "description": "배포 관련"
+  },
+  {
+    "name": "🐞 BugFix",
+    "color": "d73a4a",
+    "description": "버그 수정"
+  },
+  {
+    "name": "📃 Doc",
+    "color": "1D76DB",
+    "description": "문서 작성 및 수정 (README.md 등)"
+  },
+  {
+    "name": "📬 API",
+    "color": "D4C5F9",
+    "description": "서버 API 통신"
+  },
+  {
+    "name": "🔨 Refactor",
+    "color": "f29a4e",
+    "description": "코드 리팩토링(기능x)"
+  },
+  {
+    "name": "🛠️ Modify",
+    "color": "9ED447",
+    "description": "코드 리펙토링(기능)"
+  },
+  {
+    "name": "✅ Test",
+    "color": "ccffc4",
+    "description": "test 관련(jest)"
+  }
+]

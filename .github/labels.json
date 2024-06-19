@@ -45,7 +45,7 @@
     "description": "test 관련(jest)"
   },
   {
-    "name": "❗️delete",
+    "name": "❌ Delete",
     "color": "973131",
     "description": "코드 삭제"
   }

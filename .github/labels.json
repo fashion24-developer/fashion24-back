@@ -43,5 +43,10 @@
     "name": "✅ Test",
     "color": "ccffc4",
     "description": "test 관련(jest)"
+  },
+  {
+    "name": "❗️delete",
+    "color": "973131",
+    "description": "코드 삭제"
   }
 ]

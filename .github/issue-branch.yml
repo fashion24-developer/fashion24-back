@@ -22,3 +22,5 @@ branches:
     prefix: modify
   - label: Test
     prefix: test
+  - label: Delete
+    prefix: delete

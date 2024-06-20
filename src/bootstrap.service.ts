@@ -9,6 +9,7 @@ import { Reflector } from '@nestjs/core';
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
 import { HttpExceptionFilter } from '@src/exceptions/exception-filters/http-exception.filter';
+import { CustomValidationPipe } from '@src/pipes/custom-validation.pipe';
 
 @Injectable()
 export class BootstrapService {
@@ -29,6 +30,20 @@ export class BootstrapService {
   setInterceptor(app: INestApplication) {
     app.useGlobalInterceptors(
       new ClassSerializerInterceptor(app.get(Reflector)),
+    );
+  }
+
+  setPipe(app: INestApplication) {
+    const options = {
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    };
+
+    app.useGlobalPipes(
+      new CustomValidationPipe({
+        ...options,
+      }),
     );
   }
 

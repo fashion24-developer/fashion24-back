@@ -12,6 +12,7 @@ async function bootstrap() {
   bootstrapService.setLogger(app);
   bootstrapService.setPathPrefix(app);
   bootstrapService.setInterceptor(app);
+  bootstrapService.setPipe(app);
   bootstrapService.setFilter(app);
 
   await bootstrapService.startingServer(app);

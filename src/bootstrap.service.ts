@@ -8,6 +8,7 @@ import { Reflector } from '@nestjs/core';
 
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
+import { HttpExceptionFilter } from '@src/exceptions/exception-filters/http-exception.filter';
 
 @Injectable()
 export class BootstrapService {
@@ -29,6 +30,10 @@ export class BootstrapService {
     app.useGlobalInterceptors(
       new ClassSerializerInterceptor(app.get(Reflector)),
     );
+  }
+
+  setFilter(app: INestApplication) {
+    app.useGlobalFilters(app.get(HttpExceptionFilter));
   }
 
   async startingServer(app: INestApplication) {

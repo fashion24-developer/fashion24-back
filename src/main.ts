@@ -8,6 +8,11 @@ async function bootstrap() {
 
   const bootstrapService = app.get<BootstrapService>(BootstrapService);
 
+  bootstrapService.setCors(app);
+  bootstrapService.setLogger(app);
+  bootstrapService.setPathPrefix(app);
+  bootstrapService.setInterceptor(app);
+
   await bootstrapService.startingServer(app);
 }
 bootstrap();

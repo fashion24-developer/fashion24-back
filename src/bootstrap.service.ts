@@ -1,10 +1,36 @@
-import { INestApplication, Injectable } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  INestApplication,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
 
 @Injectable()
 export class BootstrapService {
+  setCors(app: INestApplication) {
+    app.enableCors();
+  }
+
+  setLogger(app: INestApplication) {
+    const logger = new Logger();
+
+    app.useLogger(logger);
+  }
+
+  setPathPrefix(app: INestApplication) {
+    app.setGlobalPrefix('api');
+  }
+
+  setInterceptor(app: INestApplication) {
+    app.useGlobalInterceptors(
+      new ClassSerializerInterceptor(app.get(Reflector)),
+    );
+  }
+
   async startingServer(app: INestApplication) {
     const appConfigService = app.get<AppConfigService>(AppConfigService);
 

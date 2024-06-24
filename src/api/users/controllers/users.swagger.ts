@@ -8,9 +8,9 @@ import {
 } from '@src/common/types/common.type';
 
 export const ApiUsers: ApiOperator<keyof UsersController> = {
-  Create(
+  Create: (
     apiOperationOptions: ApiOperationOptionsWithSummary,
-  ): PropertyDecorator {
+  ): PropertyDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions,
@@ -19,7 +19,9 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
     );
   },
 
-  FindAll(apiOperationOptions: ApiOperationOptionsWithSummary) {
+  FindAll: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): PropertyDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions,
@@ -28,7 +30,9 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
     );
   },
 
-  FindOne(apiOperationOptions: ApiOperationOptionsWithSummary) {
+  FindOne: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): PropertyDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions,
@@ -37,7 +41,9 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
     );
   },
 
-  Update(apiOperationOptions: ApiOperationOptionsWithSummary) {
+  Update: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): PropertyDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions,
@@ -46,7 +52,9 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
     );
   },
 
-  Remove(apiOperationOptions: ApiOperationOptionsWithSummary) {
+  Remove: (
+    apiOperationOptions: ApiOperationOptionsWithSummary,
+  ): PropertyDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions,

@@ -1,8 +1,12 @@
 import { ApiOperationOptions } from '@nestjs/swagger';
 
+export type ApiOperationOptionsWithSummary = Required<
+  Pick<ApiOperationOptions, 'summary'>
+> &
+  ApiOperationOptions;
+
 export type ApiOperator<M extends string> = {
   [key in Capitalize<M>]: (
-    apiOperationOptions: Required<Pick<ApiOperationOptions, 'summary'>> &
-      ApiOperationOptions,
+    apiOperationOptions: ApiOperationOptionsWithSummary,
   ) => PropertyDecorator;
 };

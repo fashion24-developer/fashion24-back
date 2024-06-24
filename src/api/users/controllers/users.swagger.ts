@@ -1,17 +1,15 @@
 import { applyDecorators } from '@nestjs/common';
-import {
-  ApiMethodNotAllowedResponse,
-  ApiOperation,
-  ApiOperationOptions,
-} from '@nestjs/swagger';
+import { ApiMethodNotAllowedResponse, ApiOperation } from '@nestjs/swagger';
 
 import { UsersController } from '@src/api/users/controllers/users.controller';
-import { ApiOperator } from '@src/common/types/common.type';
+import {
+  ApiOperationOptionsWithSummary,
+  ApiOperator,
+} from '@src/common/types/common.type';
 
 export const ApiUsers: ApiOperator<keyof UsersController> = {
   Create(
-    apiOperationOptions: Required<Pick<ApiOperationOptions, 'summary'>> &
-      ApiOperationOptions,
+    apiOperationOptions: ApiOperationOptionsWithSummary,
   ): PropertyDecorator {
     return applyDecorators(
       ApiOperation({
@@ -21,10 +19,7 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
     );
   },
 
-  FindAll(
-    apiOperationOptions: Required<Pick<ApiOperationOptions, 'summary'>> &
-      ApiOperationOptions,
-  ) {
+  FindAll(apiOperationOptions: ApiOperationOptionsWithSummary) {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions,
@@ -33,10 +28,7 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
     );
   },
 
-  FindOne(
-    apiOperationOptions: Required<Pick<ApiOperationOptions, 'summary'>> &
-      ApiOperationOptions,
-  ) {
+  FindOne(apiOperationOptions: ApiOperationOptionsWithSummary) {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions,
@@ -45,10 +37,7 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
     );
   },
 
-  Update(
-    apiOperationOptions: Required<Pick<ApiOperationOptions, 'summary'>> &
-      ApiOperationOptions,
-  ) {
+  Update(apiOperationOptions: ApiOperationOptionsWithSummary) {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions,
@@ -57,10 +46,7 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
     );
   },
 
-  Remove(
-    apiOperationOptions: Required<Pick<ApiOperationOptions, 'summary'>> &
-      ApiOperationOptions,
-  ) {
+  Remove(apiOperationOptions: ApiOperationOptionsWithSummary) {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions,

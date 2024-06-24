@@ -14,6 +14,7 @@ async function bootstrap() {
   bootstrapService.setInterceptor(app);
   bootstrapService.setPipe(app);
   bootstrapService.setFilter(app);
+  bootstrapService.setSwagger(app);
 
   await bootstrapService.startingServer(app);
 }

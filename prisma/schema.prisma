@@ -93,8 +93,6 @@ model Fancy {
   description1   String?       @db.Text
   /// 설명2
   description2   String?       @db.Text
-  /// 재고량
-  quantity       Int           @default(0) @db.SmallInt
   /// 상태
   status         ProductStatus @default(INACTIVE)
   /// 기본 제품 여부
@@ -105,6 +103,7 @@ model Fancy {
   updatedAt      DateTime      @updatedAt @map("updated_at") @db.Timestamp
 
   fancyImages     FancyImage[]
+  fancyStocks     FancyStock[]
   fancyOptions    FancyOption[]
   fancySubOptions FancySubOption[]
   looks           Look[]
@@ -130,6 +129,22 @@ model FancyImage {
   fancy Fancy @relation(fields: [fancyId], references: [id])
 
   @@map("fancy_image")
+}
+
+/// 완제품 재고 테이블
+model FancyStock {
+  /// Primary Key
+  id        Int      @id @default(autoincrement())
+  /// 완제품 아이디 (FK)
+  fancyId   String   @map("fancy_id")
+  /// 재고량
+  quantity  Int      @default(0) @db.SmallInt
+  /// 생성일
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+
+  fancy Fancy @relation(fields: [fancyId], references: [id])
+
+  @@map("fancy_stock")
 }
 
 /// 완제품 옵션 테이블

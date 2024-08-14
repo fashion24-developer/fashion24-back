@@ -1,5 +1,5 @@
-export class IService {
-  create: () => void;
+export interface IService {
+  create(data: any): Promise<any>;
   findAll: () => void;
   findOne: () => void;
   update: () => void;

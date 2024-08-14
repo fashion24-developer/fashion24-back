@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 
-import { IService } from '@src/common/interfaces/i-service';
+import { IService } from '@src/common/interfaces/i-service.interface';
 
 import { CreateUserDto } from '../dtos/create-user.dto';
 

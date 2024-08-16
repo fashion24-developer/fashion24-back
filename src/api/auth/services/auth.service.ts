@@ -21,27 +21,26 @@ export class AuthService implements IAuthService {
    * 4. 사용자 정보 반환
    */
   async login(provider: UserProvider, authorizeCode: string) {
-    const socialTokens = await this.getSocialToken(provider, authorizeCode);
-
+    const socialTokens = await this.getSocialTokens(provider, authorizeCode);
     const userInfoResponse = await this.getSocialUserInfo(provider, socialTokens);
 
-    console.log(userInfoResponse);
+    return userInfoResponse;
   }
 
-  async getSocialToken(provider: UserProvider, authorizeCode: string): Promise<SocialTokenDto> {
+  async getSocialTokens(provider: UserProvider, authorizeCode: string): Promise<SocialTokenDto> {
     const providerConfig = this.authProviderConfig[provider];
 
     const tokenUrl = providerConfig.tokenUrl;
     const tokenHeader = providerConfig.tokenHeader;
     const tokenBody = providerConfig.tokenBody(authorizeCode);
 
-    const tokenResponse = (
+    const socialTokens = (
       await axios.post(tokenUrl, tokenBody, {
         headers: tokenHeader
       })
     ).data;
 
-    return tokenResponse;
+    return { accessToken: socialTokens.access_token, refreshToken: socialTokens.refresh_token };
   }
 
   async getSocialUserInfo(provider: UserProvider, socialTokens: SocialTokenDto) {
@@ -56,6 +55,6 @@ export class AuthService implements IAuthService {
       })
     ).data;
 
-    return userInfoResponse;
+    return providerConfig.extractUserInfo(userInfoResponse);
   }
 }

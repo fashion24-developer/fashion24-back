@@ -15,10 +15,12 @@ export class UsersService implements IUserService {
     private readonly usersRepository: IUserRepository,
   ) {}
 
-  create(userData: CreateUserDto): Promise<User> {
-    const newUser = this.usersRepository.create(userData);
-    return newUser;
-  }
+  // create(userData: CreateUserDto): Promise<User> {
+  //   const newUser = this.usersRepository.create(userData);
+  //   return newUser;
+  // }
+
+  create(userData: CreateUserDto) {}
 
   findAll() {}
 

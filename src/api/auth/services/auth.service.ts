@@ -4,6 +4,7 @@ import { UserProvider } from '@src/api/users/enums/user-provider.enum';
 
 import { createAuthProviderConfig } from '../auth-provider-config';
 import { SocialTokenDto } from '../dtos/social-token.dto';
+import { SocialUserInfoDto } from './../../users/dtos/social-user-info.dto';
 import { IAuthService } from './i-auth-service.interface';
 
 export class AuthService implements IAuthService {
@@ -15,8 +16,8 @@ export class AuthService implements IAuthService {
 
   /**
    * 로그인 서비스 작동 방식
-   * 1. authorizeCode로 social token 발급
-   * 2. social token으로 사용자 정보 요청
+   * 1. authorizeCode로 social token 발급 (完)
+   * 2. social token으로 사용자 정보 요청 (完)
    * 3. 사용자 정보 저장
    * 4. 사용자 정보 반환
    */
@@ -27,7 +28,10 @@ export class AuthService implements IAuthService {
     return userInfoResponse;
   }
 
-  async getSocialTokens(provider: UserProvider, authorizeCode: string): Promise<SocialTokenDto> {
+  private async getSocialTokens(
+    provider: UserProvider,
+    authorizeCode: string
+  ): Promise<SocialTokenDto> {
     const providerConfig = this.authProviderConfig[provider];
 
     const tokenUrl = providerConfig.tokenUrl;
@@ -43,7 +47,10 @@ export class AuthService implements IAuthService {
     return { accessToken: socialTokens.access_token, refreshToken: socialTokens.refresh_token };
   }
 
-  async getSocialUserInfo(provider: UserProvider, socialTokens: SocialTokenDto) {
+  private async getSocialUserInfo(
+    provider: UserProvider,
+    socialTokens: SocialTokenDto
+  ): Promise<SocialUserInfoDto> {
     const providerConfig = this.authProviderConfig[provider];
 
     const userInfoUrl = providerConfig.userInfoUrl;

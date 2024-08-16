@@ -6,8 +6,10 @@ import { CoreModule } from '@src/core/core.module';
 import { ExceptionFiltersModule } from '@src/exceptions/exception-filters.module';
 import { LoggerMiddleware } from '@src/middlewares/logger.middleware';
 
+import { PrismaModule } from './prisma/prisma.module';
+
 @Module({
-  imports: [ApiModule, CoreModule, ExceptionFiltersModule],
+  imports: [ApiModule, CoreModule, ExceptionFiltersModule, PrismaModule],
   providers: [BootstrapService]
 })
 export class AppModule implements NestModule {

@@ -1,4 +1,6 @@
 /**
  * @todo Prisma setup 시에 작성
  */
-export interface IRepository {}
+export interface IRepository {
+  create(data: any): Promise<any>;
+}

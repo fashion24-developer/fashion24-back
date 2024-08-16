@@ -8,7 +8,7 @@ import { LoggerMiddleware } from '@src/middlewares/logger.middleware';
 
 @Module({
   imports: [ApiModule, CoreModule, ExceptionFiltersModule],
-  providers: [BootstrapService],
+  providers: [BootstrapService]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

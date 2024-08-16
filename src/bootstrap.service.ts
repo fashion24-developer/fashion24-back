@@ -1,9 +1,4 @@
-import {
-  ClassSerializerInterceptor,
-  INestApplication,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
+import { ClassSerializerInterceptor, INestApplication, Injectable, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
@@ -31,22 +26,20 @@ export class BootstrapService {
   }
 
   setInterceptor(app: INestApplication) {
-    app.useGlobalInterceptors(
-      new ClassSerializerInterceptor(app.get(Reflector)),
-    );
+    app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   }
 
   setPipe(app: INestApplication) {
     const options = {
       transform: true,
       whitelist: true,
-      forbidNonWhitelisted: true,
+      forbidNonWhitelisted: true
     };
 
     app.useGlobalPipes(
       new CustomValidationPipe({
-        ...options,
-      }),
+        ...options
+      })
     );
   }
 
@@ -70,7 +63,7 @@ export class BootstrapService {
       .setDescription(
         'fashion24 api</br>' +
           `<a target="_black" href="${DOMAIN}/${JSON_PATH}">json document</a></br>` +
-          `<a target="_black" href="${DOMAIN}/${YAML_PATH}">yaml document</a></br>`,
+          `<a target="_black" href="${DOMAIN}/${YAML_PATH}">yaml document</a></br>`
       )
       .setVersion('0.1')
       .addBearerAuth()
@@ -78,12 +71,13 @@ export class BootstrapService {
 
     const document = SwaggerModule.createDocument(app, config, {
       operationIdFactory: (controllerKey: string, methodKey: string) => {
-        const controllerName = singularize(
-          controllerKey.replace(/Controller$/, ''),
-        ).replace(/^(.)/, (matchStr) => matchStr.toLowerCase());
+        const controllerName = singularize(controllerKey.replace(/Controller$/, '')).replace(
+          /^(.)/,
+          (matchStr) => matchStr.toLowerCase()
+        );
 
         return `${controllerName}_${methodKey}`;
-      },
+      }
     });
 
     SwaggerModule.setup('api-docs', app, document, {
@@ -98,12 +92,12 @@ export class BootstrapService {
             get: '1',
             put: '2',
             patch: '3',
-            delete: '4',
+            delete: '4'
           };
 
           return order[a.get('method')].localeCompare(order[b.get('method')]);
-        },
-      },
+        }
+      }
     });
   }
 

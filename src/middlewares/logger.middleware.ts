@@ -24,7 +24,7 @@ export class LoggerMiddleware implements NestMiddleware {
         statusCode,
         contentLength,
         userAgent,
-        ip,
+        ip
       });
     });
 

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { UserProvider } from '@src/api/users/enums/user-provider.enum';
 
 import { createAuthProviderConfig } from '../auth-provider-config';
+import { SocialTokenDto } from '../dtos/social-token.dto';
 import { IAuthService } from './i-auth-service.interface';
 
 export class AuthService implements IAuthService {
@@ -20,6 +21,14 @@ export class AuthService implements IAuthService {
    * 4. 사용자 정보 반환
    */
   async login(provider: UserProvider, authorizeCode: string) {
+    const socialTokens = await this.getSocialToken(provider, authorizeCode);
+
+    const userInfoResponse = await this.getSocialUserInfo(provider, socialTokens);
+
+    console.log(userInfoResponse);
+  }
+
+  async getSocialToken(provider: UserProvider, authorizeCode: string): Promise<SocialTokenDto> {
     const providerConfig = this.authProviderConfig[provider];
 
     const tokenUrl = providerConfig.tokenUrl;
@@ -28,34 +37,25 @@ export class AuthService implements IAuthService {
 
     const tokenResponse = (
       await axios.post(tokenUrl, tokenBody, {
-        headers: tokenHeader,
+        headers: tokenHeader
       })
     ).data;
 
-    const socialAccessToken = tokenResponse.access_token;
-    const socialRefreshToken = tokenResponse.refresh_token;
+    return tokenResponse;
+  }
+
+  async getSocialUserInfo(provider: UserProvider, socialTokens: SocialTokenDto) {
+    const providerConfig = this.authProviderConfig[provider];
 
     const userInfoUrl = providerConfig.userInfoUrl;
-    const userInfoHeader = providerConfig.userInfoHeader(socialAccessToken);
+    const userInfoHeader = providerConfig.userInfoHeader(socialTokens.accessToken);
 
     const userInfoResponse = (
       await axios.get(userInfoUrl, {
-        headers: userInfoHeader,
+        headers: userInfoHeader
       })
     ).data;
-    console.log(userInfoResponse);
 
-    const { uniqueId, name, nickname, email, phone } =
-      providerConfig.extractUserInfo(userInfoResponse);
-
-    return {
-      uniqueId,
-      name,
-      nickname,
-      email,
-      phone,
-      socialAccessToken,
-      socialRefreshToken,
-    };
+    return userInfoResponse;
   }
 }

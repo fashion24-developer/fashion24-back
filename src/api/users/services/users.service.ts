@@ -12,7 +12,7 @@ import { CreateUserDto } from '../dtos/create-user.dto';
 export class UsersService implements IUserService {
   constructor(
     @Inject(UsersRepository)
-    private readonly usersRepository: IUserRepository,
+    private readonly usersRepository: IUserRepository
   ) {}
 
   // create(userData: CreateUserDto): Promise<User> {

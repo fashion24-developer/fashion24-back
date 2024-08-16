@@ -5,6 +5,6 @@ import { UsersModule } from '@src/api/users/users.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [AuthModule, UsersModule],
+  imports: [AuthModule, UsersModule]
 })
 export class ApiModule {}

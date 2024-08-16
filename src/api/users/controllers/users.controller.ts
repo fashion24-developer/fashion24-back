@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Delete,
-  Get,
-  MethodNotAllowedException,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Controller, Delete, Get, MethodNotAllowedException, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { ApiUsers } from '@src/api/users/controllers/users.swagger';

@@ -1,10 +1,4 @@
-import {
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 import { UserProvider } from '../enums/user-provider.enum';
 import { UserRole } from '../enums/user-role.enum';

@@ -11,9 +11,7 @@ export class AppConfigService {
   private readonly DEVELOPMENT = 'development';
   private readonly LOCAL = 'local';
 
-  constructor(
-    private readonly configService: ConfigService<typeof ENV_KEY, true>,
-  ) {}
+  constructor(private readonly configService: ConfigService<typeof ENV_KEY, true>) {}
 
   get<T extends string | number>(key: Key): T {
     return this.configService.get<T>(key);
@@ -33,15 +31,12 @@ export class AppConfigService {
 
   getAllMap(): Record<Key, string | number> {
     return Object.entries(ENV_KEY).reduce(
-      (
-        acc: Record<Key, string | number>,
-        [key, value]: [Key, (typeof ENV_KEY)[Key]],
-      ) => {
+      (acc: Record<Key, string | number>, [key, value]: [Key, (typeof ENV_KEY)[Key]]) => {
         acc[key] = this.get<string | number>(value);
 
         return acc;
       },
-      <Record<Key, string | number>>{},
+      <Record<Key, string | number>>{}
     );
   }
 

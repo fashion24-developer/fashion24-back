@@ -1,7 +1,7 @@
 const SERVER = {
   PORT: 'PORT',
   NODE_ENV: 'NODE_ENV',
-  DOMAIN: 'DOMAIN',
+  DOMAIN: 'DOMAIN'
 } as const;
 
 const OAUTH = {
@@ -14,7 +14,7 @@ const OAUTH = {
 
   GOOGLE_CLIENT_ID: 'GOOGLE_CLIENT_ID',
   GOOGLE_CLIENT_SECRET: 'GOOGLE_CLIENT_SECRET',
-  GOOGLE_REDIRECT_URI: 'GOOGLE_REDIRECT_URI',
+  GOOGLE_REDIRECT_URI: 'GOOGLE_REDIRECT_URI'
 } as const;
 
 /**
@@ -23,5 +23,5 @@ const OAUTH = {
  */
 export const ENV_KEY = {
   ...SERVER,
-  ...OAUTH,
+  ...OAUTH
 } as const;

@@ -426,9 +426,9 @@ enum Role {
 
 /// 유저 정보 제공자 ENUM
 enum Provider {
-  GOOGLE
-  KAKAO
-  NAVER
+  naver
+  kakao
+  google
 }
 
 /// 배송 상태 ENUM

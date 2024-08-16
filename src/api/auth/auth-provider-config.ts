@@ -32,7 +32,8 @@ export function createAuthProviderConfig() {
         name: userInfoResponse.response.name,
         nickname: userInfoResponse.response.nickname,
         email: userInfoResponse.response.email,
-        phone: userInfoResponse.response.mobile
+        phone: userInfoResponse.response.mobile,
+        provider: UserProvider.NAVER
       })
     },
     [UserProvider.KAKAO]: {
@@ -53,8 +54,8 @@ export function createAuthProviderConfig() {
       extractUserInfo: (userInfoResponse: any) => ({
         name: userInfoResponse.response.name,
         email: userInfoResponse.response.email,
-        profileImage: userInfoResponse.response.profile_image,
-        uniqueId: userInfoResponse.response.id
+        uniqueId: userInfoResponse.response.id,
+        provider: UserProvider.KAKAO
       })
     },
     [UserProvider.GOOGLE]: {
@@ -76,7 +77,8 @@ export function createAuthProviderConfig() {
       extractUserInfo: (userInfoResponse: any) => ({
         uniqueId: userInfoResponse.response.id,
         name: userInfoResponse.response.name,
-        email: userInfoResponse.response.email
+        email: userInfoResponse.response.email,
+        provider: UserProvider.GOOGLE
       })
     }
   };

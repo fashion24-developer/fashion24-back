@@ -24,7 +24,7 @@ model User {
   /// 이메일
   email     String    @unique @db.VarChar(100)
   /// 전화번호
-  phone     String    @unique @db.VarChar(20)
+  phone     String?   @unique @db.VarChar(20)
   /// 랭크
   rank      Int       @default(1) @db.SmallInt
   /// 포인트

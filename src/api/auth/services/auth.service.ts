@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { UserProvider } from '@src/api/users/enums/user-provider.enum';
+import { UsersRepository } from '@src/api/users/repositories/users.repository';
 
 import { createAuthProviderConfig } from '../auth-provider-config';
 import { SocialTokenDto } from '../dtos/social-token.dto';
@@ -10,7 +11,7 @@ import { IAuthService } from './i-auth-service.interface';
 export class AuthService implements IAuthService {
   private readonly authProviderConfig;
 
-  constructor() {
+  constructor(private readonly usersRepository: UsersRepository) {
     this.authProviderConfig = createAuthProviderConfig();
   }
 
@@ -23,10 +24,10 @@ export class AuthService implements IAuthService {
    */
   async login(provider: UserProvider, authorizeCode: string) {
     const socialTokens = await this.getSocialTokens(provider, authorizeCode);
-    const userInfoResponse = await this.getSocialUserInfo(provider, socialTokens);
-    // const createUser = await this.createUser(userInfoResponse);
+    const socialUserInfo = await this.getSocialUserInfo(provider, socialTokens);
+    const createUser = await this.usersRepository.create(socialUserInfo);
 
-    return userInfoResponse;
+    return socialUserInfo;
   }
 
   private async getSocialTokens(

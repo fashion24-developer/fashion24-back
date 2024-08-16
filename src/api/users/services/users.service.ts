@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 
 import { User } from '@prisma/client';
 
-import { IUserRepository } from '@src/api/users/repositories/i-user-repository.interface';
+import { IUsersRepository } from '@src/api/users/repositories/i-users-repository.interface';
 import { UsersRepository } from '@src/api/users/repositories/users.repository';
 import { IUserService } from '@src/api/users/services/i-users-service.interface';
 
@@ -12,7 +12,7 @@ import { CreateUserDto } from '../dtos/create-user.dto';
 export class UsersService implements IUserService {
   constructor(
     @Inject(UsersRepository)
-    private readonly usersRepository: IUserRepository
+    private readonly usersRepository: IUsersRepository
   ) {}
 
   // create(userData: CreateUserDto): Promise<User> {

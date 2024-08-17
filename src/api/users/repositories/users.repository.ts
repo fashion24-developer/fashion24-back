@@ -9,8 +9,7 @@ import { PrismaService } from '@src/prisma/prisma.service';
 export class UsersRepository implements IRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: Prisma.UserCreateInput): Promise<User> {
-    const user = await this.prisma.user.create({ data });
-    return user;
+  create(data: Prisma.UserCreateInput): Promise<User> {
+    return this.prisma.user.create({ data });
   }
 }

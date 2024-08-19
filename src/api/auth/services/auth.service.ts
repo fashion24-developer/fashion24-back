@@ -33,9 +33,19 @@ export class AuthService implements IAuthService {
     try {
       const socialTokens = await this.getSocialTokens(provider, authorizeCode);
       const socialUserInfo = await this.getSocialUserInfo(provider, socialTokens);
-      const createUser = await this.usersService.create(socialUserInfo);
+      const findOneUser = this.usersService.findOne({
+        where: { uniqueId: socialUserInfo.uniqueId }
+      });
+      if (findOneUser) {
+        const updateUser = await this.usersService.update({
+          where: { uniqueId: (await findOneUser).uniqueId },
+          data: socialUserInfo
+        });
+      } else {
+        const createUser = await this.usersService.create(socialUserInfo);
+      }
 
-      return createUser;
+      // return createUser;
     } catch (error) {
       console.log(error);
       throw new HttpException('Failed to login', HttpStatus.INTERNAL_SERVER_ERROR, {

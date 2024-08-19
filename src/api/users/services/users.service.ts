@@ -19,9 +19,13 @@ export class UsersService implements IUsersService {
 
   findAll() {}
 
-  findOne() {}
+  findOne(userFindUniqueArgs: Prisma.UserFindUniqueArgs): Promise<User | null> {
+    return this.usersRepository.findOne(userFindUniqueArgs);
+  }
 
-  update() {}
+  update(userUpdateArgs: Prisma.UserUpdateArgs): Promise<User> {
+    return this.usersRepository.update(userUpdateArgs);
+  }
 
   delete() {}
 

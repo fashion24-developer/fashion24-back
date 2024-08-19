@@ -12,4 +12,15 @@ export class UsersRepository implements IRepository {
   create(data: Prisma.UserCreateInput): Promise<User> {
     return this.prisma.user.create({ data });
   }
+
+  findOne(userFindUniqueArgs: Prisma.UserFindUniqueArgs): Promise<User | null> {
+    return this.prisma.user.findUnique(userFindUniqueArgs);
+  }
+
+  update(userUpdateArgs: Prisma.UserUpdateArgs): Promise<User> {
+    return this.prisma.user.update({
+      where: { id: userUpdateArgs.where.id },
+      data: userUpdateArgs.data
+    });
+  }
 }

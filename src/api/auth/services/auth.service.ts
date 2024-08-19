@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject } from '@nestjs/common';
 
 import axios from 'axios';
 
@@ -30,47 +30,68 @@ export class AuthService implements IAuthService {
    * 5. 서비스 토큰 반환
    */
   async login(provider: UserProvider, authorizeCode: string) {
-    const socialTokens = await this.getSocialTokens(provider, authorizeCode);
-    const socialUserInfo = await this.getSocialUserInfo(provider, socialTokens);
-    const createUser = await this.usersService.create(socialUserInfo);
+    try {
+      const socialTokens = await this.getSocialTokens(provider, authorizeCode);
+      const socialUserInfo = await this.getSocialUserInfo(provider, socialTokens);
+      const createUser = await this.usersService.create(socialUserInfo);
 
-    return createUser;
+      return createUser;
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Failed to login', HttpStatus.INTERNAL_SERVER_ERROR, {
+        cause: error
+      });
+    }
   }
 
   private async getSocialTokens(
     provider: UserProvider,
     authorizeCode: string
   ): Promise<SocialTokenDto> {
-    const providerConfig = this.authProviderConfig[provider];
+    try {
+      const providerConfig = this.authProviderConfig[provider];
 
-    const tokenUrl = providerConfig.tokenUrl;
-    const tokenHeader = providerConfig.tokenHeader;
-    const tokenBody = providerConfig.tokenBody(authorizeCode);
+      const tokenUrl = providerConfig.tokenUrl;
+      const tokenHeader = providerConfig.tokenHeader;
+      const tokenBody = providerConfig.tokenBody(authorizeCode);
 
-    const socialTokens = (
-      await axios.post(tokenUrl, tokenBody, {
-        headers: tokenHeader
-      })
-    ).data;
+      const socialTokens = (
+        await axios.post(tokenUrl, tokenBody, {
+          headers: tokenHeader
+        })
+      ).data;
 
-    return { accessToken: socialTokens.access_token, refreshToken: socialTokens.refresh_token };
+      return { accessToken: socialTokens.access_token, refreshToken: socialTokens.refresh_token };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Failed to get social tokens', HttpStatus.INTERNAL_SERVER_ERROR, {
+        cause: error
+      });
+    }
   }
 
   private async getSocialUserInfo(
     provider: UserProvider,
     socialTokens: SocialTokenDto
   ): Promise<SocialUserInfoDto> {
-    const providerConfig = this.authProviderConfig[provider];
+    try {
+      const providerConfig = this.authProviderConfig[provider];
 
-    const userInfoUrl = providerConfig.userInfoUrl;
-    const userInfoHeader = providerConfig.userInfoHeader(socialTokens.accessToken);
+      const userInfoUrl = providerConfig.userInfoUrl;
+      const userInfoHeader = providerConfig.userInfoHeader(socialTokens.accessToken);
 
-    const userInfoResponse = (
-      await axios.get(userInfoUrl, {
-        headers: userInfoHeader
-      })
-    ).data;
+      const userInfoResponse = (
+        await axios.get(userInfoUrl, {
+          headers: userInfoHeader
+        })
+      ).data;
 
-    return providerConfig.extractUserInfo(userInfoResponse);
+      return providerConfig.extractUserInfo(userInfoResponse);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Failed to get social user info', HttpStatus.INTERNAL_SERVER_ERROR, {
+        cause: error
+      });
+    }
   }
 }

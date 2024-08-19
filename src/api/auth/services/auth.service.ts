@@ -9,15 +9,18 @@ import { UsersService } from '@src/api/users/services/users.service';
 
 import { createAuthProviderConfig } from '../auth-provider-config';
 import { SocialTokenDto } from '../dtos/social-token.dto';
+import { TokenSubEnum } from '../enums/token-sub.enum';
 import { SocialUserInfoDto } from './../../users/dtos/social-user-info.dto';
 import { IAuthService } from './i-auth-service.interface';
+import { TokenService } from './token.service';
 
 export class AuthService implements IAuthService {
   private readonly authProviderConfig;
 
   constructor(
     @Inject(UsersService)
-    private readonly usersService: IUsersService
+    private readonly usersService: IUsersService,
+    private readonly tokenService: TokenService
   ) {
     this.authProviderConfig = createAuthProviderConfig();
   }
@@ -49,8 +52,19 @@ export class AuthService implements IAuthService {
       }
 
       // 서비스 토큰 발급
+      const accessToken = this.tokenService.generateToken({
+        sub: TokenSubEnum.ACCESS_TOKEN,
+        userId: user.id
+      });
+      const refreshToken = this.tokenService.generateToken({
+        sub: TokenSubEnum.REFRESH_TOKEN,
+        userId: user.id
+      });
 
-      // return createUser;
+      // 토큰 저장
+      this.tokenService.saveTokens({ userId: user.id, accessToken, refreshToken });
+
+      return { accessToken, refreshToken };
     } catch (error) {
       console.log(error);
       throw new HttpException('Failed to login', HttpStatus.INTERNAL_SERVER_ERROR, {

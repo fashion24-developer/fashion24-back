@@ -6,18 +6,15 @@ import { Cache } from 'cache-manager';
 @Injectable()
 export class RedisService {
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
-  getToken(userId: string): Promise<string | undefined | null> {
-    return this.cacheManager.get<string>(userId); // ? Retrieve data from the cache
-  }
-  async setToken(key: string, token: string, ttl: number) {
-    await this.cacheManager.set(key, token, ttl); // ? Save data to the cache
+  get(userId: string): Promise<string | undefined | null> {
+    return this.cacheManager.get<string>(userId);
   }
 
-  async delToken(key: string) {
-    await this.cacheManager.del(key); // ? Delete data from the cache
+  set(key: string, value: string, ttl: number) {
+    this.cacheManager.set(key, value, ttl);
   }
 
-  async delTokens(keys: string[]) {
-    // await this.cacheManager.store.del(keys);
+  del(key: string) {
+    this.cacheManager.del(key);
   }
 }

@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Inject } from '@nestjs/common';
 
+import { User } from '@prisma/client';
 import axios from 'axios';
 
 import { UserProvider } from '@src/api/users/enums/user-provider.enum';
@@ -33,17 +34,21 @@ export class AuthService implements IAuthService {
     try {
       const socialTokens = await this.getSocialTokens(provider, authorizeCode);
       const socialUserInfo = await this.getSocialUserInfo(provider, socialTokens);
-      const findOneUser = this.usersService.findOne({
+      const findOneUser = await this.usersService.findOne({
         where: { uniqueId: socialUserInfo.uniqueId }
       });
+      let user: User;
+
       if (findOneUser) {
-        const updateUser = await this.usersService.update({
-          where: { uniqueId: (await findOneUser).uniqueId },
+        user = await this.usersService.update({
+          where: { uniqueId: findOneUser.uniqueId },
           data: socialUserInfo
         });
       } else {
-        const createUser = await this.usersService.create(socialUserInfo);
+        user = await this.usersService.create(socialUserInfo);
       }
+
+      // 서비스 토큰 발급
 
       // return createUser;
     } catch (error) {

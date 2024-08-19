@@ -17,11 +17,24 @@ const OAUTH = {
   GOOGLE_REDIRECT_URI: 'GOOGLE_REDIRECT_URI'
 } as const;
 
+const JWT = {
+  ACCESS_TOKEN_SECRET_KEY: 'ACCESS_TOKEN_SECRET_KEY',
+  REFRESH_TOKEN_SECRET_KEY: 'REFRESH_TOKEN_SECRET_KEY'
+} as const;
+
+const REDIS = {
+  REDIS_HOST: 'REDIS_HOST',
+  REDIS_PORT: 'REDIS_PORT',
+  REDIS_PASSWORD: 'REDIS_PASSWORD'
+} as const;
+
 /**
  * 각 주제에 맞게 묶어서 export 하지 않는 변수로 생성하고
  * ENV_KEY 객체에 spread
  */
 export const ENV_KEY = {
   ...SERVER,
-  ...OAUTH
+  ...OAUTH,
+  ...JWT,
+  ...REDIS
 } as const;

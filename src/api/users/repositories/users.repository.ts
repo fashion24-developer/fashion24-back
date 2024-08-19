@@ -18,9 +18,6 @@ export class UsersRepository implements IRepository {
   }
 
   update(userUpdateArgs: Prisma.UserUpdateArgs): Promise<User> {
-    return this.prisma.user.update({
-      where: { id: userUpdateArgs.where.id },
-      data: userUpdateArgs.data
-    });
+    return this.prisma.user.update(userUpdateArgs);
   }
 }

@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
 export class AccessTokenAuthGuard extends AuthGuard('accessToken') {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const authorization = request.headers['authorization'];
-    if (!authorization) {
+    const accessToken = request.cookies['accessToken'];
+    if (!accessToken) {
       throw new HttpException('jwt must be provided', HttpStatus.BAD_REQUEST);
     }
     return super.canActivate(context);
@@ -42,8 +42,8 @@ export class AccessTokenAuthGuard extends AuthGuard('accessToken') {
 export class RefreshTokenAuthGuard extends AuthGuard('refreshToken') {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const authorization = request.cookies['refreshToken'];
-    if (!authorization) {
+    const refreshToken = request.cookies['refreshToken'];
+    if (!refreshToken) {
       throw new HttpException('jwt must be provided', HttpStatus.BAD_REQUEST);
     }
     return super.canActivate(context);

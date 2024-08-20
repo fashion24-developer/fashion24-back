@@ -74,16 +74,7 @@ export class RefreshTokenAuthGuard extends AuthGuard('refreshToken') {
 }
 
 @Injectable()
-export class AccessTokenOptionalAuthGuard extends AuthGuard('accessToken') {
-  handleRequest(
-    err: any,
-    user: any,
-    info: { message: string | Record<string, any> },
-    context: ExecutionContext
-  ): any {
-    return user;
-  }
-}
+export class AccessTokenOptionalAuthGuard extends AuthGuard('accessToken') {}
 
 function getStatus(message: string | Record<string, any>): HttpStatus {
   switch (message) {

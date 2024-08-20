@@ -34,7 +34,7 @@ model User {
   /// 권한
   role      Role      @default(USER)
   /// 고유 아이디
-  uniqueId  String    @unique @db.VarChar(100)
+  uniqueId  String    @unique @map("unique_id") @db.VarChar(100)
   /// 가입일
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp
   /// 수정일

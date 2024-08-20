@@ -103,7 +103,9 @@ export class BootstrapService {
   }
 
   setCookieParser(app: INestApplication) {
-    app.use(cookieParser());
+    const appConfigService = app.get<AppConfigService>(AppConfigService);
+    const secret = appConfigService.get<string>(ENV_KEY.COOKIE_PARSER_SECRET);
+    app.use(cookieParser(secret));
   }
 
   async startingServer(app: INestApplication) {

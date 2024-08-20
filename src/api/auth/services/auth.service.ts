@@ -8,10 +8,12 @@ import { IUsersService } from '@src/api/users/services/i-users-service.interface
 import { UsersService } from '@src/api/users/services/users.service';
 
 import { createAuthProviderConfig } from '../auth-provider-config';
+import { ServiceTokenDto } from '../dtos/service-token.dto';
 import { SocialTokenDto } from '../dtos/social-token.dto';
 import { TokenSubEnum } from '../enums/token-sub.enum';
 import { SocialUserInfoDto } from './../../users/dtos/social-user-info.dto';
 import { IAuthService } from './i-auth-service.interface';
+import { ITokenService } from './i-token-service.interface';
 import { TokenService } from './token.service';
 
 export class AuthService implements IAuthService {
@@ -19,21 +21,14 @@ export class AuthService implements IAuthService {
 
   constructor(
     @Inject(UsersService)
+    @Inject(TokenService)
     private readonly usersService: IUsersService,
-    private readonly tokenService: TokenService
+    private readonly tokenService: ITokenService
   ) {
     this.authProviderConfig = createAuthProviderConfig();
   }
 
-  /**
-   * 로그인 서비스 작동 방식
-   * 1. authorizeCode로 social token 발급 (完)
-   * 2. social token으로 사용자 정보 요청 (完)
-   * 3. 사용자 정보 저장 (完)
-   * 4. 서비스 토큰 발급
-   * 5. 서비스 토큰 반환
-   */
-  async login(provider: UserProvider, authorizeCode: string) {
+  async login(provider: UserProvider, authorizeCode: string): Promise<ServiceTokenDto> {
     try {
       const socialTokens = await this.getSocialTokens(provider, authorizeCode);
       const socialUserInfo = await this.getSocialUserInfo(provider, socialTokens);

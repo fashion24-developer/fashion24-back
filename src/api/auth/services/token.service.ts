@@ -18,7 +18,7 @@ export class TokenService {
     private readonly redisService: RedisService
   ) {}
 
-  generateToken(payload: TokenPayloadDto) {
+  generateToken(payload: TokenPayloadDto): string {
     if (payload.sub === TokenSubEnum.ACCESS_TOKEN) {
       return this.jwtService.sign(payload, {
         expiresIn: TokenTtlEnum.ACCESS_TOKEN,
@@ -32,7 +32,7 @@ export class TokenService {
     }
   }
 
-  saveTokens(userTokenSave: UserTokenSaveDto) {
+  saveTokens(userTokenSave: UserTokenSaveDto): void {
     this.redisService.set(
       `${String(userTokenSave.userId)}-accessToken`,
       userTokenSave.accessToken,

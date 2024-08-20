@@ -3,11 +3,10 @@ import { PassportStrategy } from '@nestjs/passport';
 
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
+import { TokenPayloadDto } from '@src/api/auth/dtos/token-payload.dto';
 import { RedisService } from '@src/common/redis/services/redis.service';
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
-
-import { TokenPayloadDto } from '../dtos/token-payload.dto';
 
 @Injectable()
 export class AccessTokenStrategy extends PassportStrategy(Strategy, 'accessToken') {

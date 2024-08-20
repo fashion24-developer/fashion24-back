@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
+import { TokenPayloadDto } from '@src/api/auth/dtos/token-payload.dto';
+import { UserTokenSaveDto } from '@src/api/auth/dtos/user-token-save.dto';
+import { TokenSubEnum } from '@src/api/auth/enums/token-sub.enum';
+import { TokenTtlEnum } from '@src/api/auth/enums/token-ttl.enum';
 import { RedisService } from '@src/common/redis/services/redis.service';
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
-
-import { TokenPayloadDto } from '../dtos/token-payload.dto';
-import { TokenSubEnum } from '../enums/token-sub.enum';
-import { TokenTtlEnum } from '../enums/token-ttl.enum';
-import { UserTokenSaveDto } from './../dtos/user-token-save.dto';
 
 @Injectable()
 export class TokenService {

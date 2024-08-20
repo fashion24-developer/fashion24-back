@@ -1,11 +1,10 @@
 import { Controller, Param, Post, Query, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
+import { ServiceTokenDto } from '@src/api/auth/dtos/service-token.dto';
+import { AuthService } from '@src/api/auth/services/auth.service';
 import { UserProvider } from '@src/api/users/enums/user-provider.enum';
 import { CookieInterceptor } from '@src/common/interceptors/cookie.interceptor';
-
-import { ServiceTokenDto } from '../dtos/service-token.dto';
-import { AuthService } from '../services/auth.service';
 
 @ApiTags('auth')
 @Controller('auth')

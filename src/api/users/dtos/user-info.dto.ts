@@ -8,8 +8,8 @@ import {
   IsString
 } from 'class-validator';
 
-import { UserProvider } from '../enums/user-provider.enum';
-import { UserRole } from '../enums/user-role.enum';
+import { UserProvider } from '@src/api/users/enums/user-provider.enum';
+import { UserRole } from '@src/api/users/enums/user-role.enum';
 
 export class UserInfoDto {
   @IsNotEmpty()

@@ -3,18 +3,17 @@ import { HttpException, HttpStatus, Inject } from '@nestjs/common';
 import { User } from '@prisma/client';
 import axios from 'axios';
 
+import { createAuthProviderConfig } from '@src/api/auth/auth-provider-config';
+import { ServiceTokenDto } from '@src/api/auth/dtos/service-token.dto';
+import { SocialTokenDto } from '@src/api/auth/dtos/social-token.dto';
+import { TokenSubEnum } from '@src/api/auth/enums/token-sub.enum';
+import { IAuthService } from '@src/api/auth/services/i-auth-service.interface';
+import { ITokenService } from '@src/api/auth/services/i-token-service.interface';
+import { TokenService } from '@src/api/auth/services/token.service';
+import { SocialUserInfoDto } from '@src/api/users/dtos/social-user-info.dto';
 import { UserProvider } from '@src/api/users/enums/user-provider.enum';
 import { IUsersService } from '@src/api/users/services/i-users-service.interface';
 import { UsersService } from '@src/api/users/services/users.service';
-
-import { createAuthProviderConfig } from '../auth-provider-config';
-import { ServiceTokenDto } from '../dtos/service-token.dto';
-import { SocialTokenDto } from '../dtos/social-token.dto';
-import { TokenSubEnum } from '../enums/token-sub.enum';
-import { SocialUserInfoDto } from './../../users/dtos/social-user-info.dto';
-import { IAuthService } from './i-auth-service.interface';
-import { ITokenService } from './i-token-service.interface';
-import { TokenService } from './token.service';
 
 export class AuthService implements IAuthService {
   private readonly authProviderConfig;

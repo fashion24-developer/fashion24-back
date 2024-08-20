@@ -1,7 +1,8 @@
-import { Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query, UseInterceptors } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { UserProvider } from '@src/api/users/enums/user-provider.enum';
+import { CookieInterceptor } from '@src/common/interceptors/cookie.interceptor';
 
 import { ServiceTokenDto } from '../dtos/service-token.dto';
 import { AuthService } from '../services/auth.service';
@@ -11,6 +12,7 @@ import { AuthService } from '../services/auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @UseInterceptors(CookieInterceptor)
   @Get(':provider/login')
   naverLogin(
     @Param('provider') provider: UserProvider,

@@ -2,6 +2,7 @@ import { ClassSerializerInterceptor, INestApplication, Injectable, Logger } from
 import { Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import cookieParser from 'cookie-parser';
 import { singularize } from 'inflection';
 
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
@@ -99,6 +100,10 @@ export class BootstrapService {
         }
       }
     });
+  }
+
+  setCookieParser(app: INestApplication) {
+    app.use(cookieParser());
   }
 
   async startingServer(app: INestApplication) {

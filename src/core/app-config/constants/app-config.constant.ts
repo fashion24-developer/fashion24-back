@@ -28,6 +28,10 @@ const REDIS = {
   REDIS_PASSWORD: 'REDIS_PASSWORD'
 } as const;
 
+const COOKIE = {
+  COOKIE_PARSER_SECRET: 'COOKIE_PARSER_SECRET'
+} as const;
+
 /**
  * 각 주제에 맞게 묶어서 export 하지 않는 변수로 생성하고
  * ENV_KEY 객체에 spread
@@ -36,5 +40,6 @@ export const ENV_KEY = {
   ...SERVER,
   ...OAUTH,
   ...JWT,
-  ...REDIS
+  ...REDIS,
+  ...COOKIE
 } as const;

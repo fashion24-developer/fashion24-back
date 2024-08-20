@@ -20,10 +20,8 @@ export class AuthService implements IAuthService {
   private readonly authProviderConfig;
 
   constructor(
-    @Inject(UsersService)
-    @Inject(TokenService)
-    private readonly usersService: IUsersService,
-    private readonly tokenService: ITokenService
+    @Inject(UsersService) private readonly usersService: IUsersService,
+    @Inject(TokenService) private readonly tokenService: ITokenService
   ) {
     this.authProviderConfig = createAuthProviderConfig();
   }

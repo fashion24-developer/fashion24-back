@@ -4,10 +4,7 @@ import { REWRITE_VALIDATION_OPTIONS_TOKEN } from '@src/pipes/constants/rewrite-v
 
 export class CustomValidationPipe extends ValidationPipe {
   async transform(value: any, metadata: ArgumentMetadata) {
-    const options = Reflect.getMetadata(
-      REWRITE_VALIDATION_OPTIONS_TOKEN,
-      metadata.metatype,
-    );
+    const options = Reflect.getMetadata(REWRITE_VALIDATION_OPTIONS_TOKEN, metadata.metatype);
 
     let originOptions: Record<string, any> = {};
 

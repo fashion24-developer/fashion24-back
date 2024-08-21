@@ -15,6 +15,7 @@ async function bootstrap() {
   bootstrapService.setPipe(app);
   bootstrapService.setFilter(app);
   bootstrapService.setSwagger(app);
+  bootstrapService.setCookieParser(app);
 
   await bootstrapService.startingServer(app);
 }

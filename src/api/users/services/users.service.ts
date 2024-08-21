@@ -1,23 +1,31 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { IUserRepository } from '@src/api/users/repositories/i-user-repository.interface';
+import { Prisma, User } from '@prisma/client';
+
+import { IUsersRepository } from '@src/api/users/repositories/i-users-repository.interface';
 import { UsersRepository } from '@src/api/users/repositories/users.repository';
-import { IUserService } from '@src/api/users/services/i-users-service.interface';
+import { IUsersService } from '@src/api/users/services/i-users-service.interface';
 
 @Injectable()
-export class UsersService implements IUserService {
+export class UsersService implements IUsersService {
   constructor(
     @Inject(UsersRepository)
-    private readonly usersRepository: IUserRepository,
+    private readonly usersRepository: IUsersRepository
   ) {}
 
-  create() {}
+  create(userData: Prisma.UserCreateInput): Promise<User> {
+    return this.usersRepository.create(userData);
+  }
 
   findAll() {}
 
-  findOne() {}
+  findOne(userFindUniqueArgs: Prisma.UserFindUniqueArgs): Promise<User | null> {
+    return this.usersRepository.findOne(userFindUniqueArgs);
+  }
 
-  update() {}
+  update(userUpdateArgs: Prisma.UserUpdateArgs): Promise<User> {
+    return this.usersRepository.update(userUpdateArgs);
+  }
 
   delete() {}
 

@@ -17,13 +17,13 @@ import { AppConfigService } from '@src/core/app-config/services/app-config.servi
         /**
          * @todo dns 적용하면 default 제거 및 required 로 변경
          */
-        [ENV_KEY.DOMAIN]: Joi.string().default('http://localhost:3000'),
+        [ENV_KEY.DOMAIN]: Joi.string().default('http://localhost:3000')
       }),
-      isGlobal: true,
-    }),
+      isGlobal: true
+    })
   ],
   providers: [ConfigService, AppConfigService],
-  exports: [AppConfigService],
+  exports: [AppConfigService]
 })
 export class AppConfigModule implements OnApplicationBootstrap {
   constructor(private readonly appConfigService: AppConfigService) {}

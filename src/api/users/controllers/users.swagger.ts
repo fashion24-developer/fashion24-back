@@ -2,64 +2,51 @@ import { applyDecorators } from '@nestjs/common';
 import { ApiMethodNotAllowedResponse, ApiOperation } from '@nestjs/swagger';
 
 import { UsersController } from '@src/api/users/controllers/users.controller';
-import {
-  ApiOperationOptionsWithSummary,
-  ApiOperator,
-} from '@src/common/types/common.type';
+import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
 
 export const ApiUsers: ApiOperator<keyof UsersController> = {
-  Create: (
-    apiOperationOptions: ApiOperationOptionsWithSummary,
-  ): PropertyDecorator => {
+  Create: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
     return applyDecorators(
       ApiOperation({
-        ...apiOperationOptions,
+        ...apiOperationOptions
       }),
-      ApiMethodNotAllowedResponse(),
+      ApiMethodNotAllowedResponse()
     );
   },
 
-  FindAll: (
-    apiOperationOptions: ApiOperationOptionsWithSummary,
-  ): PropertyDecorator => {
+  FindAll: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
     return applyDecorators(
       ApiOperation({
-        ...apiOperationOptions,
+        ...apiOperationOptions
       }),
-      ApiMethodNotAllowedResponse(),
+      ApiMethodNotAllowedResponse()
     );
   },
 
-  FindOne: (
-    apiOperationOptions: ApiOperationOptionsWithSummary,
-  ): PropertyDecorator => {
+  FindOne: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
     return applyDecorators(
       ApiOperation({
-        ...apiOperationOptions,
+        ...apiOperationOptions
       }),
-      ApiMethodNotAllowedResponse(),
+      ApiMethodNotAllowedResponse()
     );
   },
 
-  Update: (
-    apiOperationOptions: ApiOperationOptionsWithSummary,
-  ): PropertyDecorator => {
+  Update: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
     return applyDecorators(
       ApiOperation({
-        ...apiOperationOptions,
+        ...apiOperationOptions
       }),
-      ApiMethodNotAllowedResponse(),
+      ApiMethodNotAllowedResponse()
     );
   },
 
-  Remove: (
-    apiOperationOptions: ApiOperationOptionsWithSummary,
-  ): PropertyDecorator => {
+  Remove: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
     return applyDecorators(
       ApiOperation({
-        ...apiOperationOptions,
+        ...apiOperationOptions
       }),
-      ApiMethodNotAllowedResponse(),
+      ApiMethodNotAllowedResponse()
     );
-  },
+  }
 };

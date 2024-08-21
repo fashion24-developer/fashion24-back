@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { ServiceTokenDto } from '@src/api/auth/dtos/service-token.dto';
 import { AuthService } from '@src/api/auth/services/auth.service';
-import { LoginParamDto, LoginQueryDto } from '@src/api/users/dtos/login.dto';
+import { LoginParamDto } from '@src/api/users/dtos/login.dto';
 import { CookieInterceptor } from '@src/common/interceptors/cookie.interceptor';
 
 @ApiTags('auth')
@@ -15,8 +15,8 @@ export class AuthController {
   @Post(':provider/login')
   naverLogin(
     @Param() param: LoginParamDto,
-    @Query() query: LoginQueryDto
+    @Query('code') authorizeCode: string
   ): Promise<ServiceTokenDto> {
-    return this.authService.login(param.provider, query.authorizeCode);
+    return this.authService.login(param.provider, authorizeCode);
   }
 }

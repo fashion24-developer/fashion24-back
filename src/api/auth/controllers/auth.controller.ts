@@ -3,7 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { ServiceTokenDto } from '@src/api/auth/dtos/service-token.dto';
 import { AuthService } from '@src/api/auth/services/auth.service';
-import { UserProvider } from '@src/api/users/enums/user-provider.enum';
+import { LoginParamDto, LoginQueryDto } from '@src/api/users/dtos/login.dto';
 import { CookieInterceptor } from '@src/common/interceptors/cookie.interceptor';
 
 @ApiTags('auth')
@@ -14,9 +14,9 @@ export class AuthController {
   @UseInterceptors(CookieInterceptor)
   @Post(':provider/login')
   naverLogin(
-    @Param('provider') provider: UserProvider,
-    @Query('code') authorizeCode: string
+    @Param() param: LoginParamDto,
+    @Query() query: LoginQueryDto
   ): Promise<ServiceTokenDto> {
-    return this.authService.login(provider, authorizeCode);
+    return this.authService.login(param.provider, query.authorizeCode);
   }
 }

@@ -42,29 +42,29 @@ model User {
   /// 탈퇴일
   deletedAt DateTime? @map("deleted_at") @db.Timestamp
 
-  socialTokens UserSocialToken[]
-  addresses    Address[]
-  orders       Order[]
+  userToken UserToken?
+  addresses Address[]
+  orders    Order[]
 
   @@map("user")
 }
 
 /// 유저 소셜 토큰 테이블
-model UserSocialToken {
+model UserToken {
   /// Primary Key
-  id           Int      @id @default(autoincrement())
+  id                 Int      @id @default(autoincrement())
   /// 유저 아이디 (FK)
-  userId       Int      @map("user_id")
+  userId             Int      @unique @map("user_id")
   /// 액세스 토큰
-  accessToken  String   @unique @map("access_token") @db.VarChar(255)
+  socialAccessToken  String   @unique @map("social_access_token") @db.VarChar(255)
   /// 리프레시 토큰
-  refreshToken String   @unique @map("refresh_token") @db.VarChar(255)
+  socialRefreshToken String   @unique @map("social_refresh_token") @db.VarChar(255)
   /// 생성일
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamp
 
   user User @relation(fields: [userId], references: [id])
 
-  @@map("user_social_token")
+  @@map("user_token")
 }
 
 /// 유저 주소 테이블

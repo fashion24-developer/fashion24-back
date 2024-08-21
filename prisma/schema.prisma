@@ -62,7 +62,7 @@ model UserToken {
   /// 생성일
   createdAt          DateTime @default(now()) @map("created_at") @db.Timestamp
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_token")
 }
@@ -93,7 +93,7 @@ model Address {
   /// 생성일
   createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("address")
 }
@@ -147,7 +147,7 @@ model FancyImage {
   /// 생성일
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
 
-  fancy Fancy @relation(fields: [fancyId], references: [id])
+  fancy Fancy @relation(fields: [fancyId], references: [id], onDelete: Cascade)
 
   @@map("fancy_image")
 }
@@ -163,7 +163,7 @@ model FancyStock {
   /// 생성일
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
 
-  fancy Fancy @relation(fields: [fancyId], references: [id])
+  fancy Fancy @relation(fields: [fancyId], references: [id], onDelete: Cascade)
 
   @@map("fancy_stock")
 }
@@ -179,8 +179,8 @@ model FancyOption {
   /// 생성일
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
 
-  fancy  Fancy  @relation(fields: [fancyId], references: [id])
-  option Option @relation(fields: [optionId], references: [id])
+  fancy  Fancy  @relation(fields: [fancyId], references: [id], onDelete: Cascade)
+  option Option @relation(fields: [optionId], references: [id], onDelete: Cascade)
 
   @@map("fancy_option")
 }
@@ -213,8 +213,8 @@ model FancySubOption {
   /// 생성일
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp
 
-  fancy     Fancy     @relation(fields: [fancyId], references: [id])
-  subOption SubOption @relation(fields: [subOptionId], references: [id])
+  fancy     Fancy     @relation(fields: [fancyId], references: [id], onDelete: Cascade)
+  subOption SubOption @relation(fields: [subOptionId], references: [id], onDelete: Cascade)
 
   @@map("fancy_sub_option")
 }
@@ -231,7 +231,7 @@ model SubOption {
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
 
   fancySubOptions FancySubOption[]
-  option          Option           @relation(fields: [optionId], references: [id])
+  option          Option           @relation(fields: [optionId], references: [id], onDelete: Cascade)
 
   @@map("sub_option")
 }
@@ -303,7 +303,7 @@ model Order {
 
   fancyOrderItems    FancyOrderItem[]
   whateverOrderItems WhateverOrderItem[]
-  user               User                @relation(fields: [userId], references: [id])
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("order")
 }
@@ -327,8 +327,8 @@ model FancyOrderItem {
   /// 생성일
   createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp
 
-  fancy Fancy @relation(fields: [fancyId], references: [id])
-  order Order @relation(fields: [orderId], references: [id])
+  fancy Fancy @relation(fields: [fancyId], references: [id], onDelete: Cascade)
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("order_item")
 }
@@ -350,8 +350,8 @@ model WhateverOrderItem {
   /// 생성일
   createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamp
 
-  whatever Whatever @relation(fields: [whateverId], references: [id])
-  order    Order    @relation(fields: [orderId], references: [id])
+  whatever Whatever @relation(fields: [whateverId], references: [id], onDelete: Cascade)
+  order    Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("whatever_order_item")
 }
@@ -432,7 +432,7 @@ model PartsImage {
   /// 삭제일
   deletedAt DateTime? @map("deleted_at") @db.Timestamp
 
-  parts Parts @relation(fields: [partsId], references: [id])
+  parts Parts @relation(fields: [partsId], references: [id], onDelete: Cascade)
 
   @@map("parts_image")
 }

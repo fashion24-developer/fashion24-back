@@ -8,7 +8,7 @@ import { PrismaService } from '@src/prisma/prisma.service';
 export class TokenRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(data: Prisma.UserTokenCreateInput): Promise<UserToken> {
-    return await this.prisma.userToken.create({ data });
+  create(data: Prisma.UserTokenCreateInput): Promise<UserToken> {
+    return this.prisma.userToken.create({ data });
   }
 }

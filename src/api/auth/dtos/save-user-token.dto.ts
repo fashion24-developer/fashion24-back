@@ -1,4 +1,4 @@
-export class UserTokenSaveDto {
+export class SaveUserTokenDto {
   userId: number;
   accessToken: string;
   refreshToken: string;

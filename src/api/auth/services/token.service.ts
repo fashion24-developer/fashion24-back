@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
+import { SaveUserTokenDto } from '@src/api/auth/dtos/save-user-token.dto';
 import { TokenPayloadDto } from '@src/api/auth/dtos/token-payload.dto';
-import { UserTokenSaveDto } from '@src/api/auth/dtos/user-token-save.dto';
 import { TokenSubEnum } from '@src/api/auth/enums/token-sub.enum';
 import { TokenTtlEnum } from '@src/api/auth/enums/token-ttl.enum';
 import { RedisService } from '@src/common/redis/services/redis.service';
@@ -31,15 +31,15 @@ export class TokenService {
     }
   }
 
-  saveTokens(userTokenSave: UserTokenSaveDto): void {
+  saveTokens(saveUserToken: SaveUserTokenDto): void {
     this.redisService.set(
-      `${String(userTokenSave.userId)}-accessToken`,
-      userTokenSave.accessToken,
+      `${String(saveUserToken.userId)}-accessToken`,
+      saveUserToken.accessToken,
       TokenTtlEnum.ACCESS_TOKEN
     );
     this.redisService.set(
-      `${String(userTokenSave.userId)}-refreshToken`,
-      userTokenSave.refreshToken,
+      `${String(saveUserToken.userId)}-refreshToken`,
+      saveUserToken.refreshToken,
       TokenTtlEnum.REFRESH_TOKEN
     );
   }

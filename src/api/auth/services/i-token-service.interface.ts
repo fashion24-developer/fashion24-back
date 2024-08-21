@@ -1,7 +1,7 @@
+import { SaveUserTokenDto } from '@src/api/auth/dtos/save-user-token.dto';
 import { TokenPayloadDto } from '@src/api/auth/dtos/token-payload.dto';
-import { UserTokenSaveDto } from '@src/api/auth/dtos/user-token-save.dto';
 
 export interface ITokenService {
   generateToken(payload: TokenPayloadDto): string;
-  saveTokens(userTokenSave: UserTokenSaveDto): void;
+  saveTokens(saveUserToken: SaveUserTokenDto): void;
 }

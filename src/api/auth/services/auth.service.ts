@@ -54,7 +54,13 @@ export class AuthService implements IAuthService {
       });
 
       // 토큰 저장
-      this.tokenService.saveTokens({ userId: user.id, accessToken, refreshToken });
+      this.tokenService.saveTokens({
+        userId: user.id,
+        accessToken,
+        refreshToken,
+        socialAccessToken: socialTokens.accessToken,
+        socialRefreshToken: socialTokens.refreshToken
+      });
 
       return { accessToken, refreshToken };
     } catch (error) {

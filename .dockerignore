@@ -1,0 +1,15 @@
+.git
+.gitingore
+.dockerignore
+
+node_modules
+
+.env
+
+src
+test
+
+dockerfile
+README.md
+.eslintrc.js
+.prettierrc

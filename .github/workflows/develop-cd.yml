@@ -1,0 +1,18 @@
+name: develop CD
+
+on:
+  workflow_run:
+    workflows: ["Develop CI"]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - name: Pull Docker image
+      run: sudo docker pull ${{secrets.DOCKER_DEVELOP_IMAGE_NAME}}:latest
+    - name: Delete Old docker container
+      run: sudo docker rm -f ${{secrets.DOCKER_DEVELOP_CONTAINER_NAME}} || true
+    - name: Run Docker container
+      run: sudo docker run -d -p 8080:8080 --name ${{secrets.DOCKER_DEVELOP_CONTAINER_NAME}} ${{secrets.DOCKER_DEVELOP_IMAGE_NAME}}:latest

@@ -2,7 +2,7 @@ name: Develop CD
 
 on:
   workflow_run:
-    workflows: ["Develop CI"]
+    workflows: ['Develop CI']
     types:
       - completed
 
@@ -10,11 +10,11 @@ jobs:
   build:
     runs-on: develop
     steps:
-    - name: Delete Old docker image
-      run: sudo docker rmi -f ${{secrets.DOCKER_DEVELOP_IMAGE_NAME}}:latest || true
-    - name: Delete Old docker container
-      run: sudo docker rm -f ${{secrets.DOCKER_DEVELOP_CONTAINER_NAME}} || true
-    - name: Pull Docker image
-      run: sudo docker pull ${{secrets.DOCKER_DEVELOP_IMAGE_NAME}}:latest
-    - name: Run Docker container
-      run: sudo docker run -d -p 8080:8080 --name ${{secrets.DOCKER_DEVELOP_CONTAINER_NAME}} ${{secrets.DOCKER_DEVELOP_IMAGE_NAME}}:latest
+      - name: Delete Old docker image
+        run: sudo docker rmi -f ${{secrets.DOCKER_DEVELOP_IMAGE_NAME}}:latest || true
+      - name: Delete Old docker container
+        run: sudo docker rm -f ${{secrets.DOCKER_DEVELOP_CONTAINER_NAME}} || true
+      - name: Pull Docker image
+        run: sudo docker pull ${{secrets.DOCKER_DEVELOP_IMAGE_NAME}}:latest
+      - name: Run Docker container
+        run: sudo docker run -d -p 8080:8080 --name ${{secrets.DOCKER_DEVELOP_CONTAINER_NAME}} ${{secrets.DOCKER_DEVELOP_IMAGE_NAME}}:latest --env-file .env.development

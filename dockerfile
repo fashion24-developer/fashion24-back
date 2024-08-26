@@ -15,4 +15,4 @@ RUN npm ci
 COPY ./dist ./dist
 
 # 컨테이너 실행 시 실행될 명령어
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start:migrate:prod"]

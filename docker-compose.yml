@@ -5,7 +5,6 @@ services:
       - .env.development
     expose:
       - 3000
-    command: sh -c "npx prisma migrate"
     restart: always
     depends_on:
       - postgresql

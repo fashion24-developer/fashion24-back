@@ -5,6 +5,7 @@ services:
       - .env.development
     expose:
       - 3000
+    command: sh -c "npx prisma migrate"
     restart: always
     depends_on:
       - postgresql
@@ -30,3 +31,4 @@ services:
       POSTGRES_DB: fashion24
     expose:
       - 5432
+    restart: unless-stopped

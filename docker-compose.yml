@@ -1,0 +1,33 @@
+services:
+  fashion24-develop:
+    image: nicodora/fashion24-develop:latest
+    env_file:
+      - .env.development
+    expose:
+      - 3000
+    restart: always
+    depends_on:
+      - postgresql
+      - redis
+
+  redis:
+    image: redis:7.2.4-alpine
+    volumes:
+      - /home/ubuntu/fashion24/redis_data:/usr/local/etc/redis
+    env_file:
+      - .env.development
+    command: sh -c "redis-server"
+    expose:
+      - 6379
+
+  postgresql:
+    image: postgres:14.1-alpine
+    env_file:
+      - .env.development
+    volumes:
+      - /home/ubuntu/fashion24/postgresql_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: fashion24
+    expose:
+      - 5432
+    restart: unless-stopped

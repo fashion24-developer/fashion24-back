@@ -16,6 +16,3 @@ COPY ./dist ./dist
 
 # 컨테이너 실행 시 실행될 명령어
 CMD ["npm", "run", "start:prod"]
-
-# port 설정
-EXPOSE 3000

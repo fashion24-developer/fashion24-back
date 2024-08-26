@@ -13,7 +13,7 @@ services:
   redis:
     image: redis:7.2.4-alpine
     volumes:
-      - redis_data:/usr/local/etc/redis
+      - /home/ubuntu/fashion24/redis_data:/usr/local/etc/redis
     env_file:
       - .env.development
     command: sh -c "redis-server"
@@ -25,12 +25,8 @@ services:
     env_file:
       - .env.development
     volumes:
-      - postgresql_data:/usr/local/etc/postgresql
+      - /home/ubuntu/fashion24/postgresql_data:/usr/local/etc/postgresql
     environment:
       POSTGRES_DB: fashion24
     expose:
       - 5432
-
-volumes:
-  redis_data:
-  postgresql_data:

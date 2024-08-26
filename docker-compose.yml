@@ -25,7 +25,7 @@ services:
     env_file:
       - .env.development
     volumes:
-      - /home/ubuntu/fashion24/postgresql_data:/usr/local/etc/postgresql
+      - /home/ubuntu/fashion24/postgresql_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: fashion24
     expose:

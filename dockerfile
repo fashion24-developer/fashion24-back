@@ -33,5 +33,5 @@ COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules ./node_modules
 
-# 컨테이너 실행 시 실행될 명령어
+# 컨테이너 실행 시 실행될 명령어.
 CMD ["npm", "run", "start:migrate:prod"]

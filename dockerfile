@@ -13,7 +13,7 @@ COPY package*.json ./
 COPY prisma ./prisma
 
 # npm install
-RUN npm ci
+RUN npm ci --only=production && npm cache clean --force
 
 # /dist 디렉토리 복사
 COPY ./dist ./dist

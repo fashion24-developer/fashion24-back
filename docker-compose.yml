@@ -28,6 +28,6 @@ services:
       - /home/ubuntu/fashion24/postgresql_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: fashion24
-    expose:
-      - 5432
+    ports:
+      - '5432:5432'
     restart: unless-stopped

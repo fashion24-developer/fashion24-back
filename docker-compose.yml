@@ -3,8 +3,8 @@ services:
     image: nicodora/fashion24-develop:latest
     env_file:
       - .env.development
-    expose:
-      - 3000
+    ports:
+      - '3000:3000'
     restart: always
     depends_on:
       - postgresql

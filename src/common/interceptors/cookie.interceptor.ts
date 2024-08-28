@@ -38,8 +38,8 @@ export class CookieInterceptor implements NestInterceptor {
           maxAge: TokenTtlEnum.REFRESH_TOKEN
         });
 
-        delete data.accessToken; // accessToken을 응답에서 삭제
-        delete data.refreshToken; // refreshToken을 응답에서 삭제
+        // delete data.accessToken; // accessToken을 응답에서 삭제
+        // delete data.refreshToken; // refreshToken을 응답에서 삭제
         return data;
       })
     );

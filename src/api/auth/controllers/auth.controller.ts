@@ -25,7 +25,7 @@ export class AuthController {
 
   @UseInterceptors(CookieInterceptor)
   @Post(':provider/login')
-  naverLogin(
+  login(
     @Param() param: LoginParamDto,
     @Query('code') authorizeCode: string
   ): Promise<ServiceTokenDto> {

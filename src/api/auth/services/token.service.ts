@@ -7,12 +7,13 @@ import { TokenSubEnum } from '@src/api/auth/enums/token-sub.enum';
 import { TokenTtlEnum } from '@src/api/auth/enums/token-ttl.enum';
 import { ITokenRepository } from '@src/api/auth/repositories/i-token-repository.interface';
 import { TokenRepository } from '@src/api/auth/repositories/token.repository';
+import { ITokenService } from '@src/api/auth/services/i-token-service.interface';
 import { RedisService } from '@src/common/redis/services/redis.service';
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
 
 @Injectable()
-export class TokenService {
+export class TokenService implements ITokenService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly appConfigService: AppConfigService,

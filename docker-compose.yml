@@ -16,7 +16,7 @@ services:
       - /home/ubuntu/fashion24/redis_data:/usr/local/etc/redis
     env_file:
       - .env.development
-    command: sh -c "redis-server"
+    command: sh -c "redis-server /usr/local/etc/redis/redis.conf"
     expose:
       - 6379
 

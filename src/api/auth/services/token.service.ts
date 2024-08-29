@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { SaveUserTokenDto } from '@src/api/auth/dtos/save-user-token.dto';
-import { ServiceTokenDto } from '@src/api/auth/dtos/service-token.dto';
 import { TokenPayloadDto } from '@src/api/auth/dtos/token-payload.dto';
 import { TokenSubEnum } from '@src/api/auth/enums/token-sub.enum';
 import { TokenTtlEnum } from '@src/api/auth/enums/token-ttl.enum';

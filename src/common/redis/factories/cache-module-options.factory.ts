@@ -15,8 +15,8 @@ export class CacheModuleOptionsFactory implements CacheOptionsFactory {
       isGlobal: false,
       store: redisStore,
       host: this.appConfigService.get(ENV_KEY.REDIS_HOST),
-      port: this.appConfigService.get(ENV_KEY.REDIS_PORT)
-      // password: this.appConfigService.get(ENV_KEY.REDIS_PASSWORD)
+      port: this.appConfigService.get(ENV_KEY.REDIS_PORT),
+      password: this.appConfigService.get(ENV_KEY.REDIS_PASSWORD)
     };
   }
 }

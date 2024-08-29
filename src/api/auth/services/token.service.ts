@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { SaveUserTokenDto } from '@src/api/auth/dtos/save-user-token.dto';
+import { ServiceTokenDto } from '@src/api/auth/dtos/service-token.dto';
 import { TokenPayloadDto } from '@src/api/auth/dtos/token-payload.dto';
 import { TokenSubEnum } from '@src/api/auth/enums/token-sub.enum';
 import { TokenTtlEnum } from '@src/api/auth/enums/token-ttl.enum';
@@ -21,17 +22,17 @@ export class TokenService {
   ) {}
 
   generateToken(payload: TokenPayloadDto): string {
-    if (payload.sub === TokenSubEnum.ACCESS_TOKEN) {
-      return this.jwtService.sign(payload, {
-        expiresIn: TokenTtlEnum.ACCESS_TOKEN,
-        secret: this.appConfigService.get<string>(ENV_KEY.ACCESS_TOKEN_SECRET_KEY)
-      });
-    } else if (payload.sub === TokenSubEnum.REFRESH_TOKEN) {
-      return this.jwtService.sign(payload, {
-        expiresIn: TokenTtlEnum.REFRESH_TOKEN,
-        secret: this.appConfigService.get<string>(ENV_KEY.REFRESH_TOKEN_SECRET_KEY)
-      });
-    }
+    return this.jwtService.sign(payload, {
+      expiresIn:
+        payload.sub === TokenSubEnum.ACCESS_TOKEN
+          ? TokenTtlEnum.ACCESS_TOKEN
+          : TokenTtlEnum.REFRESH_TOKEN,
+      secret: this.appConfigService.get<string>(
+        payload.sub === TokenSubEnum.ACCESS_TOKEN
+          ? ENV_KEY.ACCESS_TOKEN_SECRET_KEY
+          : ENV_KEY.REFRESH_TOKEN_SECRET_KEY
+      )
+    });
   }
 
   saveTokens(saveUserToken: SaveUserTokenDto): void {

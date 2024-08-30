@@ -20,23 +20,27 @@ export class CookieInterceptor implements NestInterceptor {
         const response = context.switchToHttp().getResponse<Response>();
         const { accessToken, refreshToken } = data;
 
-        const signedAccessToken = cookieSignature.sign(accessToken, this.secret);
-        const signedRefreshToken = cookieSignature.sign(refreshToken, this.secret);
+        if (accessToken) {
+          const signedAccessToken = cookieSignature.sign(accessToken, this.secret);
+          response.cookie('accessToken', signedAccessToken, {
+            // httpOnly: true,
+            sameSite: 'lax',
+            domain: '.localhost',
+            // secure: true,
+            maxAge: TokenTtlEnum.ACCESS_TOKEN
+          });
+        }
 
-        response.cookie('accessToken', signedAccessToken, {
-          // httpOnly: true,
-          sameSite: 'lax',
-          domain: '.localhost',
-          // secure: true,
-          maxAge: TokenTtlEnum.ACCESS_TOKEN
-        });
-        response.cookie('refreshToken', signedRefreshToken, {
-          // httpOnly: true,
-          sameSite: 'lax',
-          domain: '.localhost',
-          // secure: true,
-          maxAge: TokenTtlEnum.REFRESH_TOKEN
-        });
+        if (refreshToken) {
+          const signedRefreshToken = cookieSignature.sign(refreshToken, this.secret);
+          response.cookie('refreshToken', signedRefreshToken, {
+            // httpOnly: true,
+            sameSite: 'lax',
+            domain: '.localhost',
+            // secure: true,
+            maxAge: TokenTtlEnum.REFRESH_TOKEN
+          });
+        }
 
         // delete data.accessToken; // accessToken을 응답에서 삭제
         // delete data.refreshToken; // refreshToken을 응답에서 삭제

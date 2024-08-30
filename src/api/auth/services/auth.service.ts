@@ -71,6 +71,26 @@ export class AuthService implements IAuthService {
     }
   }
 
+  generateNewAccessToken(userId: number): ServiceTokenDto {
+    try {
+      const accessToken = this.tokenService.generateToken({
+        sub: TokenSubEnum.ACCESS_TOKEN,
+        userId
+      });
+
+      return { accessToken };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        'Failed to generate new access token',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        {
+          cause: error
+        }
+      );
+    }
+  }
+
   private async getSocialTokens(
     provider: UserProvider,
     authorizeCode: string

@@ -7,12 +7,13 @@ import { TokenSubEnum } from '@src/api/auth/enums/token-sub.enum';
 import { TokenTtlEnum } from '@src/api/auth/enums/token-ttl.enum';
 import { ITokenRepository } from '@src/api/auth/repositories/i-token-repository.interface';
 import { TokenRepository } from '@src/api/auth/repositories/token.repository';
+import { ITokenService } from '@src/api/auth/services/i-token-service.interface';
 import { RedisService } from '@src/common/redis/services/redis.service';
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
 
 @Injectable()
-export class TokenService {
+export class TokenService implements ITokenService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly appConfigService: AppConfigService,
@@ -21,17 +22,17 @@ export class TokenService {
   ) {}
 
   generateToken(payload: TokenPayloadDto): string {
-    if (payload.sub === TokenSubEnum.ACCESS_TOKEN) {
-      return this.jwtService.sign(payload, {
-        expiresIn: TokenTtlEnum.ACCESS_TOKEN,
-        secret: this.appConfigService.get<string>(ENV_KEY.ACCESS_TOKEN_SECRET_KEY)
-      });
-    } else if (payload.sub === TokenSubEnum.REFRESH_TOKEN) {
-      return this.jwtService.sign(payload, {
-        expiresIn: TokenTtlEnum.REFRESH_TOKEN,
-        secret: this.appConfigService.get<string>(ENV_KEY.REFRESH_TOKEN_SECRET_KEY)
-      });
-    }
+    return this.jwtService.sign(payload, {
+      expiresIn:
+        payload.sub === TokenSubEnum.ACCESS_TOKEN
+          ? TokenTtlEnum.ACCESS_TOKEN
+          : TokenTtlEnum.REFRESH_TOKEN,
+      secret: this.appConfigService.get<string>(
+        payload.sub === TokenSubEnum.ACCESS_TOKEN
+          ? ENV_KEY.ACCESS_TOKEN_SECRET_KEY
+          : ENV_KEY.REFRESH_TOKEN_SECRET_KEY
+      )
+    });
   }
 
   saveTokens(saveUserToken: SaveUserTokenDto): void {

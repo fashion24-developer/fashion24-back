@@ -28,7 +28,6 @@ export function createAuthProviderConfig() {
       }),
       extractUserInfo: (userInfoResponse: any) => ({
         uniqueId: userInfoResponse.response.id,
-        name: userInfoResponse.response.name,
         nickname: userInfoResponse.response.nickname,
         email: userInfoResponse.response.email,
         phone: userInfoResponse.response.mobile,
@@ -51,9 +50,9 @@ export function createAuthProviderConfig() {
         Authorization: `Bearer ${socialAccessToken}`
       }),
       extractUserInfo: (userInfoResponse: any) => ({
-        name: userInfoResponse.response.name,
-        email: userInfoResponse.response.email,
         uniqueId: userInfoResponse.response.id,
+        nickname: userInfoResponse.response.name,
+        email: userInfoResponse.response.email,
         provider: UserProvider.KAKAO
       })
     },
@@ -74,9 +73,9 @@ export function createAuthProviderConfig() {
         Authorization: `Bearer ${socialAccessToken}`
       }),
       extractUserInfo: (userInfoResponse: any) => ({
-        uniqueId: userInfoResponse.response.id,
-        name: userInfoResponse.response.name,
-        email: userInfoResponse.response.email,
+        uniqueId: userInfoResponse.id,
+        nickname: userInfoResponse.name,
+        email: userInfoResponse.email,
         provider: UserProvider.GOOGLE
       })
     }

@@ -17,8 +17,6 @@ datasource db {
 model User {
   /// Primary Key
   id        Int       @id @default(autoincrement())
-  /// 실명 이름
-  name      String    @unique @db.VarChar(20)
   /// 닉네임
   nickname  String    @unique @db.VarChar(20)
   /// 이메일

@@ -47,15 +47,15 @@ model User {
   @@map("user")
 }
 
-/// 유저 소셜 토큰 테이블
+/// 유저 토큰 테이블
 model UserToken {
   /// Primary Key
   id                 Int      @id @default(autoincrement())
   /// 유저 아이디 (FK)
   userId             Int      @unique @map("user_id")
-  /// 액세스 토큰
+  /// 소셜 액세스 토큰
   socialAccessToken  String   @unique @map("social_access_token") @db.VarChar(255)
-  /// 리프레시 토큰
+  /// 소셜 리프레시 토큰
   socialRefreshToken String   @unique @map("social_refresh_token") @db.VarChar(255)
   /// 생성일
   createdAt          DateTime @default(now()) @map("created_at") @db.Timestamp
@@ -99,27 +99,25 @@ model Address {
 // 완제품 테이블
 model Fancy {
   /// Primary Key
-  id             String        @id @db.VarChar(50)
+  id           String        @id @db.VarChar(50)
   /// 상품명
-  name           String        @unique @db.VarChar(100)
+  name         String        @unique @db.VarChar(100)
   /// 원가
-  costPrice      Int           @map("cost_price") @db.Integer
+  costPrice    Int           @map("cost_price") @db.Integer
   /// 판매가
-  price          Int           @db.Integer
+  price        Int           @db.Integer
   /// 할인율
-  discountRate   Int           @default(0) @map("discount_rate") @db.SmallInt
+  discountRate Int           @default(0) @map("discount_rate") @db.SmallInt
   /// 설명1
-  description1   String?       @db.Text
+  description1 String?       @db.Text
   /// 설명2
-  description2   String?       @db.Text
+  description2 String?       @db.Text
   /// 상태
-  status         ProductStatus @default(INACTIVE)
-  /// 기본 제품 여부
-  defaultDisplay Boolean       @default(false) @map("default_display") @db.Boolean
+  status       ProductStatus @default(INACTIVE)
   /// 생성일
-  createdAt      DateTime      @default(now()) @map("created_at") @db.Timestamp
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamp
   /// 수정일
-  updatedAt      DateTime      @updatedAt @map("updated_at") @db.Timestamp
+  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamp
 
   fancyImages     FancyImage[]
   fancyStocks     FancyStock[]
@@ -158,6 +156,8 @@ model FancyStock {
   fancyId   String   @map("fancy_id")
   /// 재고량
   quantity  Int      @default(0) @db.SmallInt
+  /// 옵션
+  option    String[] @db.VarChar(255)
   /// 생성일
   createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
 
@@ -317,7 +317,7 @@ model FancyOrderItem {
   /// 수량
   quantity  Int       @db.SmallInt
   /// 옵션
-  option    String?   @db.VarChar(255)
+  option    String[]  @db.VarChar(255)
   /// 가격
   price     Int       @db.Integer
   /// 포장 방식

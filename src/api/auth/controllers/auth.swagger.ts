@@ -1,13 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import {
-  ApiBadRequestResponse,
-  ApiCookieAuth,
-  ApiCreatedResponse,
-  ApiInternalServerErrorResponse,
-  ApiOkResponse,
-  ApiOperation,
-  ApiResponse
-} from '@nestjs/swagger';
+import { ApiCookieAuth, ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
 import { AuthController } from '@src/api/auth/controllers/auth.controller';
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
@@ -18,7 +10,8 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
       ApiOperation({
         ...apiOperationOptions
       }),
-      ApiCreatedResponse({
+      ApiResponse({
+        status: 201,
         description: '로그인 성공. (쿠키에 accessToken, refreshToken 저장)',
         schema: {
           type: 'object',
@@ -36,7 +29,8 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
           }
         }
       }),
-      ApiBadRequestResponse({
+      ApiResponse({
+        status: 400,
         description: '로그인 요청 시 인가코드가 누락됨.',
         schema: {
           type: 'object',
@@ -60,7 +54,8 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
           }
         }
       }),
-      ApiInternalServerErrorResponse({
+      ApiResponse({
+        status: 500,
         description: '로그인 중 에러 발생.',
         schema: {
           type: 'object',
@@ -83,6 +78,18 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
             }
           }
         }
+      }),
+      ApiParam({
+        name: 'provider',
+        type: 'string',
+        required: true,
+        description: '로그인 제공자 (ex: naver, kakao, google)'
+      }),
+      ApiQuery({
+        name: 'code',
+        type: 'string',
+        required: true,
+        description: '소셜 로그인 인가코드'
       })
     );
   },
@@ -92,7 +99,8 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
       ApiOperation({
         ...apiOperationOptions
       }),
-      ApiOkResponse({
+      ApiResponse({
+        status: 200,
         description: '새 accessToken 발급 성공. (쿠키에 accessToken 저장)',
         schema: {
           type: 'object',
@@ -157,6 +165,15 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
                 },
                 description: '우리 서비스의 토큰이 아닌 경우'
               },
+              'token missmatch': {
+                value: {
+                  statusCode: 401,
+                  timestamp: '2024-09-04T04:45:55.410Z',
+                  path: '/api/auth/new-access-token',
+                  message: 'token missmatch'
+                },
+                description: '토큰이 일치하지 않는 경우'
+              },
               'jwt expired': {
                 value: {
                   statusCode: 401,
@@ -170,7 +187,8 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
           }
         }
       }),
-      ApiInternalServerErrorResponse({
+      ApiResponse({
+        status: 500,
         description: '새 accessToken 발급 중 에러 발생.',
         schema: {
           type: 'object',

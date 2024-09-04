@@ -70,10 +70,9 @@ export class BootstrapService {
       .addCookieAuth(
         'accessToken',
         {
-          type: 'http',
+          type: 'apiKey',
           in: 'cookie',
           name: 'accessToken',
-          scheme: 'bearer',
           description: 'access token'
         },
         'accessToken'
@@ -81,10 +80,9 @@ export class BootstrapService {
       .addCookieAuth(
         'refreshToken',
         {
-          type: 'http',
+          type: 'apiKey',
           in: 'cookie',
           name: 'refreshToken',
-          scheme: 'bearer',
           description: 'refresh token'
         },
         'refreshToken'

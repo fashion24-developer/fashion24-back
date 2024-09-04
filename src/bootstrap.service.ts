@@ -67,7 +67,26 @@ export class BootstrapService {
           `<a target="_black" href="${DOMAIN}/${YAML_PATH}">yaml document</a></br>`
       )
       .setVersion('0.1')
-      .addBearerAuth()
+      .addCookieAuth(
+        'accessToken',
+        {
+          type: 'apiKey',
+          in: 'cookie',
+          name: 'accessToken',
+          description: 'access token'
+        },
+        'accessToken'
+      )
+      .addCookieAuth(
+        'refreshToken',
+        {
+          type: 'apiKey',
+          in: 'cookie',
+          name: 'refreshToken',
+          description: 'refresh token'
+        },
+        'refreshToken'
+      )
       .build();
 
     const document = SwaggerModule.createDocument(app, config, {

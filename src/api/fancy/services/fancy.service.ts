@@ -6,8 +6,7 @@ import { nanoid } from 'nanoid';
 import { CreateFancyDto } from '@src/api/fancy/dtos/create-fancy.dto';
 import { FancyRepository } from '@src/api/fancy/repositories/fancy.repository';
 import { IFancyRepository } from '@src/api/fancy/repositories/i-fancy-repository.interface';
-
-import { IFancyService } from './i-fancy-service.interface';
+import { IFancyService } from '@src/api/fancy/services/i-fancy-service.interface';
 
 @Injectable()
 export class FancyService implements IFancyService {
@@ -29,11 +28,11 @@ export class FancyService implements IFancyService {
   }
 
   async findOne(data) {
-    return null;
+    return data;
   }
 
   async update(data) {
-    return null;
+    return data;
   }
 
   private calculatePrice(costPrice: number, discountRate: number): number {

@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 import { ProductStatus } from '@prisma/client';
 import { IsDate, IsEnum, IsNotEmpty, IsNumber, IsString, Min } from 'class-validator';
@@ -30,10 +30,12 @@ export class FancyDto {
 
   @ApiProperty({ description: '설명1', example: '예쁘고 미니멀한 반지' })
   @IsString()
+  @ApiPropertyOptional()
   description1: string;
 
   @ApiProperty({ description: '설명2', example: '이 반지는 예쁘고 미니멀한 반자입니다.' })
   @IsString()
+  @ApiPropertyOptional()
   description2: string;
 
   @ApiProperty({ description: '상태', example: 'ACTIVE' })

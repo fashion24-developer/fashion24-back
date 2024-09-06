@@ -31,6 +31,71 @@ export const ApiFancy: ApiOperator<keyof FancyController> = {
           },
           $ref: getSchemaPath(FancyDto)
         }
+      }),
+      ApiResponse({
+        status: 400,
+        description: '필수 요청 값이 누락되었거나 잘못된 형식일 경우',
+        schema: {
+          type: 'object',
+          properties: {
+            statusCode: {
+              type: 'number',
+              example: 400
+            },
+            timestamp: {
+              type: 'string',
+              example: '2024-09-06T05:02:18.503Z'
+            },
+            path: {
+              type: 'string',
+              example: '/api/fancy'
+            },
+            message: {
+              type: 'object',
+              properties: {
+                message: {
+                  type: 'array',
+                  items: {
+                    type: 'string'
+                  },
+                  example: [
+                    'property status1 should not exist',
+                    'status must be one of the following values: ACTIVE, INACTIVE'
+                  ]
+                }
+              }
+            },
+            error: {
+              type: 'string',
+              example: 'Bad Request'
+            }
+          }
+        }
+      }),
+      ApiResponse({
+        status: 500,
+        description: 'Fancy 생성 실패',
+        schema: {
+          type: 'object',
+          properties: {
+            statusCode: {
+              type: 'number',
+              example: 500
+            },
+            timestamp: {
+              type: 'string',
+              example: '2024-09-06T05:02:18.503Z'
+            },
+            path: {
+              type: 'string',
+              example: '/api/fancy'
+            },
+            message: {
+              type: 'string',
+              example: 'Failed to create fancy'
+            }
+          }
+        }
       })
     );
   }

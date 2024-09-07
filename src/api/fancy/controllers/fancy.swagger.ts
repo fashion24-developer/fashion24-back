@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { getSchemaPath } from '@nestjs/swagger';
 
 import { FancyController } from '@src/api/fancy/controllers/fancy.controller';
@@ -96,7 +96,8 @@ export const ApiFancy: ApiOperator<keyof FancyController> = {
             }
           }
         }
-      })
+      }),
+      ApiCookieAuth('accessToken')
     );
   }
 };

@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 import { ProductStatus } from '@prisma/client';
-import { IsDate, IsEnum, IsNotEmpty, IsNumber, IsString, Min } from 'class-validator';
+import { IsDate, IsEnum, IsInt, IsNotEmpty, IsNumber, IsString, Min } from 'class-validator';
 
 export class FancyDto {
   @ApiProperty({ description: '아이디', example: '90c7gRlwkLvmDQxbp5pzY' })
@@ -14,12 +14,12 @@ export class FancyDto {
   name: string;
 
   @ApiProperty({ description: '원가', example: 25000 })
-  @IsNumber()
+  @IsInt()
   @Min(0)
   costPrice: number;
 
   @ApiProperty({ description: '가격', example: 24250 })
-  @IsNumber()
+  @IsInt()
   @Min(0)
   price: number;
 
@@ -31,12 +31,12 @@ export class FancyDto {
   @ApiProperty({ description: '설명1', example: '예쁘고 미니멀한 반지' })
   @IsString()
   @ApiPropertyOptional()
-  description1: string;
+  description1?: string;
 
   @ApiProperty({ description: '설명2', example: '이 반지는 예쁘고 미니멀한 반자입니다.' })
   @IsString()
   @ApiPropertyOptional()
-  description2: string;
+  description2?: string;
 
   @ApiProperty({ description: '상태', example: 'ACTIVE' })
   @IsEnum(ProductStatus)

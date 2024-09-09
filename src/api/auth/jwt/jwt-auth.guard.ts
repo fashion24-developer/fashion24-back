@@ -79,7 +79,7 @@ export class RefreshTokenAuthGuard extends AuthGuard('refreshToken') {
 export class AccessTokenOptionalAuthGuard extends AuthGuard('accessToken') {}
 
 @Injectable()
-export class AdminGuard extends AccessTokenAuthGuard {
+export class AdminGuard extends AuthGuard('accessToken') {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     const accessToken = request.cookies['accessToken'];

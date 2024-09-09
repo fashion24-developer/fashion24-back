@@ -39,7 +39,7 @@ export class AuthController {
   @UseInterceptors(CookieInterceptor)
   @UseGuards(RefreshTokenAuthGuard)
   @Get('new-access-token')
-  getNewAccessToken(@GetUserId() userId: number): ServiceTokenDto {
+  getNewAccessToken(@GetUserId() userId: number): Promise<ServiceTokenDto> {
     return this.authService.generateNewAccessToken(userId);
   }
 }

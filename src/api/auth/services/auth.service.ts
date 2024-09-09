@@ -46,11 +46,13 @@ export class AuthService implements IAuthService {
       // 서비스 토큰 발급
       const accessToken = this.tokenService.generateToken({
         sub: TokenSubEnum.ACCESS_TOKEN,
-        userId: user.id
+        userId: user.id,
+        userRole: user.role
       });
       const refreshToken = this.tokenService.generateToken({
         sub: TokenSubEnum.REFRESH_TOKEN,
-        userId: user.id
+        userId: user.id,
+        userRole: user.role
       });
 
       // 토큰 저장
@@ -71,11 +73,13 @@ export class AuthService implements IAuthService {
     }
   }
 
-  generateNewAccessToken(userId: number): ServiceTokenDto {
+  async generateNewAccessToken(userId: number): Promise<ServiceTokenDto> {
     try {
+      const user = await this.usersService.findOne({ where: { id: userId } });
       const accessToken = this.tokenService.generateToken({
         sub: TokenSubEnum.ACCESS_TOKEN,
-        userId
+        userId,
+        userRole: user.role
       });
 
       return { accessToken };

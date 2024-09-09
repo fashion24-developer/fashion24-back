@@ -36,6 +36,7 @@ export class FancyService implements IFancyService {
   }
 
   private calculatePrice(costPrice: number, discountRate: number): number {
-    return costPrice * (1 - discountRate / 100);
+    const price = costPrice * (1 - discountRate / 100);
+    return Math.ceil(price);
   }
 }

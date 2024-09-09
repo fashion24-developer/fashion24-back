@@ -31,9 +31,15 @@ export class FancyService implements IFancyService {
     return data;
   }
 
+  async findAll() {
+    return [];
+  }
+
   async update(data) {
     return data;
   }
+
+  delete(data: any): void {}
 
   private calculatePrice(costPrice: number, discountRate: number): number {
     const price = costPrice * (1 - discountRate / 100);

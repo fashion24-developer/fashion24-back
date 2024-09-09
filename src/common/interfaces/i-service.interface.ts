@@ -3,5 +3,5 @@ export interface IService {
   findAll: () => void;
   findOne: (data: any) => Promise<any>;
   update: (data: any) => Promise<any>;
-  delete: () => void;
+  delete: (data: any) => void;
 }

@@ -2,8 +2,6 @@ import { applyDecorators } from '@nestjs/common';
 import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { getSchemaPath } from '@nestjs/swagger';
 
-import path from 'path';
-
 import { FancyAdminController } from '@src/api/fancy/controllers/fancy.admin.controller';
 import { FancyDto } from '@src/api/fancy/dtos/fancy.dto';
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';

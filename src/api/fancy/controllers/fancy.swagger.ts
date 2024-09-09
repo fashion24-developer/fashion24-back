@@ -73,6 +73,31 @@ export const ApiFancy: ApiOperator<keyof FancyAdminController> = {
         }
       }),
       ApiResponse({
+        status: 403,
+        description: 'admin 권한이 없는 경우',
+        schema: {
+          type: 'object',
+          properties: {
+            statusCode: {
+              type: 'number',
+              example: 403
+            },
+            timestamp: {
+              type: 'string',
+              example: '2024-09-06T05:02:18.503Z'
+            },
+            path: {
+              type: 'string',
+              example: '/api/admin/fancy'
+            },
+            message: {
+              type: 'string',
+              example: `You don't have permission to access this resource`
+            }
+          }
+        }
+      }),
+      ApiResponse({
         status: 500,
         description: 'Fancy 생성 실패',
         schema: {

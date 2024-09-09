@@ -39,7 +39,7 @@ export class FancyService implements IFancyService {
     return data;
   }
 
-  delete(data: any): void {}
+  delete(): void {}
 
   private calculatePrice(costPrice: number, discountRate: number): number {
     const price = costPrice * (1 - discountRate / 100);

@@ -27,7 +27,7 @@ const messageArrayType = {
  * @param msgAndDescription 에러 메시지 및 설명 배열
  * @param path 요청한 API 경로
  */
-export const ErrorSwaggerBuilder = (
+export const SwaggerErrorResponse = (
   statusCode: ValueOf<typeof COMMON_ERROR_HTTP_STATUS_CODE>,
   error: ValueOf<typeof COMMON_ERROR_HTTP_STATUS_MESSAGE>,
   msgAndDescription: { message: string | string[]; description: string }[] = [

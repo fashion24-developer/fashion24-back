@@ -6,7 +6,7 @@ import {
   COMMON_ERROR_HTTP_STATUS_CODE,
   COMMON_ERROR_HTTP_STATUS_MESSAGE
 } from '@src/common/constants/common.constant';
-import { ErrorSwaggerBuilder } from '@src/common/decorators/error-swagger-builder.decorator';
+import { SwaggerErrorResponse } from '@src/common/decorators/swagger-error-response.decorator';
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
 
 export const ApiUsers: ApiOperator<keyof UsersController> = {
@@ -15,7 +15,7 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
       ApiOperation({
         ...apiOperationOptions
       }),
-      ErrorSwaggerBuilder(
+      SwaggerErrorResponse(
         COMMON_ERROR_HTTP_STATUS_CODE.METHOD_NOT_ALLOWED,
         COMMON_ERROR_HTTP_STATUS_MESSAGE[405],
         [
@@ -43,7 +43,7 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
       ApiOperation({
         ...apiOperationOptions
       }),
-      ErrorSwaggerBuilder(
+      SwaggerErrorResponse(
         COMMON_ERROR_HTTP_STATUS_CODE.METHOD_NOT_ALLOWED,
         COMMON_ERROR_HTTP_STATUS_MESSAGE[405],
         [
@@ -59,7 +59,7 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
       ApiOperation({
         ...apiOperationOptions
       }),
-      ErrorSwaggerBuilder(
+      SwaggerErrorResponse(
         COMMON_ERROR_HTTP_STATUS_CODE.METHOD_NOT_ALLOWED,
         COMMON_ERROR_HTTP_STATUS_MESSAGE[405],
         [
@@ -75,7 +75,7 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
       ApiOperation({
         ...apiOperationOptions
       }),
-      ErrorSwaggerBuilder(
+      SwaggerErrorResponse(
         COMMON_ERROR_HTTP_STATUS_CODE.METHOD_NOT_ALLOWED,
         COMMON_ERROR_HTTP_STATUS_MESSAGE[405],
         [
@@ -91,7 +91,7 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
       ApiOperation({
         ...apiOperationOptions
       }),
-      ErrorSwaggerBuilder(
+      SwaggerErrorResponse(
         COMMON_ERROR_HTTP_STATUS_CODE.METHOD_NOT_ALLOWED,
         COMMON_ERROR_HTTP_STATUS_MESSAGE[405],
         [

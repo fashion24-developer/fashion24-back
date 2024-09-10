@@ -23,9 +23,9 @@ const messageArrayType = {
  * @description error에 대한 response를 swagger에 명세 해주기 위한 builder
  *
  * @param statusCode HTTP status code (400번~500번대)
- * @param path 요청한 API 경로
  * @param error HTTP status message
  * @param msgAndDescription 에러 메시지 및 설명 배열
+ * @param path 요청한 API 경로
  */
 export const ErrorSwaggerBuilder = (
   statusCode: ValueOf<typeof COMMON_ERROR_HTTP_STATUS_CODE>,

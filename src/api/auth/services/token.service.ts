@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { SaveUserTokenDto } from '@src/api/auth/dtos/save-user-token.dto';
@@ -54,8 +54,22 @@ export class TokenService implements ITokenService {
       });
     } catch (error) {
       console.log(error);
+      throw new HttpException('Failed to save the token.', HttpStatus.INTERNAL_SERVER_ERROR, {
+        cause: error
+      });
+    }
+  }
 
-      throw new Error(error);
+  async deleteTokens(userId: number): Promise<void> {
+    try {
+      this.redisService.del(`${String(userId)}-accessToken`);
+      this.redisService.del(`${String(userId)}-refreshToken`);
+      await this.tokenRepository.delete({ where: { userId } });
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Failed to delete the token.', HttpStatus.INTERNAL_SERVER_ERROR, {
+        cause: error
+      });
     }
   }
 }

@@ -94,6 +94,38 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
     );
   },
 
+  Logout: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions
+      }),
+      ApiResponse({
+        status: 200,
+        description: '로그아웃 성공.',
+        schema: {
+          type: 'object',
+          properties: {
+            statusCode: {
+              type: 'number',
+              example: 200
+            },
+            timestamp: {
+              type: 'string',
+              example: '2024-09-04T04:45:55.410Z'
+            }
+          }
+        }
+      }),
+      ApiParam({
+        name: 'provider',
+        type: 'string',
+        required: true,
+        description: '로그인 제공자 (ex: naver, kakao, google)'
+      }),
+      ApiCookieAuth('accessToken')
+    );
+  },
+
   GetNewAccessToken: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
     return applyDecorators(
       ApiOperation({

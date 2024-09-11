@@ -14,6 +14,7 @@ import { SocialUserInfoDto } from '@src/api/users/dtos/social-user-info.dto';
 import { UserProvider } from '@src/api/users/enums/user-provider.enum';
 import { IUsersService } from '@src/api/users/services/i-users-service.interface';
 import { UsersService } from '@src/api/users/services/users.service';
+import { ResponseDto } from '@src/common/dtos/response.dto';
 
 export class AuthService implements IAuthService {
   private readonly authProviderConfig;
@@ -68,6 +69,29 @@ export class AuthService implements IAuthService {
     } catch (error) {
       console.log(error);
       throw new HttpException('Failed to login', HttpStatus.INTERNAL_SERVER_ERROR, {
+        cause: error
+      });
+    }
+  }
+
+  async logout(provider: UserProvider, userId: number): Promise<ResponseDto> {
+    try {
+      const userSocialTokens = await this.usersService.findTokens({ where: { userId } });
+      const socialTokens: SocialTokenDto = {
+        accessToken: userSocialTokens.socialAccessToken,
+        refreshToken: userSocialTokens.socialRefreshToken
+      };
+
+      if (provider === UserProvider.KAKAO) {
+        await this.requestLogout(provider, socialTokens);
+      }
+
+      await this.tokenService.deleteTokens(userId);
+
+      return { statusCode: HttpStatus.OK, message: 'Logout successful' };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Failed to logout', HttpStatus.INTERNAL_SERVER_ERROR, {
         cause: error
       });
     }
@@ -141,6 +165,22 @@ export class AuthService implements IAuthService {
     } catch (error) {
       console.log(error);
       throw new HttpException('Failed to get social user info', HttpStatus.INTERNAL_SERVER_ERROR, {
+        cause: error
+      });
+    }
+  }
+
+  private async requestLogout(provider: UserProvider, socialTokens: SocialTokenDto): Promise<void> {
+    try {
+      const providerConfig = this.authProviderConfig[provider];
+
+      const logoutUrl = providerConfig.logoutUrl;
+      const logoutHeader = providerConfig.logoutHeader(socialTokens.accessToken);
+
+      await axios.post(logoutUrl, {}, { headers: logoutHeader });
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Failed to request logout', HttpStatus.INTERNAL_SERVER_ERROR, {
         cause: error
       });
     }

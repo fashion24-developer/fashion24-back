@@ -12,11 +12,12 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { ApiAuth } from '@src/api/auth/controllers/auth.swagger';
 import { ServiceTokenDto } from '@src/api/auth/dtos/service-token.dto';
-import { RefreshTokenAuthGuard } from '@src/api/auth/jwt/jwt-auth.guard';
+import { AccessTokenAuthGuard, RefreshTokenAuthGuard } from '@src/api/auth/jwt/jwt-auth.guard';
 import { AuthService } from '@src/api/auth/services/auth.service';
 import { IAuthService } from '@src/api/auth/services/i-auth-service.interface';
-import { LoginParamDto } from '@src/api/users/dtos/login.dto';
+import { AuthParamDto } from '@src/api/users/dtos/auth.dto';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
+import { ResponseDto } from '@src/common/dtos/response.dto';
 import { CookieInterceptor } from '@src/common/interceptors/cookie.interceptor';
 import { ExistsPipe } from '@src/common/pipes/exists.pipe';
 
@@ -29,10 +30,17 @@ export class AuthController {
   @UseInterceptors(CookieInterceptor)
   @Post(':provider/login')
   login(
-    @Param() param: LoginParamDto,
+    @Param() param: AuthParamDto,
     @Query('code', ExistsPipe) authorizeCode: string
   ): Promise<ServiceTokenDto> {
     return this.authService.login(param.provider, authorizeCode);
+  }
+
+  @ApiAuth.Logout({ summary: '로그아웃' })
+  @UseGuards(AccessTokenAuthGuard)
+  @Post(':provider/logout')
+  logout(@Param() param: AuthParamDto, @GetUserId() userId: number): Promise<ResponseDto> {
+    return this.authService.logout(param.provider, userId);
   }
 
   @ApiAuth.GetNewAccessToken({ summary: '새 액세스 토큰 발급' })

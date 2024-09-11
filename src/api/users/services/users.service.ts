@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { Prisma, User } from '@prisma/client';
+import { Prisma, User, UserToken } from '@prisma/client';
 
 import { IUsersRepository } from '@src/api/users/repositories/i-users-repository.interface';
 import { UsersRepository } from '@src/api/users/repositories/users.repository';
@@ -21,6 +21,10 @@ export class UsersService implements IUsersService {
 
   findOne(userFindUniqueArgs: Prisma.UserFindUniqueArgs): Promise<User | null> {
     return this.usersRepository.findOne(userFindUniqueArgs);
+  }
+
+  findTokens(userTokenFindUniqueArgs: Prisma.UserTokenFindUniqueArgs): Promise<UserToken | null> {
+    return this.usersRepository.findTokens(userTokenFindUniqueArgs);
   }
 
   update(userUpdateArgs: Prisma.UserUpdateArgs): Promise<User> {

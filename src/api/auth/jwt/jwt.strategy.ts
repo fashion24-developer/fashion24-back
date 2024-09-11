@@ -15,7 +15,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'accessToken
     private readonly appConfigService: AppConfigService
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: (req) => req.cookies['accessToken'],
       ignoreExpiration: false,
       secretOrKey: appConfigService.get<string>(ENV_KEY.ACCESS_TOKEN_SECRET_KEY),
       passReqToCallback: true
@@ -27,7 +27,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'accessToken
       throw new HttpException('invalid token type', HttpStatus.BAD_REQUEST);
     }
 
-    const tokenFromRequest = request.headers.authorization.split(' ')[1];
+    const tokenFromRequest = request.cookies['accessToken'];
     const tokenInRedis = await this.redisService.get(`${payload.userId}-accessToken`);
 
     if (!tokenInRedis) {

@@ -1,7 +1,16 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiCookieAuth, ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiCookieAuth,
+  ApiExtraModels,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  getSchemaPath
+} from '@nestjs/swagger';
 
 import { AuthController } from '@src/api/auth/controllers/auth.controller';
+import { ResponseDto } from '@src/common/dtos/response.dto';
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
 
 export const ApiAuth: ApiOperator<keyof AuthController> = {
@@ -99,19 +108,43 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
       ApiOperation({
         ...apiOperationOptions
       }),
+      ApiExtraModels(ResponseDto),
       ApiResponse({
         status: 200,
         description: '로그아웃 성공.',
+        content: {
+          'application/json': {
+            schema: {
+              $ref: getSchemaPath(ResponseDto)
+            },
+            example: {
+              statusCode: 200,
+              message: 'Logout successful'
+            }
+          }
+        }
+      }),
+      ApiResponse({
+        status: 500,
+        description: '로그아웃 중 에러 발생.',
         schema: {
           type: 'object',
           properties: {
             statusCode: {
               type: 'number',
-              example: 200
+              example: 500
             },
             timestamp: {
               type: 'string',
-              example: '2024-09-04T04:45:55.410Z'
+              example: '2024-09-04T04:10:34.008Z'
+            },
+            path: {
+              type: 'string',
+              example: '/api/auth/:provider/logout'
+            },
+            message: {
+              type: 'string',
+              example: 'Failed to logout'
             }
           }
         }

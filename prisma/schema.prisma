@@ -204,8 +204,6 @@ model FancySubOption {
   id          Int      @id @default(autoincrement())
   /// 완제품 아이디 (FK)
   fancyId     String   @map("fancy_uuid")
-  /// 옵션 아이디 (FK)
-  optionId    Int      @map("option_id")
   /// 소옵션 아이디 (FK)
   subOptionId Int      @map("sub_option_id")
   /// 생성일

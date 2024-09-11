@@ -180,6 +180,7 @@ model FancyOption {
   fancy  Fancy  @relation(fields: [fancyId], references: [id], onDelete: Cascade)
   option Option @relation(fields: [optionId], references: [id], onDelete: Cascade)
 
+  @@unique([fancyId, optionId])
   @@map("fancy_option")
 }
 
@@ -212,6 +213,7 @@ model FancySubOption {
   fancy     Fancy     @relation(fields: [fancyId], references: [id], onDelete: Cascade)
   subOption SubOption @relation(fields: [subOptionId], references: [id], onDelete: Cascade)
 
+  @@unique([fancyId, subOptionId])
   @@map("fancy_sub_option")
 }
 

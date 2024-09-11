@@ -10,6 +10,8 @@ import { AppConfigService } from '@src/core/app-config/services/app-config.servi
 import { HttpExceptionFilter } from '@src/exceptions/exception-filters/http-exception.filter';
 import { CustomValidationPipe } from '@src/pipes/custom-validation.pipe';
 
+export const globalPrefix = 'api';
+
 @Injectable()
 export class BootstrapService {
   setCors(app: INestApplication) {
@@ -23,7 +25,7 @@ export class BootstrapService {
   }
 
   setPathPrefix(app: INestApplication) {
-    app.setGlobalPrefix('api');
+    app.setGlobalPrefix(globalPrefix);
   }
 
   setInterceptor(app: INestApplication) {

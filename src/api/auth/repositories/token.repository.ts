@@ -13,11 +13,11 @@ export class TokenRepository implements ITokenRepository {
     return this.prisma.userToken.create({ data });
   }
 
-  findOne(data: any): Promise<any> {
+  findOne(): Promise<any> {
     return;
   }
 
-  update(data: any): Promise<any> {
+  update(): Promise<any> {
     return;
   }
 

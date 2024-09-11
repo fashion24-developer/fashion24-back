@@ -8,3 +8,5 @@ export type ApiOperator<M extends string> = {
     apiOperationOptions: ApiOperationOptionsWithSummary
   ) => PropertyDecorator;
 };
+
+export type ValueOf<T extends Record<string, any>> = T[keyof T];

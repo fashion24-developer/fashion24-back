@@ -17,7 +17,15 @@ export class FancyRepository implements IFancyRepository {
     return this.prisma.fancy.findFirst({ where: data });
   }
 
+  findAll(data: Prisma.FancyFindManyArgs): Promise<Fancy[]> {
+    return this.prisma.fancy.findMany(data);
+  }
+
   update(data: any): Promise<any> {
     return this.prisma.fancy.update({ where: { id: data.id }, data });
+  }
+
+  count(data?: Prisma.FancyCountArgs): Promise<number> {
+    return this.prisma.fancy.count(data);
   }
 }

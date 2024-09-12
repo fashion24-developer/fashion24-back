@@ -6,7 +6,9 @@ import { FancyAdminController } from '@src/api/fancy/controllers/fancy.admin.con
 import { FancyDto } from '@src/api/fancy/dtos/fancy.dto';
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
 
-export const ApiFancy: ApiOperator<keyof FancyAdminController> = {
+import { FancyController } from './fancy.controller';
+
+export const ApiFancy: ApiOperator<keyof FancyAdminController | keyof FancyController> = {
   Create: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
     return applyDecorators(
       ApiOperation({
@@ -123,6 +125,14 @@ export const ApiFancy: ApiOperator<keyof FancyAdminController> = {
         }
       }),
       ApiCookieAuth('accessToken')
+    );
+  },
+
+  FindAll: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions
+      })
     );
   }
 };

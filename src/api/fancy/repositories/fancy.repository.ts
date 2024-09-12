@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { Fancy, Prisma } from '@prisma/client';
 
+import { CreateFancyDto } from '@src/api/fancy/dtos/create-fancy.dto';
+import { FancyDto } from '@src/api/fancy/dtos/fancy.dto';
 import { IFancyRepository } from '@src/api/fancy/repositories/i-fancy-repository.interface';
 import { PrismaService } from '@src/prisma/prisma.service';
 
@@ -9,7 +11,7 @@ import { PrismaService } from '@src/prisma/prisma.service';
 export class FancyRepository implements IFancyRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(data: Prisma.FancyCreateInput): Promise<Fancy> {
+  create(data: CreateFancyDto): Promise<FancyDto> {
     return this.prisma.fancy.create({ data });
   }
 

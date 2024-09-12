@@ -1,10 +1,12 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 
-import { Fancy, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { nanoid } from 'nanoid';
 
 import { FANCY_FIND_ALL_SELECT } from '@src/api/fancy/constants/fancy-find-all-select.const';
+import { CreateFancyInputDto } from '@src/api/fancy/dtos/create-fancy-input.dto';
 import { CreateFancyDto } from '@src/api/fancy/dtos/create-fancy.dto';
+import { FancyDto } from '@src/api/fancy/dtos/fancy.dto';
 import { FindAllFancyDto } from '@src/api/fancy/dtos/find-all-fancy.dto';
 import { FancyRepository } from '@src/api/fancy/repositories/fancy.repository';
 import { IFancyRepository } from '@src/api/fancy/repositories/i-fancy-repository.interface';
@@ -15,11 +17,11 @@ import { IPaginationMeta } from '@src/common/interfaces/pagination/i-pagination-
 export class FancyService implements IFancyService {
   constructor(@Inject(FancyRepository) private readonly fancyRepository: IFancyRepository) {}
 
-  async create(fancyData: CreateFancyDto): Promise<Fancy> {
+  async create(fancyData: CreateFancyInputDto): Promise<FancyDto> {
     try {
       const id = nanoid();
       const price = this.calculatePrice(fancyData.costPrice, fancyData.discountRate);
-      const createFancyData: Prisma.FancyCreateInput = { ...fancyData, id, price };
+      const createFancyData: CreateFancyDto = { ...fancyData, id, price };
 
       return this.fancyRepository.create(createFancyData);
     } catch (error) {
@@ -36,7 +38,7 @@ export class FancyService implements IFancyService {
 
   async findAll(
     paginationData: FindAllFancyDto
-  ): Promise<{ data: Fancy[]; meta: IPaginationMeta }> {
+  ): Promise<{ data: FancyDto[]; meta: IPaginationMeta }> {
     const { page, pageSize, orderBy, orderDirection, ...whereInput } = paginationData;
 
     const where = this.findAllWhere(whereInput);

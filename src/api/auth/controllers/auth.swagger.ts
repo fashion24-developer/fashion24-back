@@ -102,31 +102,6 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
           }
         }
       }),
-      // ApiResponse({
-      //   status: 500,
-      //   description: '로그아웃 중 에러 발생.',
-      //   schema: {
-      //     type: 'object',
-      //     properties: {
-      //       statusCode: {
-      //         type: 'number',
-      //         example: 500
-      //       },
-      //       timestamp: {
-      //         type: 'string',
-      //         example: '2024-09-04T04:10:34.008Z'
-      //       },
-      //       path: {
-      //         type: 'string',
-      //         example: '/api/auth/:provider/logout'
-      //       },
-      //       message: {
-      //         type: 'string',
-      //         example: 'Failed to logout'
-      //       }
-      //     }
-      //   }
-      // }),
       SwaggerErrorResponse(
         COMMON_ERROR_HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
         COMMON_ERROR_HTTP_STATUS_MESSAGE[500],
@@ -167,114 +142,59 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
           }
         }
       }),
-      ApiResponse({
-        status: 400,
-        description: 'BadRequest',
-        content: {
-          'application/json': {
-            examples: {
-              'invalid token': {
-                value: {
-                  statusCode: 400,
-                  timestamp: '2024-09-04T04:45:55.410Z',
-                  path: '/api/auth/new-access-token',
-                  message: 'invalid token'
-                },
-                description: '유효하지 않은 토큰인 경우'
-              },
-              'jwt must be provided': {
-                value: {
-                  statusCode: 400,
-                  timestamp: '2024-09-04T04:45:55.410Z',
-                  path: '/api/auth/new-access-token',
-                  message: 'jwt must be provided'
-                },
-                description: '토큰이 제공되지 않은 경우'
-              },
-              'jwt error': {
-                value: {
-                  statusCode: 400,
-                  timestamp: '2024-09-04T04:45:55.410Z',
-                  path: '/api/auth/new-access-token',
-                  message: 'jwt error'
-                },
-                description: '그 외 에러 (백엔드에 도움 요청하기)'
-              }
-            }
+      SwaggerErrorResponse(
+        COMMON_ERROR_HTTP_STATUS_CODE.BAD_REQUEST,
+        COMMON_ERROR_HTTP_STATUS_MESSAGE[400],
+        [
+          {
+            description: '유효하지 않은 토큰인 경우',
+            message: 'invalid token'
+          },
+          {
+            description: '토큰이 제공되지 않은 경우',
+            message: 'jwt must be provided'
+          },
+          {
+            description: '그 외 에러 (백엔드에 도움 요청하기)',
+            message: 'jwt error'
           }
-        }
-      }),
-      ApiResponse({
-        status: 401,
-        description: 'Unauthorized',
-        content: {
-          'application/json': {
-            examples: {
-              'invalid signature': {
-                value: {
-                  statusCode: 401,
-                  timestamp: '2024-09-04T04:45:55.410Z',
-                  path: '/api/auth/new-access-token',
-                  message: 'invalid signature'
-                },
-                description: '우리 서비스의 토큰이 아닌 경우'
-              },
-              'token missmatch': {
-                value: {
-                  statusCode: 401,
-                  timestamp: '2024-09-04T04:45:55.410Z',
-                  path: '/api/auth/new-access-token',
-                  message: 'token missmatch'
-                },
-                description: '토큰이 일치하지 않는 경우'
-              },
-              'jwt expired': {
-                value: {
-                  statusCode: 401,
-                  timestamp: '2024-09-04T04:45:55.410Z',
-                  path: '/api/auth/new-access-token',
-                  message: 'jwt expired'
-                },
-                description: '만료된 토큰인 경우'
-              },
-              'token not found': {
-                value: {
-                  statusCode: 401,
-                  timestamp: '2024-09-04T04:45:55.410Z',
-                  path: '/api/auth/new-access-token',
-                  message: 'token not found'
-                },
-                description: '토큰을 redis에서 찾을 수 없는 경우'
-              }
-            }
+        ],
+        `${AuthController.path}/new-access-token`
+      ),
+      SwaggerErrorResponse(
+        COMMON_ERROR_HTTP_STATUS_CODE.UNAUTHORIZED,
+        COMMON_ERROR_HTTP_STATUS_MESSAGE[401],
+        [
+          {
+            description: '우리 서비스의 토큰이 아닌 경우',
+            message: 'invalid signature'
+          },
+          {
+            description: '토큰이 일치하지 않는 경우',
+            message: 'token missmatch'
+          },
+          {
+            description: '만료된 토큰인 경우',
+            message: 'jwt expired'
+          },
+          {
+            description: '토큰을 redis에서 찾을 수 없는 경우',
+            message: 'token not found'
           }
-        }
-      }),
-      ApiResponse({
-        status: 500,
-        description: '새 accessToken 발급 중 에러 발생.',
-        schema: {
-          type: 'object',
-          properties: {
-            statusCode: {
-              type: 'number',
-              example: 500
-            },
-            timestamp: {
-              type: 'string',
-              example: '2024-09-04T04:10:34.008Z'
-            },
-            path: {
-              type: 'string',
-              example: '/api/auth/new-access-token'
-            },
-            message: {
-              type: 'string',
-              example: 'Failed to generate new access token'
-            }
+        ],
+        `${AuthController.path}/new-access-token`
+      ),
+      SwaggerErrorResponse(
+        COMMON_ERROR_HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+        COMMON_ERROR_HTTP_STATUS_MESSAGE[500],
+        [
+          {
+            description: '새 accessToken 발급 중 에러 발생.',
+            message: 'Failed to generate new access token'
           }
-        }
-      }),
+        ],
+        `${AuthController.path}/new-access-token`
+      ),
       ApiCookieAuth('refreshToken')
     );
   }

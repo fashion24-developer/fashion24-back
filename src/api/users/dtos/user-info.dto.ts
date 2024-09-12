@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPhoneNumber,
   IsString
 } from 'class-validator';
 
@@ -12,6 +13,10 @@ import { UserProvider } from '@src/api/users/enums/user-provider.enum';
 import { UserRole } from '@src/api/users/enums/user-role.enum';
 
 export class UserInfoDto {
+  @IsNotEmpty()
+  @IsNumber()
+  id: number;
+
   @IsNotEmpty()
   @IsString()
   uniqueId: string;
@@ -29,6 +34,7 @@ export class UserInfoDto {
   email: string;
 
   @IsOptional()
+  @IsPhoneNumber('KR')
   phone?: string;
 
   @IsNotEmpty()
@@ -56,5 +62,5 @@ export class UserInfoDto {
   updatedAt: Date;
 
   @IsDateString()
-  deletedAt: Date;
+  deletedAt?: Date;
 }

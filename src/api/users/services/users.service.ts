@@ -17,7 +17,9 @@ export class UsersService implements IUsersService {
     return this.usersRepository.create(userData);
   }
 
-  findAll() {}
+  findAll(data): Promise<void> {
+    return;
+  }
 
   findOne(userFindUniqueArgs: Prisma.UserFindUniqueArgs): Promise<User | null> {
     return this.usersRepository.findOne(userFindUniqueArgs);

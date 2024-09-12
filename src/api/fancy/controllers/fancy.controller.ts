@@ -3,14 +3,14 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { ApiFancy } from '@src/api/fancy/controllers/fancy.swagger';
 import { FindAllFancyDto } from '@src/api/fancy/dtos/find-all-fancy.dto';
-import { FancyService } from '@src/api/fancy/services/fancy.service';
 import { IFancyService } from '@src/api/fancy/services/i-fancy-service.interface';
+import { FANCY_SERVICE_DI_TOKEN } from '@src/common/constants/di.tokens';
 import { PaginationResponseDto } from '@src/common/dtos/pagination/pagination-response.dto';
 
 @ApiTags('fancy')
 @Controller('fancy')
 export class FancyController {
-  constructor(@Inject(FancyService) private readonly fancyService: IFancyService) {}
+  constructor(@Inject(FANCY_SERVICE_DI_TOKEN) private readonly fancyService: IFancyService) {}
 
   @ApiFancy.FindAll({ summary: 'fancy 전체 조회' })
   @Get()

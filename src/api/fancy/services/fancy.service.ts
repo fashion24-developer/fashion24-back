@@ -8,14 +8,16 @@ import { CreateFancyInputDto } from '@src/api/fancy/dtos/create-fancy-input.dto'
 import { CreateFancyDto } from '@src/api/fancy/dtos/create-fancy.dto';
 import { FancyDto } from '@src/api/fancy/dtos/fancy.dto';
 import { FindAllFancyDto } from '@src/api/fancy/dtos/find-all-fancy.dto';
-import { FancyRepository } from '@src/api/fancy/repositories/fancy.repository';
 import { IFancyRepository } from '@src/api/fancy/repositories/i-fancy-repository.interface';
 import { IFancyService } from '@src/api/fancy/services/i-fancy-service.interface';
+import { FANCY_REPOSITORY_DI_TOKEN } from '@src/common/constants/di.tokens';
 import { IPaginationMeta } from '@src/common/interfaces/pagination/i-pagination-meta.interface';
 
 @Injectable()
 export class FancyService implements IFancyService {
-  constructor(@Inject(FancyRepository) private readonly fancyRepository: IFancyRepository) {}
+  constructor(
+    @Inject(FANCY_REPOSITORY_DI_TOKEN) private readonly fancyRepository: IFancyRepository
+  ) {}
 
   async create(fancyData: CreateFancyInputDto): Promise<FancyDto> {
     try {

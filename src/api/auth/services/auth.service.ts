@@ -9,18 +9,17 @@ import { SocialTokenDto } from '@src/api/auth/dtos/social-token.dto';
 import { TokenSubEnum } from '@src/api/auth/enums/token-sub.enum';
 import { IAuthService } from '@src/api/auth/services/i-auth-service.interface';
 import { ITokenService } from '@src/api/auth/services/i-token-service.interface';
-import { TokenService } from '@src/api/auth/services/token.service';
 import { SocialUserInfoDto } from '@src/api/users/dtos/social-user-info.dto';
 import { UserProvider } from '@src/api/users/enums/user-provider.enum';
 import { IUsersService } from '@src/api/users/services/i-users-service.interface';
-import { UsersService } from '@src/api/users/services/users.service';
+import { TOKEN_SERVICE_DI_TOKEN, USERS_SERVICE_DI_TOKEN } from '@src/common/constants/di.tokens';
 
 export class AuthService implements IAuthService {
   private readonly authProviderConfig;
 
   constructor(
-    @Inject(UsersService) private readonly usersService: IUsersService,
-    @Inject(TokenService) private readonly tokenService: ITokenService
+    @Inject(USERS_SERVICE_DI_TOKEN) private readonly usersService: IUsersService,
+    @Inject(TOKEN_SERVICE_DI_TOKEN) private readonly tokenService: ITokenService
   ) {
     this.authProviderConfig = createAuthProviderConfig();
   }

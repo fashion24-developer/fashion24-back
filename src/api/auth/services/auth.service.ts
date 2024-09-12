@@ -14,6 +14,7 @@ import { SocialUserInfoDto } from '@src/api/users/dtos/social-user-info.dto';
 import { UserProvider } from '@src/api/users/enums/user-provider.enum';
 import { IUsersService } from '@src/api/users/services/i-users-service.interface';
 import { UsersService } from '@src/api/users/services/users.service';
+import { COMMON_ERROR_HTTP_STATUS_MESSAGE } from '@src/common/constants/common.constant';
 import { ResponseDto } from '@src/common/dtos/response.dto';
 
 export class AuthService implements IAuthService {
@@ -68,9 +69,15 @@ export class AuthService implements IAuthService {
       return { accessToken, refreshToken };
     } catch (error) {
       console.log(error);
-      throw new HttpException('Failed to login', HttpStatus.INTERNAL_SERVER_ERROR, {
-        cause: error
-      });
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Failed to login',
+          error: COMMON_ERROR_HTTP_STATUS_MESSAGE[500],
+          cause: error.message
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 

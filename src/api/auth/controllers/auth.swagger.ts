@@ -11,6 +11,11 @@ import {
 
 import { AuthController } from '@src/api/auth/controllers/auth.controller';
 import { UserProvider } from '@src/api/users/enums/user-provider.enum';
+import {
+  COMMON_ERROR_HTTP_STATUS_CODE,
+  COMMON_ERROR_HTTP_STATUS_MESSAGE
+} from '@src/common/constants/common.constant';
+import { SwaggerErrorResponse } from '@src/common/decorators/swagger-error-response.decorator';
 import { ResponseDto } from '@src/common/dtos/response.dto';
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
 
@@ -39,56 +44,28 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
           }
         }
       }),
-      ApiResponse({
-        status: 400,
-        description: '로그인 요청 시 인가코드가 누락됨.',
-        schema: {
-          type: 'object',
-          properties: {
-            statusCode: {
-              type: 'number',
-              example: 400
-            },
-            timestamp: {
-              type: 'string',
-              example: '2024-09-04T04:45:55.410Z'
-            },
-            path: {
-              type: 'string',
-              example: '/api/auth/:provider/login'
-            },
-            message: {
-              type: 'string',
-              example: 'The code is required for query.'
-            }
+      SwaggerErrorResponse(
+        COMMON_ERROR_HTTP_STATUS_CODE.BAD_REQUEST,
+        COMMON_ERROR_HTTP_STATUS_MESSAGE[400],
+        [
+          {
+            description: '로그인 요청 시 인가코드가 누락됨.',
+            message: 'The code is required for query.'
           }
-        }
-      }),
-      ApiResponse({
-        status: 500,
-        description: '로그인 중 에러 발생.',
-        schema: {
-          type: 'object',
-          properties: {
-            statusCode: {
-              type: 'number',
-              example: 500
-            },
-            timestamp: {
-              type: 'string',
-              example: '2024-09-04T04:10:34.008Z'
-            },
-            path: {
-              type: 'string',
-              example: '/api/auth/:provider/login'
-            },
-            message: {
-              type: 'string',
-              example: 'Failed to login'
-            }
+        ],
+        `${AuthController.path}/:provider/login`
+      ),
+      SwaggerErrorResponse(
+        COMMON_ERROR_HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+        COMMON_ERROR_HTTP_STATUS_MESSAGE[500],
+        [
+          {
+            description: '로그인 중 에러 발생.',
+            message: 'Failed to login'
           }
-        }
-      }),
+        ],
+        `${AuthController.path}/:provider/login`
+      ),
       ApiParam({
         name: 'provider',
         enum: UserProvider,

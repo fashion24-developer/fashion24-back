@@ -7,6 +7,11 @@ import { CreateFancyDto } from '@src/api/fancy/dtos/create-fancy.dto';
 import { FancyRepository } from '@src/api/fancy/repositories/fancy.repository';
 import { IFancyRepository } from '@src/api/fancy/repositories/i-fancy-repository.interface';
 import { IFancyService } from '@src/api/fancy/services/i-fancy-service.interface';
+import { PaginationResponseDto } from '@src/common/dtos/pagination/pagination-response.dto';
+import { IPaginationMeta } from '@src/common/interfaces/pagination/i-pagination-meta.interface';
+
+import { FANCY_FIND_ALL_SELECT } from '../consts/fancy-find-all-select.const';
+import { FindAllFancyDto } from '../dtos/find-all-fancy.dto';
 
 @Injectable()
 export class FancyService implements IFancyService {
@@ -31,8 +36,33 @@ export class FancyService implements IFancyService {
     return data;
   }
 
-  async findAll() {
-    return [];
+  async findAll(
+    paginationData: FindAllFancyDto
+  ): Promise<{ data: Fancy[]; meta: IPaginationMeta }> {
+    const { page, pageSize, orderBy, orderDirection, ...whereInput } = paginationData;
+
+    const where = this.findAllWhere(whereInput);
+
+    const totalCount = await this.fancyRepository.count({ where });
+    const totalPages = pageSize ? Math.ceil(totalCount / pageSize) : 1;
+
+    const isFirstPage = page === 1 ? true : false;
+    const isLastPage = page === totalPages ? true : false;
+
+    const skip = pageSize ? pageSize * (page - 1) : 0;
+
+    const data = await this.fancyRepository.findAll({
+      select: { ...FANCY_FIND_ALL_SELECT },
+      take: pageSize,
+      skip,
+      where,
+      orderBy: { [orderBy]: orderDirection }
+    });
+
+    return {
+      data,
+      meta: { pageNumber: page, pageSize, totalPages, totalCount, isLastPage, isFirstPage }
+    };
   }
 
   async update(data) {
@@ -44,5 +74,42 @@ export class FancyService implements IFancyService {
   private calculatePrice(costPrice: number, discountRate: number): number {
     const price = costPrice * (1 - discountRate / 100);
     return Math.ceil(price);
+  }
+
+  private findAllWhere(
+    data: Omit<FindAllFancyDto, 'page' | 'pageSize' | 'orderBy' | 'orderDirection'>
+  ): Prisma.FancyWhereInput {
+    const { name, status, optionName, subOptionName, lookName, tagName } = data;
+
+    return {
+      name: { contains: name },
+      status,
+      AND: [
+        ...(optionName
+          ? optionName.map((id) => ({
+              fancyOptions: {
+                some: {
+                  option: {
+                    id
+                  }
+                }
+              }
+            }))
+          : []),
+        ...(subOptionName
+          ? subOptionName.map((id) => ({
+              fancySubOptions: {
+                some: {
+                  subOption: {
+                    id
+                  }
+                }
+              }
+            }))
+          : []),
+        ...(lookName ? lookName.map((id) => ({ looks: { some: { id } } })) : []),
+        ...(tagName ? tagName.map((id) => ({ tags: { some: { id } } })) : [])
+      ]
+    };
   }
 }

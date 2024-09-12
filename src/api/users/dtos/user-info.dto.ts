@@ -23,10 +23,6 @@ export class UserInfoDto {
 
   @IsNotEmpty()
   @IsString()
-  name: string;
-
-  @IsNotEmpty()
-  @IsString()
   nickname: string;
 
   @IsNotEmpty()

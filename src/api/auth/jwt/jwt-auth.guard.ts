@@ -4,6 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
 
 import { UserRole } from '@src/api/users/enums/user-role.enum';
+import { COMMON_ERROR_HTTP_STATUS_MESSAGE } from '@src/common/constants/common.constant';
 
 @Injectable()
 export class AccessTokenAuthGuard extends AuthGuard('accessToken') {
@@ -46,7 +47,14 @@ export class RefreshTokenAuthGuard extends AuthGuard('refreshToken') {
     const request = context.switchToHttp().getRequest();
     const refreshToken = request.cookies['refreshToken'];
     if (!refreshToken) {
-      throw new HttpException('jwt must be provided', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'jwt must be provided',
+          error: COMMON_ERROR_HTTP_STATUS_MESSAGE[400]
+        },
+        HttpStatus.BAD_REQUEST
+      );
     }
     return super.canActivate(context);
   }
@@ -64,12 +72,26 @@ export class RefreshTokenAuthGuard extends AuthGuard('refreshToken') {
 
       if (err instanceof HttpException) throw err;
 
-      throw new HttpException(info.message, getStatus(info.message));
+      throw new HttpException(
+        {
+          statusCode: getStatus(info.message),
+          message: info.message,
+          error: COMMON_ERROR_HTTP_STATUS_MESSAGE[getStatus(info.message)]
+        },
+        getStatus(info.message)
+      );
     } catch (error) {
       if (error instanceof HttpException) throw error;
       else {
         console.log(error.message);
-        throw new HttpException('jwt error', HttpStatus.BAD_REQUEST);
+        throw new HttpException(
+          {
+            statusCode: HttpStatus.BAD_REQUEST,
+            message: 'jwt error',
+            error: COMMON_ERROR_HTTP_STATUS_MESSAGE[400]
+          },
+          HttpStatus.BAD_REQUEST
+        );
       }
     }
   }

@@ -102,31 +102,42 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
           }
         }
       }),
-      ApiResponse({
-        status: 500,
-        description: '로그아웃 중 에러 발생.',
-        schema: {
-          type: 'object',
-          properties: {
-            statusCode: {
-              type: 'number',
-              example: 500
-            },
-            timestamp: {
-              type: 'string',
-              example: '2024-09-04T04:10:34.008Z'
-            },
-            path: {
-              type: 'string',
-              example: '/api/auth/:provider/logout'
-            },
-            message: {
-              type: 'string',
-              example: 'Failed to logout'
-            }
+      // ApiResponse({
+      //   status: 500,
+      //   description: '로그아웃 중 에러 발생.',
+      //   schema: {
+      //     type: 'object',
+      //     properties: {
+      //       statusCode: {
+      //         type: 'number',
+      //         example: 500
+      //       },
+      //       timestamp: {
+      //         type: 'string',
+      //         example: '2024-09-04T04:10:34.008Z'
+      //       },
+      //       path: {
+      //         type: 'string',
+      //         example: '/api/auth/:provider/logout'
+      //       },
+      //       message: {
+      //         type: 'string',
+      //         example: 'Failed to logout'
+      //       }
+      //     }
+      //   }
+      // }),
+      SwaggerErrorResponse(
+        COMMON_ERROR_HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
+        COMMON_ERROR_HTTP_STATUS_MESSAGE[500],
+        [
+          {
+            description: '로그아웃 중 에러 발생.',
+            message: 'Failed to logout'
           }
-        }
-      }),
+        ],
+        `${AuthController.path}/:provider/logout`
+      ),
       ApiParam({
         name: 'provider',
         enum: UserProvider,

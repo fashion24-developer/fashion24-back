@@ -73,8 +73,7 @@ export class AuthService implements IAuthService {
         {
           statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
           message: 'Failed to login',
-          error: COMMON_ERROR_HTTP_STATUS_MESSAGE[500],
-          cause: error.message
+          error: COMMON_ERROR_HTTP_STATUS_MESSAGE[500]
         },
         HttpStatus.INTERNAL_SERVER_ERROR
       );
@@ -98,9 +97,14 @@ export class AuthService implements IAuthService {
       return { statusCode: HttpStatus.OK, message: 'Logout successful' };
     } catch (error) {
       console.log(error);
-      throw new HttpException('Failed to logout', HttpStatus.INTERNAL_SERVER_ERROR, {
-        cause: error
-      });
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Failed to logout',
+          error: COMMON_ERROR_HTTP_STATUS_MESSAGE[500]
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 

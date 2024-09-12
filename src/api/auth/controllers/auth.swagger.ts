@@ -10,6 +10,7 @@ import {
 } from '@nestjs/swagger';
 
 import { AuthController } from '@src/api/auth/controllers/auth.controller';
+import { UserProvider } from '@src/api/users/enums/user-provider.enum';
 import { ResponseDto } from '@src/common/dtos/response.dto';
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
 
@@ -90,9 +91,9 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
       }),
       ApiParam({
         name: 'provider',
-        type: 'string',
+        enum: UserProvider,
         required: true,
-        description: '로그인 제공자 (ex: naver, kakao, google)'
+        description: '소셜 정보 제공자'
       }),
       ApiQuery({
         name: 'code',
@@ -151,9 +152,9 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
       }),
       ApiParam({
         name: 'provider',
-        type: 'string',
+        enum: UserProvider,
         required: true,
-        description: '로그인 제공자 (ex: naver, kakao, google)'
+        description: '소셜 정보 제공자'
       }),
       ApiCookieAuth('accessToken')
     );

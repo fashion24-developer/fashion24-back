@@ -1,7 +1,8 @@
-import { HttpException, HttpStatus, Inject } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Logger } from '@nestjs/common';
 
 import { User } from '@prisma/client';
 import axios from 'axios';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { createAuthProviderConfig } from '@src/api/auth/auth-provider-config';
 import { ServiceTokenDto } from '@src/api/auth/dtos/service-token.dto';
@@ -21,6 +22,7 @@ export class AuthService implements IAuthService {
   private readonly authProviderConfig;
 
   constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: Logger,
     @Inject(UsersService) private readonly usersService: IUsersService,
     @Inject(TokenService) private readonly tokenService: ITokenService
   ) {
@@ -68,7 +70,7 @@ export class AuthService implements IAuthService {
 
       return { accessToken, refreshToken };
     } catch (error) {
-      console.log(error);
+      this.logger.error(error);
       throw new HttpException(
         {
           statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -96,7 +98,7 @@ export class AuthService implements IAuthService {
 
       return { statusCode: HttpStatus.OK, message: 'Logout successful' };
     } catch (error) {
-      console.log(error);
+      this.logger.error(error);
       throw new HttpException(
         {
           statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -119,7 +121,7 @@ export class AuthService implements IAuthService {
 
       return { accessToken };
     } catch (error) {
-      console.log(error);
+      this.logger.error(error);
       throw new HttpException(
         'Failed to generate new access token',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -149,7 +151,7 @@ export class AuthService implements IAuthService {
 
       return { accessToken: socialTokens.access_token, refreshToken: socialTokens.refresh_token };
     } catch (error) {
-      console.log(error);
+      this.logger.error(error);
       throw new HttpException('Failed to get social tokens', HttpStatus.INTERNAL_SERVER_ERROR, {
         cause: error
       });
@@ -174,7 +176,7 @@ export class AuthService implements IAuthService {
 
       return providerConfig.extractUserInfo(userInfoResponse);
     } catch (error) {
-      console.log(error);
+      this.logger.error(error);
       throw new HttpException('Failed to get social user info', HttpStatus.INTERNAL_SERVER_ERROR, {
         cause: error
       });
@@ -190,7 +192,7 @@ export class AuthService implements IAuthService {
 
       await axios.post(logoutUrl, {}, { headers: logoutHeader });
     } catch (error) {
-      console.log(error);
+      this.logger.error(error);
       throw new HttpException('Failed to request logout', HttpStatus.INTERNAL_SERVER_ERROR, {
         cause: error
       });

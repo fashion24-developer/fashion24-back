@@ -1,5 +1,7 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { SaveUserTokenDto } from '@src/api/auth/dtos/save-user-token.dto';
 import { TokenPayloadDto } from '@src/api/auth/dtos/token-payload.dto';
@@ -8,6 +10,7 @@ import { TokenTtlEnum } from '@src/api/auth/enums/token-ttl.enum';
 import { ITokenRepository } from '@src/api/auth/repositories/i-token-repository.interface';
 import { TokenRepository } from '@src/api/auth/repositories/token.repository';
 import { ITokenService } from '@src/api/auth/services/i-token-service.interface';
+import { COMMON_ERROR_HTTP_STATUS_MESSAGE } from '@src/common/constants/common.constant';
 import { RedisService } from '@src/common/redis/services/redis.service';
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
@@ -18,6 +21,7 @@ export class TokenService implements ITokenService {
     private readonly jwtService: JwtService,
     private readonly appConfigService: AppConfigService,
     private readonly redisService: RedisService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: Logger,
     @Inject(TokenRepository) private readonly tokenRepository: ITokenRepository
   ) {}
 
@@ -53,10 +57,15 @@ export class TokenService implements ITokenService {
         socialRefreshToken: saveUserToken.socialRefreshToken
       });
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Failed to save the token.', HttpStatus.INTERNAL_SERVER_ERROR, {
-        cause: error
-      });
+      this.logger.error(error);
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Failed to save the token',
+          error: COMMON_ERROR_HTTP_STATUS_MESSAGE[500]
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -66,10 +75,15 @@ export class TokenService implements ITokenService {
       this.redisService.del(`${String(userId)}-refreshToken`);
       await this.tokenRepository.delete({ where: { userId } });
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Failed to delete the token.', HttpStatus.INTERNAL_SERVER_ERROR, {
-        cause: error
-      });
+      this.logger.error(error);
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Failed to delete the token',
+          error: COMMON_ERROR_HTTP_STATUS_MESSAGE[500]
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 }

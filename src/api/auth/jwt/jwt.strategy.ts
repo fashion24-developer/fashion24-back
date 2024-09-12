@@ -31,7 +31,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'accessToken
     const tokenInRedis = await this.redisService.get(`${payload.userId}-accessToken`);
 
     if (!tokenInRedis) {
-      throw new HttpException('token not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('token not found', HttpStatus.UNAUTHORIZED);
     } else if (tokenInRedis !== tokenFromRequest) {
       this.redisService.del(`${payload.userId}-accessToken`);
       this.redisService.del(`${payload.userId}-refreshToken`);
@@ -66,7 +66,7 @@ export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'refreshTok
     const tokenInRedis = await this.redisService.get(`${payload.userId}-refreshToken`);
 
     if (!tokenInRedis) {
-      throw new HttpException('token not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('token not found', HttpStatus.UNAUTHORIZED);
     } else if (tokenInRedis !== tokenFromRequest) {
       this.redisService.del(`${payload.userId}-accessToken`);
       this.redisService.del(`${payload.userId}-refreshToken`);

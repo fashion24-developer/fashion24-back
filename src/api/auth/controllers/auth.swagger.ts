@@ -225,6 +225,15 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
                   message: 'jwt expired'
                 },
                 description: '만료된 토큰인 경우'
+              },
+              'token not found': {
+                value: {
+                  statusCode: 401,
+                  timestamp: '2024-09-04T04:45:55.410Z',
+                  path: '/api/auth/new-access-token',
+                  message: 'token not found'
+                },
+                description: '토큰을 redis에서 찾을 수 없는 경우'
               }
             }
           }

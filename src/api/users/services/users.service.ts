@@ -23,10 +23,6 @@ export class UsersService implements IUsersService {
     return this.usersRepository.findOne(userFindUniqueArgs);
   }
 
-  findTokens(userTokenFindUniqueArgs: Prisma.UserTokenFindUniqueArgs): Promise<UserToken | null> {
-    return this.usersRepository.findTokens(userTokenFindUniqueArgs);
-  }
-
   update(userUpdateArgs: Prisma.UserUpdateArgs): Promise<User> {
     return this.usersRepository.update(userUpdateArgs);
   }

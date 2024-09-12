@@ -1,4 +1,4 @@
-import { Prisma, User, UserToken } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 
 import { IService } from '@src/common/interfaces/i-service.interface';
 

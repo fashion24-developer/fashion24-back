@@ -35,7 +35,7 @@ export class TokenService implements ITokenService {
     });
   }
 
-  saveTokens(saveUserToken: SaveUserTokenDto): void {
+  async saveTokens(saveUserToken: SaveUserTokenDto): Promise<void> {
     try {
       this.redisService.set(
         `${String(saveUserToken.userId)}-accessToken`,
@@ -47,7 +47,7 @@ export class TokenService implements ITokenService {
         saveUserToken.refreshToken,
         TokenTtlEnum.REFRESH_TOKEN
       );
-      this.tokenRepository.create({
+      await this.tokenRepository.create({
         userId: saveUserToken.userId,
         socialAccessToken: saveUserToken.socialAccessToken,
         socialRefreshToken: saveUserToken.socialRefreshToken

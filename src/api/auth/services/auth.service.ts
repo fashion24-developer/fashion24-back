@@ -84,7 +84,7 @@ export class AuthService implements IAuthService {
 
   async logout(provider: UserProvider, userId: number): Promise<ResponseDto> {
     try {
-      const userSocialTokens = await this.usersService.findTokens({ where: { userId } });
+      const userSocialTokens = await this.tokenService.findTokens({ where: { userId } });
       const socialTokens: SocialTokenDto = {
         accessToken: userSocialTokens.socialAccessToken,
         refreshToken: userSocialTokens.socialRefreshToken

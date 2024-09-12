@@ -5,6 +5,5 @@ import { IService } from '@src/common/interfaces/i-service.interface';
 export interface IUsersService extends IService {
   create(userData: Prisma.UserCreateInput): Promise<User>;
   findOne(userFindUniqueArgs: Prisma.UserFindUniqueArgs): Promise<User | null>;
-  findTokens(userTokenFindUniqueArgs: Prisma.UserTokenFindUniqueArgs): Promise<UserToken | null>;
   update(userUpdateArgs: Prisma.UserUpdateArgs): Promise<User>;
 }

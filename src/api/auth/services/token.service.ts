@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
+import { Prisma, UserToken } from '@prisma/client';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { SaveUserTokenDto } from '@src/api/auth/dtos/save-user-token.dto';
@@ -37,6 +38,10 @@ export class TokenService implements ITokenService {
           : ENV_KEY.REFRESH_TOKEN_SECRET_KEY
       )
     });
+  }
+
+  findTokens(userTokenFindUniqueArgs: Prisma.UserTokenFindUniqueArgs): Promise<UserToken | null> {
+    return this.tokenRepository.findTokens(userTokenFindUniqueArgs);
   }
 
   async saveTokens(saveUserToken: SaveUserTokenDto): Promise<void> {

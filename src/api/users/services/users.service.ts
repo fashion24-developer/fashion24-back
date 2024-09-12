@@ -17,7 +17,7 @@ export class UsersService implements IUsersService {
     return this.usersRepository.create(userData);
   }
 
-  findAll(data): Promise<void> {
+  findAll(): Promise<void> {
     return;
   }
 

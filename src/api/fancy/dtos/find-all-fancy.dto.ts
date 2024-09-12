@@ -3,10 +3,9 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Prisma, ProductStatus } from '@prisma/client';
 import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 
+import { TransformValueToNumberArray } from '@src/api/fancy/decorators/value-to-number-array.decorator';
+import { FancyOrderBy } from '@src/api/fancy/enums/fancy-orderby.enum';
 import { PaginationDto } from '@src/common/dtos/pagination/pagaination.dto';
-
-import { TransformValueToNumberArray } from '../decorators/value-to-number-array.decorator';
-import { FancyOrderBy } from '../enums/fancy-orderby.enum';
 
 export class FindAllFancyDto extends PaginationDto {
   @ApiPropertyOptional({ description: '완제품 이름' })

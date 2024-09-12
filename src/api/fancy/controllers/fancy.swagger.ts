@@ -3,10 +3,9 @@ import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { getSchemaPath } from '@nestjs/swagger';
 
 import { FancyAdminController } from '@src/api/fancy/controllers/fancy.admin.controller';
+import { FancyController } from '@src/api/fancy/controllers/fancy.controller';
 import { FancyDto } from '@src/api/fancy/dtos/fancy.dto';
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
-
-import { FancyController } from './fancy.controller';
 
 export const ApiFancy: ApiOperator<keyof FancyAdminController | keyof FancyController> = {
   Create: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {

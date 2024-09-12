@@ -1,12 +1,11 @@
 import { Controller, Get, Inject, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
+import { ApiFancy } from '@src/api/fancy/controllers/fancy.swagger';
+import { FindAllFancyDto } from '@src/api/fancy/dtos/find-all-fancy.dto';
+import { FancyService } from '@src/api/fancy/services/fancy.service';
+import { IFancyService } from '@src/api/fancy/services/i-fancy-service.interface';
 import { PaginationResponseDto } from '@src/common/dtos/pagination/pagination-response.dto';
-
-import { FindAllFancyDto } from '../dtos/find-all-fancy.dto';
-import { FancyService } from '../services/fancy.service';
-import { IFancyService } from '../services/i-fancy-service.interface';
-import { ApiFancy } from './fancy.swagger';
 
 @ApiTags('fancy')
 @Controller('fancy')

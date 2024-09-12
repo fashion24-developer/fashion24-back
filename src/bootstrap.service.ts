@@ -1,9 +1,10 @@
-import { ClassSerializerInterceptor, INestApplication, Injectable, Logger } from '@nestjs/common';
+import { ClassSerializerInterceptor, INestApplication, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import cookieParser from 'cookie-parser';
 import { singularize } from 'inflection';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
@@ -19,9 +20,7 @@ export class BootstrapService {
   }
 
   setLogger(app: INestApplication) {
-    const logger = new Logger();
-
-    app.useLogger(logger);
+    app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
   }
 
   setPathPrefix(app: INestApplication) {

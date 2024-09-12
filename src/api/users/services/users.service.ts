@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { Prisma, User, UserToken } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 
 import { IUsersRepository } from '@src/api/users/repositories/i-users-repository.interface';
 import { UsersRepository } from '@src/api/users/repositories/users.repository';

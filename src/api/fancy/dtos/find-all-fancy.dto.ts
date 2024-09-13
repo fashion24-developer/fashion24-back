@@ -5,7 +5,7 @@ import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 
 import { TransformValueToNumberArray } from '@src/api/fancy/decorators/value-to-number-array.decorator';
 import { FancyOrderBy } from '@src/api/fancy/enums/fancy-orderby.enum';
-import { PaginationDto } from '@src/common/dtos/pagination/pagaination.dto';
+import { PaginationDto } from '@src/common/dtos/pagination/pagination.dto';
 
 export class FindAllFancyDto extends PaginationDto {
   @ApiPropertyOptional({ description: '완제품 이름' })

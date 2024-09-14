@@ -1,11 +1,15 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
-import { Prisma, ProductStatus } from '@prisma/client';
 import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
 
 import { TransformValueToNumberArray } from '@src/api/fancy/decorators/value-to-number-array.decorator';
-import { FancyOrderBy } from '@src/api/fancy/enums/fancy-orderby.enum';
+import { FancyOrderBy, FancyOrderByType } from '@src/api/fancy/enums/fancy-orderby.enum';
+import {
+  FancyProductStatus,
+  FancyProductStatusType
+} from '@src/api/fancy/enums/fancy-product-status.enum';
 import { PaginationDto } from '@src/common/dtos/pagination/pagination.dto';
+import { SortOption, SortOptionType } from '@src/common/enums/sort-option.enum';
 
 export class FindAllFancyDto extends PaginationDto {
   @ApiPropertyOptional({ description: '완제품 이름' })
@@ -13,10 +17,10 @@ export class FindAllFancyDto extends PaginationDto {
   @IsOptional()
   name?: string;
 
-  @ApiPropertyOptional({ description: '상품 상태', enum: ProductStatus })
-  @IsEnum(ProductStatus)
+  @ApiPropertyOptional({ description: '상품 상태', enum: FancyProductStatus })
+  @IsEnum(FancyProductStatus)
   @IsOptional()
-  status?: ProductStatus;
+  status?: FancyProductStatusType;
 
   @ApiPropertyOptional({ description: '옵션 ID' })
   @TransformValueToNumberArray()
@@ -48,13 +52,13 @@ export class FindAllFancyDto extends PaginationDto {
     default: FancyOrderBy.PRICE
   })
   @IsEnum(FancyOrderBy)
-  orderBy: FancyOrderBy = FancyOrderBy.PRICE;
+  orderBy: FancyOrderByType = FancyOrderBy.PRICE;
 
   @ApiPropertyOptional({
     description: '정렬 방향',
-    enum: Prisma.SortOrder,
-    default: Prisma.SortOrder.desc
+    enum: SortOption,
+    default: SortOption.DESC
   })
-  @IsEnum(Prisma.SortOrder)
-  orderDirection: Prisma.SortOrder = Prisma.SortOrder.desc;
+  @IsEnum(SortOption)
+  orderDirection: SortOptionType = SortOption.DESC;
 }

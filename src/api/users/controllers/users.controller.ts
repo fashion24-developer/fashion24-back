@@ -1,9 +1,18 @@
-import { Controller, Delete, Get, MethodNotAllowedException, Patch, Post } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  MethodNotAllowedException,
+  Patch,
+  Post
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { ApiUsers } from '@src/api/users/controllers/users.swagger';
 import { UsersService } from '@src/api/users/services/users.service';
 import { globalPrefix } from '@src/bootstrap.service';
+import { USERS_SERVICE_DI_TOKEN } from '@src/common/constants/di.tokens';
 import { routesV1 } from '@src/configs/app.route';
 
 @ApiTags('user')
@@ -11,7 +20,7 @@ import { routesV1 } from '@src/configs/app.route';
 export class UsersController {
   static path = `/${globalPrefix}/${routesV1.version}/${routesV1.user.root}`;
 
-  constructor(private readonly usersService: UsersService) {}
+  constructor(@Inject(USERS_SERVICE_DI_TOKEN) private readonly usersService: UsersService) {}
 
   @ApiUsers.Create({ summary: '유저 생성 API' })
   @Post(routesV1.user.root)

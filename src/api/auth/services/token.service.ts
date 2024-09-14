@@ -1,5 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+
+import { Prisma, UserToken } from '@prisma/client';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { SaveUserTokenDto } from '@src/api/auth/dtos/save-user-token.dto';
 import { TokenPayloadDto } from '@src/api/auth/dtos/token-payload.dto';
@@ -8,6 +11,7 @@ import { TokenTtlEnum } from '@src/api/auth/enums/token-ttl.enum';
 import { ITokenRepository } from '@src/api/auth/repositories/i-token-repository.interface';
 import { TokenRepository } from '@src/api/auth/repositories/token.repository';
 import { ITokenService } from '@src/api/auth/services/i-token-service.interface';
+import { COMMON_ERROR_HTTP_STATUS_MESSAGE } from '@src/common/constants/common.constant';
 import { RedisService } from '@src/common/redis/services/redis.service';
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
@@ -18,6 +22,7 @@ export class TokenService implements ITokenService {
     private readonly jwtService: JwtService,
     private readonly appConfigService: AppConfigService,
     private readonly redisService: RedisService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: Logger,
     @Inject(TokenRepository) private readonly tokenRepository: ITokenRepository
   ) {}
 
@@ -35,7 +40,11 @@ export class TokenService implements ITokenService {
     });
   }
 
-  saveTokens(saveUserToken: SaveUserTokenDto): void {
+  findTokens(userTokenFindUniqueArgs: Prisma.UserTokenFindUniqueArgs): Promise<UserToken | null> {
+    return this.tokenRepository.findTokens(userTokenFindUniqueArgs);
+  }
+
+  async saveTokens(saveUserToken: SaveUserTokenDto): Promise<void> {
     try {
       this.redisService.set(
         `${String(saveUserToken.userId)}-accessToken`,
@@ -47,15 +56,39 @@ export class TokenService implements ITokenService {
         saveUserToken.refreshToken,
         TokenTtlEnum.REFRESH_TOKEN
       );
-      this.tokenRepository.create({
+      await this.tokenRepository.create({
         userId: saveUserToken.userId,
         socialAccessToken: saveUserToken.socialAccessToken,
         socialRefreshToken: saveUserToken.socialRefreshToken
       });
     } catch (error) {
-      console.log(error);
+      this.logger.error(error);
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Failed to save the token',
+          error: COMMON_ERROR_HTTP_STATUS_MESSAGE[500]
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
 
-      throw new Error(error);
+  async deleteTokens(userId: number): Promise<void> {
+    try {
+      this.redisService.del(`${String(userId)}-accessToken`);
+      this.redisService.del(`${String(userId)}-refreshToken`);
+      await this.tokenRepository.delete({ where: { userId } });
+    } catch (error) {
+      this.logger.error(error);
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Failed to delete the token',
+          error: COMMON_ERROR_HTTP_STATUS_MESSAGE[500]
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 }

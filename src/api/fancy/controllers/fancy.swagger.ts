@@ -3,10 +3,11 @@ import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { getSchemaPath } from '@nestjs/swagger';
 
 import { FancyAdminController } from '@src/api/fancy/controllers/fancy.admin.controller';
+import { FancyController } from '@src/api/fancy/controllers/fancy.controller';
 import { FancyDto } from '@src/api/fancy/dtos/fancy.dto';
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
 
-export const ApiFancy: ApiOperator<keyof FancyAdminController> = {
+export const ApiFancy: ApiOperator<keyof FancyAdminController | keyof FancyController> = {
   Create: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
     return applyDecorators(
       ApiOperation({
@@ -123,6 +124,14 @@ export const ApiFancy: ApiOperator<keyof FancyAdminController> = {
         }
       }),
       ApiCookieAuth('accessToken')
+    );
+  },
+
+  FindAll: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
+    return applyDecorators(
+      ApiOperation({
+        ...apiOperationOptions
+      })
     );
   }
 };

@@ -54,6 +54,10 @@ export function createAuthProviderConfig() {
         nickname: userInfoResponse.response.name,
         email: userInfoResponse.response.email,
         provider: UserProvider.KAKAO
+      }),
+      logoutUrl: 'https://kapi.kakao.com/v1/user/logout',
+      logoutHeader: (socialAccessToken: string) => ({
+        Authorization: `Bearer ${socialAccessToken}`
       })
     },
     [UserProvider.GOOGLE]: {

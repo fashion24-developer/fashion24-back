@@ -17,6 +17,10 @@ export class TokenRepository implements ITokenRepository {
     return;
   }
 
+  findAll(data: any): Promise<any> {
+    return;
+  }
+
   findTokens(userTokenFindUniqueArgs: Prisma.UserTokenFindUniqueArgs): Promise<UserToken | null> {
     return this.prisma.userToken.findUnique(userTokenFindUniqueArgs);
   }

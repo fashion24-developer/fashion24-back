@@ -28,14 +28,12 @@ export class FancyDto {
   @Min(0)
   discountRate: number;
 
-  @ApiProperty({ description: '설명1', example: '예쁘고 미니멀한 반지' })
+  @ApiPropertyOptional({ description: '설명1', example: '예쁘고 미니멀한 반지' })
   @IsString()
-  @ApiPropertyOptional()
   description1?: string;
 
-  @ApiProperty({ description: '설명2', example: '이 반지는 예쁘고 미니멀한 반자입니다.' })
+  @ApiPropertyOptional({ description: '설명2', example: '이 반지는 예쁘고 미니멀한 반자입니다.' })
   @IsString()
-  @ApiPropertyOptional()
   description2?: string;
 
   @ApiProperty({ description: '상태', example: 'ACTIVE' })

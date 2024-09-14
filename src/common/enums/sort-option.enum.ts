@@ -1,6 +1,8 @@
+import { ValueOf } from '@src/common/types/common.type';
+
 export enum SortOption {
-  asc = 'asc',
-  desc = 'desc'
+  ASC = 'asc',
+  DESC = 'desc'
 }
 
-export type SortOptionType = keyof typeof SortOption;
+export type SortOptionType = ValueOf<typeof SortOption>;

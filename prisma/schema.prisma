@@ -180,6 +180,7 @@ model FancyOption {
   fancy  Fancy  @relation(fields: [fancyId], references: [id], onDelete: Cascade)
   option Option @relation(fields: [optionId], references: [id], onDelete: Cascade)
 
+  @@unique([fancyId, optionId])
   @@map("fancy_option")
 }
 
@@ -204,8 +205,6 @@ model FancySubOption {
   id          Int      @id @default(autoincrement())
   /// 완제품 아이디 (FK)
   fancyId     String   @map("fancy_uuid")
-  /// 옵션 아이디 (FK)
-  optionId    Int      @map("option_id")
   /// 소옵션 아이디 (FK)
   subOptionId Int      @map("sub_option_id")
   /// 생성일
@@ -214,19 +213,22 @@ model FancySubOption {
   fancy     Fancy     @relation(fields: [fancyId], references: [id], onDelete: Cascade)
   subOption SubOption @relation(fields: [subOptionId], references: [id], onDelete: Cascade)
 
+  @@unique([fancyId, subOptionId])
   @@map("fancy_sub_option")
 }
 
 /// 소옵션 테이블
 model SubOption {
   /// Primary Key
-  id        Int      @id @default(autoincrement())
-  /// 소옵션 이름
-  name      String   @unique @db.VarChar(100)
+  id              Int      @id @default(autoincrement())
   /// 옵션 아이디 (FK)
-  optionId  Int      @map("option_id")
+  optionId        Int      @map("option_id")
+  /// 소옵션 이름
+  name            String   @unique @db.VarChar(100)
+  /// 소옵션 추가 금액
+  additionalPrice Int      @default(0) @map("additional_price") @db.Integer
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamp
 
   fancySubOptions FancySubOption[]
   option          Option           @relation(fields: [optionId], references: [id], onDelete: Cascade)

@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
+  IsPhoneNumber,
   IsString
 } from 'class-validator';
 
@@ -13,12 +14,12 @@ import { UserRole } from '@src/api/users/enums/user-role.enum';
 
 export class UserInfoDto {
   @IsNotEmpty()
-  @IsString()
-  uniqueId: string;
+  @IsNumber()
+  id: number;
 
   @IsNotEmpty()
   @IsString()
-  name: string;
+  uniqueId: string;
 
   @IsNotEmpty()
   @IsString()
@@ -29,6 +30,7 @@ export class UserInfoDto {
   email: string;
 
   @IsOptional()
+  @IsPhoneNumber('KR')
   phone?: string;
 
   @IsNotEmpty()
@@ -56,5 +58,5 @@ export class UserInfoDto {
   updatedAt: Date;
 
   @IsDateString()
-  deletedAt: Date;
+  deletedAt?: Date;
 }

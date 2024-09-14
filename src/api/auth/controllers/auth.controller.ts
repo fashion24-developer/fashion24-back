@@ -13,10 +13,10 @@ import { ApiTags } from '@nestjs/swagger';
 import { ApiAuth } from '@src/api/auth/controllers/auth.swagger';
 import { ServiceTokenDto } from '@src/api/auth/dtos/service-token.dto';
 import { AccessTokenAuthGuard, RefreshTokenAuthGuard } from '@src/api/auth/jwt/jwt-auth.guard';
-import { AuthService } from '@src/api/auth/services/auth.service';
 import { IAuthService } from '@src/api/auth/services/i-auth-service.interface';
 import { AuthParamDto } from '@src/api/users/dtos/auth.dto';
 import { globalPrefix } from '@src/bootstrap.service';
+import { AUTH_SERVICE_DI_TOKEN } from '@src/common/constants/di.tokens';
 import { GetUserId } from '@src/common/decorators/get-userId.decorator';
 import { ResponseDto } from '@src/common/dtos/response.dto';
 import { CookieInterceptor } from '@src/common/interceptors/cookie.interceptor';
@@ -28,7 +28,7 @@ import { routesV1 } from '@src/configs/app.route';
 export class AuthController {
   static path = `/${globalPrefix}/${routesV1.version}/${routesV1.auth.root}`;
 
-  constructor(@Inject(AuthService) private readonly authService: IAuthService) {}
+  constructor(@Inject(AUTH_SERVICE_DI_TOKEN) private readonly authService: IAuthService) {}
 
   @ApiAuth.Login({ summary: '소셜 로그인' })
   @UseInterceptors(CookieInterceptor)

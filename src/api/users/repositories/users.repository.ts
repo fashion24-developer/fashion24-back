@@ -17,6 +17,10 @@ export class UsersRepository implements IRepository {
     return this.prisma.user.findUnique(userFindUniqueArgs);
   }
 
+  findAll(): Promise<void> {
+    return;
+  }
+
   update(userUpdateArgs: Prisma.UserUpdateArgs): Promise<User> {
     return this.prisma.user.update(userUpdateArgs);
   }

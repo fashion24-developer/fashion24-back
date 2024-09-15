@@ -12,6 +12,7 @@ import { IFancyRepository } from '@src/api/fancy/repositories/i-fancy-repository
 import { IFancyService } from '@src/api/fancy/services/i-fancy-service.interface';
 import { FANCY_REPOSITORY_DI_TOKEN } from '@src/common/constants/di.tokens';
 import { PaginationResponseDto } from '@src/common/dtos/pagination/pagination-response.dto';
+import { FancyMapper } from '@src/utils/mappers/fancy.mapper';
 
 @Injectable()
 export class FancyService implements IFancyService {
@@ -43,7 +44,7 @@ export class FancyService implements IFancyService {
   ): Promise<PaginationResponseDto<FindAllFancyResponseDto>> {
     const { page, pageSize: take, orderBy, orderDirection, ...where } = paginationData;
 
-    const totalCount = await this.fancyRepository.count(where);
+    const totalCount = await this.fancyRepository.count(FancyMapper.findAllWhere(where));
     const totalPages = take ? Math.ceil(totalCount / take) : 1;
 
     const isFirstPage = page === 1 ? true : false;

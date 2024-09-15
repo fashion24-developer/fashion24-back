@@ -17,7 +17,7 @@ export class TokenRepository implements ITokenRepository {
     return;
   }
 
-  findAll(data: any): Promise<any> {
+  findAll(): Promise<any> {
     return;
   }
 

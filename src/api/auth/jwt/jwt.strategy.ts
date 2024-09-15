@@ -16,7 +16,13 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'accessToken
     private readonly appConfigService: AppConfigService
   ) {
     super({
-      jwtFromRequest: (req) => req.cookies['accessToken'],
+      /**
+       * @todo 배포 시 cookie에서만 가져오도록 수정
+       */
+      // jwtFromRequest: (req) => req.cookies['accessToken'],
+      jwtFromRequest: (req) => {
+        return req.cookies['accessToken'] || req.headers['authorization']?.split(' ')[1];
+      },
       ignoreExpiration: false,
       secretOrKey: appConfigService.get<string>(ENV_KEY.ACCESS_TOKEN_SECRET_KEY),
       passReqToCallback: true
@@ -35,7 +41,12 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'accessToken
       );
     }
 
-    const tokenFromRequest = request.cookies['accessToken'];
+    /**
+     * @todo 배포 시 cookie에서만 가져오도록 수정
+     */
+    // const tokenFromRequest = request.cookies['accessToken'];
+    const tokenFromRequest =
+      request.cookies['accessToken'] || request.headers['authorization']?.split(' ')[1];
     const tokenInRedis = await this.redisService.get(`${payload.userId}-accessToken`);
 
     if (!tokenInRedis) {
@@ -72,7 +83,13 @@ export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'refreshTok
     private readonly appConfigService: AppConfigService
   ) {
     super({
-      jwtFromRequest: (req) => req.cookies['refreshToken'],
+      /**
+       * @todo 배포 시 cookie에서만 가져오도록 수정
+       */
+      // jwtFromRequest: (req) => req.cookies['refreshToken'],
+      jwtFromRequest: (req) => {
+        return req.cookies['refreshToken'] || req.headers['authorization']?.split(' ')[1];
+      },
       ignoreExpiration: false,
       secretOrKey: appConfigService.get<string>(ENV_KEY.REFRESH_TOKEN_SECRET_KEY),
       passReqToCallback: true
@@ -91,7 +108,12 @@ export class RefreshTokenStrategy extends PassportStrategy(Strategy, 'refreshTok
       );
     }
 
-    const tokenFromRequest = request.cookies['refreshToken'];
+    /**
+     * @todo 배포 시 cookie에서만 가져오도록 수정
+     */
+    // const tokenFromRequest = request.cookies['refreshToken'];
+    const tokenFromRequest =
+      request.cookies['refreshToken'] || request.headers['authorization']?.split(' ')[1];
     const tokenInRedis = await this.redisService.get(`${payload.userId}-refreshToken`);
 
     if (!tokenInRedis) {

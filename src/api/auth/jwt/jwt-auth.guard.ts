@@ -10,7 +10,13 @@ import { COMMON_ERROR_HTTP_STATUS_MESSAGE } from '@src/common/constants/common.c
 export class AccessTokenAuthGuard extends AuthGuard('accessToken') {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const accessToken = request.cookies['accessToken'];
+    /**
+     * @todo 배포 시 cookie에서만 가져오도록 수정
+     */
+    // const accessToken = request.cookies['accessToken'];
+    const accessToken =
+      request.cookies['accessToken'] || request.headers['authorization']?.split(' ')[1];
+
     if (!accessToken) {
       throw new HttpException('jwt must be provided', HttpStatus.BAD_REQUEST);
     }
@@ -45,7 +51,13 @@ export class AccessTokenAuthGuard extends AuthGuard('accessToken') {
 export class RefreshTokenAuthGuard extends AuthGuard('refreshToken') {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const refreshToken = request.cookies['refreshToken'];
+    /**
+     * @todo 배포 시 cookie에서만 가져오도록 수정
+     */
+    // const refreshToken = request.cookies['refreshToken'];
+    const refreshToken =
+      request.cookies['refreshToken'] || request.headers['authorization']?.split(' ')[1];
+
     if (!refreshToken) {
       throw new HttpException(
         {
@@ -104,7 +116,12 @@ export class AccessTokenOptionalAuthGuard extends AuthGuard('accessToken') {}
 export class AdminGuard extends AuthGuard('accessToken') {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const accessToken = request.cookies['accessToken'];
+    /**
+     * @todo 배포 시 cookie에서만 가져오도록 수정
+     */
+    // const accessToken = request.cookies['accessToken'];
+    const accessToken =
+      request.cookies['accessToken'] || request.headers['authorization']?.split(' ')[1];
     if (!accessToken) {
       throw new HttpException('jwt must be provided', HttpStatus.BAD_REQUEST);
     }

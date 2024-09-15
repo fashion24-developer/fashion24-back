@@ -1,16 +1,10 @@
-// logger.module.ts
 import { Module } from '@nestjs/common';
 
 import { WinstonModule } from 'nest-winston';
 import winston from 'winston';
 import winstonDaily from 'winston-daily-rotate-file';
 
-import {
-  daliyOptions,
-  logFormat,
-  s3StreamError,
-  s3StreamInfo
-} from '@src/core/app-config/logger/logger.config';
+import { daliyOptions, logFormat } from '@src/core/app-config/logger/logger.config';
 
 @Module({
   imports: [
@@ -27,17 +21,7 @@ import {
         }),
 
         new winstonDaily(daliyOptions('info')),
-        new winstonDaily(daliyOptions('error')),
-
-        new winston.transports.Stream({
-          stream: s3StreamInfo,
-          level: 'info'
-        }),
-
-        new winston.transports.Stream({
-          stream: s3StreamError,
-          level: 'error'
-        })
+        new winstonDaily(daliyOptions('error'))
       ]
     })
   ],

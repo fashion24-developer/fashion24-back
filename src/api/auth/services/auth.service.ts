@@ -1,7 +1,8 @@
-import { HttpException, HttpStatus, Inject } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Logger } from '@nestjs/common';
 
 import { User } from '@prisma/client';
 import axios from 'axios';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { createAuthProviderConfig } from '@src/api/auth/auth-provider-config';
 import { ServiceTokenDto } from '@src/api/auth/dtos/service-token.dto';
@@ -12,12 +13,15 @@ import { ITokenService } from '@src/api/auth/services/i-token-service.interface'
 import { SocialUserInfoDto } from '@src/api/users/dtos/social-user-info.dto';
 import { UserProvider } from '@src/api/users/enums/user-provider.enum';
 import { IUsersService } from '@src/api/users/services/i-users-service.interface';
+import { COMMON_ERROR_HTTP_STATUS_MESSAGE } from '@src/common/constants/common.constant';
 import { TOKEN_SERVICE_DI_TOKEN, USERS_SERVICE_DI_TOKEN } from '@src/common/constants/di.tokens';
+import { ResponseDto } from '@src/common/dtos/response.dto';
 
 export class AuthService implements IAuthService {
   private readonly authProviderConfig;
 
   constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: Logger,
     @Inject(USERS_SERVICE_DI_TOKEN) private readonly usersService: IUsersService,
     @Inject(TOKEN_SERVICE_DI_TOKEN) private readonly tokenService: ITokenService
   ) {
@@ -65,10 +69,43 @@ export class AuthService implements IAuthService {
 
       return { accessToken, refreshToken };
     } catch (error) {
-      console.log(error);
-      throw new HttpException('Failed to login', HttpStatus.INTERNAL_SERVER_ERROR, {
-        cause: error
-      });
+      this.logger.error(error);
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Failed to login',
+          error: COMMON_ERROR_HTTP_STATUS_MESSAGE[500]
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
+  }
+
+  async logout(provider: UserProvider, userId: number): Promise<ResponseDto> {
+    try {
+      const userSocialTokens = await this.tokenService.findTokens({ where: { userId } });
+      const socialTokens: SocialTokenDto = {
+        accessToken: userSocialTokens.socialAccessToken,
+        refreshToken: userSocialTokens.socialRefreshToken
+      };
+
+      if (provider === UserProvider.KAKAO) {
+        await this.requestLogout(provider, socialTokens);
+      }
+
+      await this.tokenService.deleteTokens(userId);
+
+      return { statusCode: HttpStatus.OK, message: 'Logout successful' };
+    } catch (error) {
+      this.logger.error(error);
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Failed to logout',
+          error: COMMON_ERROR_HTTP_STATUS_MESSAGE[500]
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
     }
   }
 
@@ -83,7 +120,7 @@ export class AuthService implements IAuthService {
 
       return { accessToken };
     } catch (error) {
-      console.log(error);
+      this.logger.error(error);
       throw new HttpException(
         'Failed to generate new access token',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -113,7 +150,7 @@ export class AuthService implements IAuthService {
 
       return { accessToken: socialTokens.access_token, refreshToken: socialTokens.refresh_token };
     } catch (error) {
-      console.log(error);
+      this.logger.error(error);
       throw new HttpException('Failed to get social tokens', HttpStatus.INTERNAL_SERVER_ERROR, {
         cause: error
       });
@@ -138,8 +175,24 @@ export class AuthService implements IAuthService {
 
       return providerConfig.extractUserInfo(userInfoResponse);
     } catch (error) {
-      console.log(error);
+      this.logger.error(error);
       throw new HttpException('Failed to get social user info', HttpStatus.INTERNAL_SERVER_ERROR, {
+        cause: error
+      });
+    }
+  }
+
+  private async requestLogout(provider: UserProvider, socialTokens: SocialTokenDto): Promise<void> {
+    try {
+      const providerConfig = this.authProviderConfig[provider];
+
+      const logoutUrl = providerConfig.logoutUrl;
+      const logoutHeader = providerConfig.logoutHeader(socialTokens.accessToken);
+
+      await axios.post(logoutUrl, {}, { headers: logoutHeader });
+    } catch (error) {
+      this.logger.error(error);
+      throw new HttpException('Failed to request logout', HttpStatus.INTERNAL_SERVER_ERROR, {
         cause: error
       });
     }

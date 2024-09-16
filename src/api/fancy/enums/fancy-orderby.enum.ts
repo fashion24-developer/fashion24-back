@@ -1,6 +1,10 @@
+import { ValueOf } from '@src/common/types/common.type';
+
 export enum FancyOrderBy {
-  COSTPRICE = 'costPrice',
+  COST_PRICE = 'costPrice',
   PRICE = 'price',
-  DISCOUNTRATE = 'discountRate',
-  CREATEDAT = 'createdAt'
+  DISCOUNT_RATE = 'discountRate',
+  CREATED_AT = 'createdAt'
 }
+
+export type FancyOrderByType = ValueOf<typeof FancyOrderBy>;

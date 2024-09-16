@@ -1,7 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-import { ProductStatus } from '@prisma/client';
 import { IsDate, IsEnum, IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
+
+import {
+  FancyProductStatus,
+  FancyProductStatusType
+} from '@src/api/fancy/enums/fancy-product-status.enum';
 
 export class FancyDto {
   @ApiProperty({ description: '아이디', example: '90c7gRlwkLvmDQxbp5pzY' })
@@ -37,8 +41,8 @@ export class FancyDto {
   description2?: string;
 
   @ApiProperty({ description: '상태', example: 'ACTIVE' })
-  @IsEnum(ProductStatus)
-  status: ProductStatus;
+  @IsEnum(FancyProductStatus)
+  status: FancyProductStatusType;
 
   @ApiProperty({ description: '생성일', example: '2024-09-05T12:15:54.194Z' })
   @IsDate()

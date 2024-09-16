@@ -56,7 +56,7 @@ export class FancyService implements IFancyService {
       select: { ...FANCY_FIND_ALL_SELECT },
       take,
       skip,
-      where,
+      where: FancyMapper.findAllWhere(where),
       orderBy: { [orderBy]: orderDirection }
     });
 

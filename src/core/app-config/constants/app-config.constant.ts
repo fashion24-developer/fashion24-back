@@ -1,7 +1,8 @@
 const SERVER = {
   PORT: 'PORT',
   NODE_ENV: 'NODE_ENV',
-  DOMAIN: 'DOMAIN'
+  DOMAIN: 'DOMAIN',
+  DATABASE_URL: 'DATABASE_URL'
 } as const;
 
 const OAUTH = {

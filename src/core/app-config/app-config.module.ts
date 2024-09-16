@@ -17,7 +17,22 @@ import { AppConfigService } from '@src/core/app-config/services/app-config.servi
         /**
          * @todo dns 적용하면 default 제거 및 required 로 변경
          */
-        [ENV_KEY.DOMAIN]: Joi.string().default('http://localhost:3000')
+        [ENV_KEY.DOMAIN]: Joi.string().default('http://localhost:3000'),
+        [ENV_KEY.DATABASE_URL]: Joi.string().required(),
+        [ENV_KEY.NAVER_CLIENT_ID]: Joi.string().required(),
+        [ENV_KEY.NAVER_CLIENT_SECRET]: Joi.string().required(),
+        [ENV_KEY.NAVER_REDIRECT_URI]: Joi.string().required(),
+        [ENV_KEY.KAKAO_CLIENT_ID]: Joi.string().required(),
+        [ENV_KEY.KAKAO_REDIRECT_URI]: Joi.string().required(),
+        [ENV_KEY.GOOGLE_CLIENT_ID]: Joi.string().required(),
+        [ENV_KEY.GOOGLE_CLIENT_SECRET]: Joi.string().required(),
+        [ENV_KEY.GOOGLE_REDIRECT_URI]: Joi.string().required(),
+        [ENV_KEY.ACCESS_TOKEN_SECRET_KEY]: Joi.string().required(),
+        [ENV_KEY.REFRESH_TOKEN_SECRET_KEY]: Joi.string().required(),
+        [ENV_KEY.REDIS_HOST]: Joi.string().required(),
+        [ENV_KEY.REDIS_PORT]: Joi.number().required(),
+        [ENV_KEY.REDIS_PASSWORD]: Joi.optional(),
+        [ENV_KEY.COOKIE_PARSER_SECRET]: Joi.string().required()
       }),
       isGlobal: true
     })

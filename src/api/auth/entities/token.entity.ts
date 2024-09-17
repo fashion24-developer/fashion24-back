@@ -16,11 +16,11 @@ export class UserTokenEntity {
   /**
    * 소셜 액세스 토큰
    */
-  private readonly _socialAccessToken: string;
+  private _socialAccessToken: string;
   /**
    * 소셜 리프레시 토큰
    */
-  private readonly _socialRefreshToken: string;
+  private _socialRefreshToken: string;
   /**
    * 생성일
    */

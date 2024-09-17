@@ -1,6 +1,5 @@
 import { HttpException, HttpStatus, Inject, Logger } from '@nestjs/common';
 
-import { User } from '@prisma/client';
 import axios from 'axios';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
@@ -11,11 +10,13 @@ import { TokenSubEnum } from '@src/api/auth/enums/token-sub.enum';
 import { IAuthService } from '@src/api/auth/services/i-auth-service.interface';
 import { ITokenService } from '@src/api/auth/services/i-token-service.interface';
 import { SocialUserInfoDto } from '@src/api/users/dtos/social-user-info.dto';
+import { UserEntity } from '@src/api/users/entities/user.entity';
 import { UserProvider } from '@src/api/users/enums/user-provider.enum';
 import { IUsersService } from '@src/api/users/services/i-users-service.interface';
 import { COMMON_ERROR_HTTP_STATUS_MESSAGE } from '@src/common/constants/common.constant';
 import { TOKEN_SERVICE_DI_TOKEN, USERS_SERVICE_DI_TOKEN } from '@src/common/constants/di.tokens';
 import { ResponseDto } from '@src/common/dtos/response.dto';
+import { ValueOf } from '@src/common/types/common.type';
 
 export class AuthService implements IAuthService {
   private readonly authProviderConfig;
@@ -28,22 +29,23 @@ export class AuthService implements IAuthService {
     this.authProviderConfig = createAuthProviderConfig();
   }
 
-  async login(provider: UserProvider, authorizeCode: string): Promise<ServiceTokenDto> {
+  async login(
+    provider: ValueOf<typeof UserProvider>,
+    authorizeCode: string
+  ): Promise<ServiceTokenDto> {
     try {
       const socialTokens = await this.getSocialTokens(provider, authorizeCode);
       const socialUserInfo = await this.getSocialUserInfo(provider, socialTokens);
-      const findOneUser = await this.usersService.findOne({
-        where: { uniqueId: socialUserInfo.uniqueId }
-      });
-      let user: User;
+      const findOneUser = await this.usersService.findOneByUniqueId(socialUserInfo.uniqueId);
+      let user: UserEntity;
 
       if (findOneUser) {
-        user = await this.usersService.update({
-          where: { uniqueId: findOneUser.uniqueId },
-          data: socialUserInfo
-        });
+        findOneUser.update(socialUserInfo);
+
+        user = await this.usersService.update(findOneUser);
       } else {
-        user = await this.usersService.create(socialUserInfo);
+        const entity = UserEntity.create(socialUserInfo);
+        user = await this.usersService.create(entity);
       }
 
       // 서비스 토큰 발급
@@ -67,7 +69,7 @@ export class AuthService implements IAuthService {
         socialRefreshToken: socialTokens.refreshToken
       });
 
-      return { accessToken, refreshToken };
+      return new ServiceTokenDto({ accessToken, refreshToken });
     } catch (error) {
       this.logger.error(error);
       throw new HttpException(
@@ -81,9 +83,9 @@ export class AuthService implements IAuthService {
     }
   }
 
-  async logout(provider: UserProvider, userId: number): Promise<ResponseDto> {
+  async logout(provider: ValueOf<typeof UserProvider>, userId: number): Promise<ResponseDto> {
     try {
-      const userSocialTokens = await this.tokenService.findTokens({ where: { userId } });
+      const userSocialTokens = await this.tokenService.findOneByUserId(userId);
       const socialTokens: SocialTokenDto = {
         accessToken: userSocialTokens.socialAccessToken,
         refreshToken: userSocialTokens.socialRefreshToken
@@ -111,14 +113,14 @@ export class AuthService implements IAuthService {
 
   async generateNewAccessToken(userId: number): Promise<ServiceTokenDto> {
     try {
-      const user = await this.usersService.findOne({ where: { id: userId } });
+      const user = await this.usersService.findOneById(userId);
       const accessToken = this.tokenService.generateToken({
         sub: TokenSubEnum.ACCESS_TOKEN,
         userId,
         userRole: user.role
       });
 
-      return { accessToken };
+      return new ServiceTokenDto({ accessToken });
     } catch (error) {
       this.logger.error(error);
       throw new HttpException(
@@ -132,7 +134,7 @@ export class AuthService implements IAuthService {
   }
 
   private async getSocialTokens(
-    provider: UserProvider,
+    provider: ValueOf<typeof UserProvider>,
     authorizeCode: string
   ): Promise<SocialTokenDto> {
     try {
@@ -148,7 +150,10 @@ export class AuthService implements IAuthService {
         })
       ).data;
 
-      return { accessToken: socialTokens.access_token, refreshToken: socialTokens.refresh_token };
+      return new ServiceTokenDto({
+        accessToken: socialTokens.access_token,
+        refreshToken: socialTokens.refresh_token
+      });
     } catch (error) {
       this.logger.error(error);
       throw new HttpException('Failed to get social tokens', HttpStatus.INTERNAL_SERVER_ERROR, {
@@ -158,7 +163,7 @@ export class AuthService implements IAuthService {
   }
 
   private async getSocialUserInfo(
-    provider: UserProvider,
+    provider: ValueOf<typeof UserProvider>,
     socialTokens: SocialTokenDto
   ): Promise<SocialUserInfoDto> {
     try {
@@ -182,7 +187,10 @@ export class AuthService implements IAuthService {
     }
   }
 
-  private async requestLogout(provider: UserProvider, socialTokens: SocialTokenDto): Promise<void> {
+  private async requestLogout(
+    provider: ValueOf<typeof UserProvider>,
+    socialTokens: SocialTokenDto
+  ): Promise<void> {
     try {
       const providerConfig = this.authProviderConfig[provider];
 

@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { Prisma, UserToken } from '@prisma/client';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { SaveUserTokenDto } from '@src/api/auth/dtos/save-user-token.dto';
 import { TokenPayloadDto } from '@src/api/auth/dtos/token-payload.dto';
+import { UserTokenEntity } from '@src/api/auth/entities/token.entity';
 import { TokenSubEnum } from '@src/api/auth/enums/token-sub.enum';
 import { TokenTtlEnum } from '@src/api/auth/enums/token-ttl.enum';
 import { ITokenRepository } from '@src/api/auth/repositories/i-token-repository.interface';
@@ -40,8 +40,8 @@ export class TokenService implements ITokenService {
     });
   }
 
-  findTokens(userTokenFindUniqueArgs: Prisma.UserTokenFindUniqueArgs): Promise<UserToken | null> {
-    return this.tokenRepository.findTokens(userTokenFindUniqueArgs);
+  findOneByUserId(userId: number): Promise<UserTokenEntity | null> {
+    return this.tokenRepository.findOneByUserId(userId);
   }
 
   async saveTokens(saveUserToken: SaveUserTokenDto): Promise<void> {
@@ -78,7 +78,7 @@ export class TokenService implements ITokenService {
     try {
       this.redisService.del(`${String(userId)}-accessToken`);
       this.redisService.del(`${String(userId)}-refreshToken`);
-      await this.tokenRepository.delete({ where: { userId } });
+      await this.tokenRepository.deleteByUserId(userId);
     } catch (error) {
       this.logger.error(error);
       throw new HttpException(

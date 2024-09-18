@@ -10,7 +10,7 @@ import { SwaggerErrorResponse } from '@src/common/decorators/swagger-error-respo
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
 
 export const ApiUsers: ApiOperator<keyof UsersController> = {
-  Create: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
+  Create: (apiOperationOptions: ApiOperationOptionsWithSummary): MethodDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions
@@ -38,7 +38,7 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
     );
   },
 
-  FindAll: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
+  FindAll: (apiOperationOptions: ApiOperationOptionsWithSummary): MethodDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions
@@ -54,7 +54,7 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
     );
   },
 
-  FindOne: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
+  FindOne: (apiOperationOptions: ApiOperationOptionsWithSummary): MethodDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions
@@ -70,7 +70,7 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
     );
   },
 
-  Update: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
+  Update: (apiOperationOptions: ApiOperationOptionsWithSummary): MethodDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions
@@ -86,7 +86,7 @@ export const ApiUsers: ApiOperator<keyof UsersController> = {
     );
   },
 
-  Remove: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
+  Remove: (apiOperationOptions: ApiOperationOptionsWithSummary): MethodDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions

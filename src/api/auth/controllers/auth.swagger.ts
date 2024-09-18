@@ -20,7 +20,7 @@ import { ResponseDto } from '@src/common/dtos/response.dto';
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
 
 export const ApiAuth: ApiOperator<keyof AuthController> = {
-  Login: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
+  Login: (apiOperationOptions: ApiOperationOptionsWithSummary): MethodDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions
@@ -81,7 +81,7 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
     );
   },
 
-  Logout: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
+  Logout: (apiOperationOptions: ApiOperationOptionsWithSummary): MethodDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions
@@ -123,7 +123,7 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
     );
   },
 
-  GetNewAccessToken: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
+  GetNewAccessToken: (apiOperationOptions: ApiOperationOptionsWithSummary): MethodDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions

@@ -8,7 +8,7 @@ import { FancyDto } from '@src/api/fancy/dtos/fancy.dto';
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
 
 export const ApiFancy: ApiOperator<keyof FancyAdminController | keyof FancyController> = {
-  Create: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
+  Create: (apiOperationOptions: ApiOperationOptionsWithSummary): MethodDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions
@@ -127,7 +127,7 @@ export const ApiFancy: ApiOperator<keyof FancyAdminController | keyof FancyContr
     );
   },
 
-  FindAll: (apiOperationOptions: ApiOperationOptionsWithSummary): PropertyDecorator => {
+  FindAll: (apiOperationOptions: ApiOperationOptionsWithSummary): MethodDecorator => {
     return applyDecorators(
       ApiOperation({
         ...apiOperationOptions

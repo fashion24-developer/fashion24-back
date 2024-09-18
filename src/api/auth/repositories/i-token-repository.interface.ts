@@ -1,9 +1,8 @@
-import { Prisma, UserToken } from '@prisma/client';
-
+import { UserTokenEntity } from '@src/api/auth/entities/token.entity';
 import { IRepository } from '@src/common/interfaces/i-repository.interface';
 
-export interface ITokenRepository extends IRepository {
-  create(data: any): Promise<UserToken>;
-  findTokens(userTokenFindUniqueArgs: Prisma.UserTokenFindUniqueArgs): Promise<UserToken | null>;
-  delete(userTokenDeleteArgs: Prisma.UserTokenDeleteArgs): Promise<UserToken>;
+export interface ITokenRepository extends IRepository<UserTokenEntity> {
+  create(data: any): Promise<UserTokenEntity>;
+  findOneByUserId(userId: number): Promise<UserTokenEntity | null>;
+  deleteByUserId(userId: number): Promise<UserTokenEntity>;
 }

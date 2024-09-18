@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { Prisma, User } from '@prisma/client';
-
+import { UserEntity } from '@src/api/users/entities/user.entity';
 import { IUsersRepository } from '@src/api/users/repositories/i-users-repository.interface';
 import { IUsersService } from '@src/api/users/services/i-users-service.interface';
 import { USERS_REPOSITORY_DI_TOKEN } from '@src/common/constants/di.tokens';
@@ -13,7 +12,7 @@ export class UsersService implements IUsersService {
     private readonly usersRepository: IUsersRepository
   ) {}
 
-  create(userData: Prisma.UserCreateInput): Promise<User> {
+  create(userData: UserEntity): Promise<UserEntity> {
     return this.usersRepository.create(userData);
   }
 
@@ -21,12 +20,16 @@ export class UsersService implements IUsersService {
     return;
   }
 
-  findOne(userFindUniqueArgs: Prisma.UserFindUniqueArgs): Promise<User | null> {
-    return this.usersRepository.findOne(userFindUniqueArgs);
+  findOneById(id: number): Promise<UserEntity | null> {
+    return this.usersRepository.findOneById(id);
   }
 
-  update(userUpdateArgs: Prisma.UserUpdateArgs): Promise<User> {
-    return this.usersRepository.update(userUpdateArgs);
+  findOneByUniqueId(uniqueId: string): Promise<UserEntity | null> {
+    return this.usersRepository.findOneByUniqueId(uniqueId);
+  }
+
+  update(data: UserEntity): Promise<UserEntity> {
+    return this.usersRepository.update(data);
   }
 
   delete() {}

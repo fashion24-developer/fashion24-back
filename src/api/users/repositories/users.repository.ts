@@ -1,27 +1,42 @@
 import { Injectable } from '@nestjs/common';
 
-import { Prisma, User } from '@prisma/client';
-
-import { IRepository } from '@src/common/interfaces/i-repository.interface';
+import { UserEntity } from '@src/api/users/entities/user.entity';
+import { IUsersRepository } from '@src/api/users/repositories/i-users-repository.interface';
 import { PrismaService } from '@src/prisma/prisma.service';
 
 @Injectable()
-export class UsersRepository implements IRepository {
+export class UsersRepository implements IUsersRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(data: Prisma.UserCreateInput): Promise<User> {
-    return this.prisma.user.create({ data });
+  async create(data: UserEntity): Promise<UserEntity> {
+    const record = await this.prisma.user.create({ data });
+
+    return new UserEntity(record);
   }
 
-  findOne(userFindUniqueArgs: Prisma.UserFindUniqueArgs): Promise<User | null> {
-    return this.prisma.user.findUnique(userFindUniqueArgs);
+  async findOneById(id: number): Promise<UserEntity> {
+    const record = await this.prisma.user.findUnique({ where: { id } });
+
+    return new UserEntity(record);
   }
 
-  findAll(): Promise<void> {
-    return;
+  async findOneByUniqueId(uniqueId: string): Promise<UserEntity | null> {
+    const record = await this.prisma.user.findUnique({ where: { uniqueId } });
+
+    return new UserEntity(record);
   }
 
-  update(userUpdateArgs: Prisma.UserUpdateArgs): Promise<User> {
-    return this.prisma.user.update(userUpdateArgs);
+  async findAll<K extends keyof UserEntity>(
+    where: Record<K, UserEntity[K]>
+  ): Promise<UserEntity[]> {
+    const records = await this.prisma.user.findMany({ where });
+
+    return records.map((record) => new UserEntity(record));
+  }
+
+  async update(data: UserEntity): Promise<UserEntity> {
+    const record = await this.prisma.user.update({ data: data.getProps(), where: { id: data.id } });
+
+    return new UserEntity(record);
   }
 }

@@ -1,19 +1,38 @@
-import { Prisma } from '@prisma/client';
-
 import { FindAllFancyDto } from '@src/api/fancy/dtos/find-all-fancy.dto';
+import { FancyEntity } from '@src/api/fancy/entity/fancy.entity';
 
 export class FancyMapper {
-  static findAllWhere(
+  static toEntity(data: any): FancyEntity {
+    return new FancyEntity({
+      id: data.id,
+      name: data.name,
+      price: data.price,
+      costPrice: data.costPrice,
+      discountRate: data.discountRate,
+      description1: data.description1,
+      description2: data.description2,
+      status: data.status,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+      fancyImages: data.fancyImages,
+      fancyOptions: data.fancyOptions,
+      fancySubOptions: data.fancySubOptions,
+      looks: data.looks,
+      tags: data.tags
+    });
+  }
+
+  static paginationWhere(
     data: Omit<FindAllFancyDto, 'page' | 'pageSize' | 'orderBy' | 'orderDirection'>
-  ): Prisma.FancyWhereInput {
-    const { name, status, optionName, subOptionName, lookName, tagName } = data;
+  ) {
+    const { name, status, optionId, subOptionId, lookId, tagId } = data;
 
     return {
       name: { contains: name },
       status,
       AND: [
-        ...(optionName
-          ? optionName.map((id) => ({
+        ...(optionId
+          ? optionId.map((id) => ({
               fancyOptions: {
                 some: {
                   option: {
@@ -23,8 +42,8 @@ export class FancyMapper {
               }
             }))
           : []),
-        ...(subOptionName
-          ? subOptionName.map((id) => ({
+        ...(subOptionId
+          ? subOptionId.map((id) => ({
               fancySubOptions: {
                 some: {
                   subOption: {
@@ -34,8 +53,8 @@ export class FancyMapper {
               }
             }))
           : []),
-        ...(lookName ? lookName.map((id) => ({ looks: { some: { id } } })) : []),
-        ...(tagName ? tagName.map((id) => ({ tags: { some: { id } } })) : [])
+        ...(lookId ? lookId.map((id) => ({ looks: { some: { id } } })) : []),
+        ...(tagId ? tagId.map((id) => ({ tags: { some: { id } } })) : [])
       ]
     };
   }

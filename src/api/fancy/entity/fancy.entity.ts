@@ -100,7 +100,57 @@ export class FancyEntity {
     return this._updatedAt;
   }
 
+  get fancyImages(): FancyImageEntity[] | undefined {
+    return this._fancyImages;
+  }
+
+  get fancyStocks(): any[] | undefined {
+    return this._fancyStocks;
+  }
+
+  get fancyOptions(): FancyOptionEntity[] | undefined {
+    return this._fancyOptions;
+  }
+
+  get fancySubOptions(): FancySubOptionEntity[] | undefined {
+    return this._fancySubOptions;
+  }
+
+  get looks(): LookEntity[] | undefined {
+    return this._looks;
+  }
+
+  get tags(): TagEntity[] | undefined {
+    return this._tags;
+  }
+
   getProps(): {
+    id: string;
+    name: string;
+    price: number;
+    costPrice: number;
+    discountRate: number;
+    description1?: string;
+    description2?: string;
+    status: ValueOf<typeof FancyProductStatus>;
+    createdAt: Date;
+    updatedAt: Date;
+  } {
+    return {
+      id: this._id,
+      name: this._name,
+      price: this._price,
+      costPrice: this._costPrice,
+      discountRate: this._discountRate,
+      description1: this._description1,
+      description2: this._description2,
+      status: this._status,
+      createdAt: this._createdAt,
+      updatedAt: this._updatedAt
+    };
+  }
+
+  getPropsWithForeign(): {
     id: string;
     name: string;
     price: number;

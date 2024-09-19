@@ -94,7 +94,7 @@ export class UserEntity {
       rank: this._rank,
       provider: this._provider,
       role: this._role,
-      uniqueId: this.uniqueId,
+      uniqueId: this._uniqueId,
       point: this._point,
       createdAt: this._createdAt,
       updatedAt: this._updatedAt,

@@ -1,6 +1,4 @@
-export enum FancyProductStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE'
-}
-
-export type FancyProductStatusType = keyof typeof FancyProductStatus;
+export const FancyProductStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE'
+} as const;

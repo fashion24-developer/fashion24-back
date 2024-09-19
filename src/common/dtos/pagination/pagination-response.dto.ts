@@ -1,11 +1,16 @@
-import { IPaginationMeta } from '@src/common/interfaces/pagination/i-pagination-meta.interface';
+import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
 
+import { PaginationMetaDto } from '@src/common/dtos/pagination/pagination-meta.dto';
+
+@ApiExtraModels()
 export class PaginationResponseDto<T> {
+  @ApiProperty({ type: 'array' })
   data: Array<T>;
 
-  meta: IPaginationMeta;
+  @ApiProperty({ type: PaginationMetaDto })
+  meta: PaginationMetaDto;
 
-  constructor(data: Array<T>, meta: IPaginationMeta) {
+  constructor(data: Array<T>, meta: PaginationMetaDto) {
     this.data = data;
     this.meta = meta;
   }

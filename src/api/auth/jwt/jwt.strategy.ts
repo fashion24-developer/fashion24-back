@@ -72,7 +72,7 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy, 'accessToken
       );
     }
 
-    return { id: payload.userId };
+    return { id: payload.userId, userRole: payload.userRole };
   }
 }
 

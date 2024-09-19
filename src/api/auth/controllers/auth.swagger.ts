@@ -50,10 +50,10 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
         [
           {
             description: '로그인 요청 시 인가코드가 누락됨.',
-            message: 'The code is required for query.'
+            message: 'The code is required for query.',
+            path: `${AuthController.path}/:provider/login`
           }
-        ],
-        `${AuthController.path}/:provider/login`
+        ]
       ),
       SwaggerErrorResponse(
         COMMON_ERROR_HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
@@ -61,10 +61,10 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
         [
           {
             description: '로그인 중 에러 발생.',
-            message: 'Failed to login'
+            message: 'Failed to login',
+            path: `${AuthController.path}/:provider/login`
           }
-        ],
-        `${AuthController.path}/:provider/login`
+        ]
       ),
       ApiParam({
         name: 'provider',
@@ -108,10 +108,10 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
         [
           {
             description: '로그아웃 중 에러 발생.',
-            message: 'Failed to logout'
+            message: 'Failed to logout',
+            path: `${AuthController.path}/:provider/logout`
           }
-        ],
-        `${AuthController.path}/:provider/logout`
+        ]
       ),
       ApiParam({
         name: 'provider',
@@ -148,18 +148,20 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
         [
           {
             description: '유효하지 않은 토큰인 경우',
-            message: 'invalid token'
+            message: 'invalid token',
+            path: `${AuthController.path}/new-access-token`
           },
           {
             description: '토큰이 제공되지 않은 경우',
-            message: 'jwt must be provided'
+            message: 'jwt must be provided',
+            path: `${AuthController.path}/new-access-token`
           },
           {
             description: '그 외 에러 (백엔드에 도움 요청하기)',
-            message: 'jwt error'
+            message: 'jwt error',
+            path: `${AuthController.path}/new-access-token`
           }
-        ],
-        `${AuthController.path}/new-access-token`
+        ]
       ),
       SwaggerErrorResponse(
         COMMON_ERROR_HTTP_STATUS_CODE.UNAUTHORIZED,
@@ -167,22 +169,25 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
         [
           {
             description: '우리 서비스의 토큰이 아닌 경우',
-            message: 'invalid signature'
+            message: 'invalid signature',
+            path: `${AuthController.path}/new-access-token`
           },
           {
             description: '토큰이 일치하지 않는 경우',
-            message: 'token missmatch'
+            message: 'token missmatch',
+            path: `${AuthController.path}/new-access-token`
           },
           {
             description: '만료된 토큰인 경우',
-            message: 'jwt expired'
+            message: 'jwt expired',
+            path: `${AuthController.path}/new-access-token`
           },
           {
             description: '토큰을 redis에서 찾을 수 없는 경우',
-            message: 'token not found'
+            message: 'token not found',
+            path: `${AuthController.path}/new-access-token`
           }
-        ],
-        `${AuthController.path}/new-access-token`
+        ]
       ),
       SwaggerErrorResponse(
         COMMON_ERROR_HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR,
@@ -190,10 +195,10 @@ export const ApiAuth: ApiOperator<keyof AuthController> = {
         [
           {
             description: '새 accessToken 발급 중 에러 발생.',
-            message: 'Failed to generate new access token'
+            message: 'Failed to generate new access token',
+            path: `${AuthController.path}/new-access-token`
           }
-        ],
-        `${AuthController.path}/new-access-token`
+        ]
       ),
       ApiCookieAuth('refreshToken')
     );

@@ -24,7 +24,7 @@ export const ApiLook: ApiOperator<keyof LookController> = {
         schema: {
           type: 'array',
           items: { $ref: getSchemaPath(LookResponseDto) },
-          examples: [
+          example: [
             {
               id: 1,
               name: '1번룩',

@@ -4,7 +4,7 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { ILookAppRepository } from '@src/api/apps/looks/respositories/i-look.app.repository.interface';
 import { LOOK_REPOSITORY_DI_TOKEN } from '@src/common/constants/di.tokens';
-import { LookEntity } from '@src/libs/looks/entity/look.entity';
+import { LookEntity } from '@src/libs/looks/entities/look.entity';
 
 @Injectable()
 export class LookAppService {

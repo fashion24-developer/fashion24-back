@@ -1,5 +1,5 @@
 import { LookDto } from '@src/libs/looks/dtos/look.dto';
-import { LookEntity } from '@src/libs/looks/entity/look.entity';
+import { LookEntity } from '@src/libs/looks/entities/look.entity';
 
 export class LookResponseDto extends LookDto {
   constructor(props: LookEntity) {

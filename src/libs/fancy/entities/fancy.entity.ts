@@ -3,8 +3,8 @@ import { ValueOf } from '@src/common/types/common.type';
 import { FancyImageEntity } from '@src/libs/fancy/fancy-images/entities/fancy-image.entity';
 import { FancyOptionEntity } from '@src/libs/fancy/fancy-options/entities/fancy-option.entity';
 import { FancySubOptionEntity } from '@src/libs/fancy/fancy-sub-options/entities/fancy-sub-option.entity';
-import { LookEntity } from '@src/libs/looks/entity/look.entity';
-import { TagEntity } from '@src/libs/tags/entity/tag.entity';
+import { LookEntity } from '@src/libs/looks/entities/look.entity';
+import { TagEntity } from '@src/libs/tags/entities/tag.entity';
 
 export class FancyEntity {
   /**

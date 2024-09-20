@@ -6,7 +6,7 @@ import { FancyAdminController } from '@src/api/admins/fancy/controllers/fancy.ad
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
 import { FancyDto } from '@src/libs/fancy/dtos/fancy.dto';
 
-export const ApiFancy: ApiOperator<keyof FancyAdminController> = {
+export const ApiFancyAdmin: ApiOperator<keyof FancyAdminController> = {
   Create: (apiOperationOptions: ApiOperationOptionsWithSummary): MethodDecorator => {
     return applyDecorators(
       ApiOperation({

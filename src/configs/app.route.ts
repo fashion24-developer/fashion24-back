@@ -2,6 +2,7 @@
 const authRoot = `auth`;
 const usersRoot = `users`;
 const fancyRoot = `fancy`;
+const lookRoot = `look`;
 // Api Versions
 const v1 = 'v1';
 
@@ -29,5 +30,13 @@ export const routesV1 = {
     findOne: `/${fancyRoot}/:id`,
     patch: `/${fancyRoot}/:id`,
     delete: `/${fancyRoot}/:id`
+  },
+
+  look: {
+    root: lookRoot,
+    create: `/${lookRoot}`,
+    findAll: `/${lookRoot}`,
+    patch: `/${lookRoot}/:id`,
+    delete: `/${lookRoot}/:id`
   }
 } as const;

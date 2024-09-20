@@ -1,5 +1,5 @@
-import { FindAllFancyDto } from '@src/api/fancy/dtos/find-all-fancy.dto';
-import { FancyEntity } from '@src/api/fancy/entity/fancy.entity';
+import { FindAllFancyDto } from '@src/api/apps/fancy/dtos/find-all-fancy.dto';
+import { FancyEntity } from '@src/libs/fancy/entities/fancy.entity';
 
 export class FancyMapper {
   static toEntity(data: any): FancyEntity {

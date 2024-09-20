@@ -5,7 +5,7 @@ import { Response } from 'express';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { TokenTtlEnum } from '@src/api/auth/enums/token-ttl.enum';
+import { TokenTtlEnum } from '@src/api/apps/auth/enums/token-ttl.enum';
 import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/core/app-config/services/app-config.service';
 

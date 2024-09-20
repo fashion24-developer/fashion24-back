@@ -4,7 +4,7 @@ import { IFancyAdminRepository } from '@src/api/admins/fancy/repositories/i-fanc
 import { FANCY_FIND_ALL_SELECT } from '@src/api/apps/fancy/constants/fancy-find-all-select.const';
 import { FancyOrderBy } from '@src/api/apps/fancy/enums/fancy-orderby.enum';
 import { FancyProductStatus } from '@src/api/apps/fancy/enums/fancy-product-status.enum';
-import { IFancyRepository } from '@src/api/apps/fancy/repositories/i-fancy-repository.interface';
+import { IFancyAppRepository } from '@src/api/apps/fancy/repositories/i-fancy.app.repository.interface';
 import { SortOption } from '@src/common/enums/sort-option.enum';
 import { ValueOf } from '@src/common/types/common.type';
 import { FancyEntity } from '@src/libs/fancy/entities/fancy.entity';
@@ -12,7 +12,7 @@ import { PrismaService } from '@src/prisma/prisma.service';
 import { FancyMapper } from '@src/utils/mappers/fancy.mapper';
 
 @Injectable()
-export class FancyRepository implements IFancyRepository, IFancyAdminRepository {
+export class FancyRepository implements IFancyAppRepository, IFancyAdminRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: FancyEntity): Promise<FancyEntity> {

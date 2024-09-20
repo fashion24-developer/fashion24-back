@@ -4,7 +4,7 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { FANCY_FIND_ALL_SELECT } from '@src/api/apps/fancy/constants/fancy-find-all-select.const';
 import { FindAllFancyDto } from '@src/api/apps/fancy/dtos/find-all-fancy.dto';
-import { IFancyRepository } from '@src/api/apps/fancy/repositories/i-fancy-repository.interface';
+import { IFancyAppRepository } from '@src/api/apps/fancy/repositories/i-fancy.app.repository.interface';
 import { FANCY_REPOSITORY_DI_TOKEN } from '@src/common/constants/di.tokens';
 import { PaginationResponseDto } from '@src/common/dtos/pagination/pagination-response.dto';
 import { FancyEntity } from '@src/libs/fancy/entities/fancy.entity';
@@ -14,7 +14,7 @@ import { FancyMapper } from '@src/utils/mappers/fancy.mapper';
 export class FancyAppService {
   constructor(
     @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: Logger,
-    @Inject(FANCY_REPOSITORY_DI_TOKEN) private readonly fancyRepository: IFancyRepository
+    @Inject(FANCY_REPOSITORY_DI_TOKEN) private readonly fancyRepository: IFancyAppRepository
   ) {}
 
   async findOne(data) {

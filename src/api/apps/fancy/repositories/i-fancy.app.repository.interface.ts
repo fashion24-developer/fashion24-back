@@ -6,7 +6,7 @@ import { IRepository } from '@src/common/interfaces/i-repository.interface';
 import { ValueOf } from '@src/common/types/common.type';
 import { FancyEntity } from '@src/libs/fancy/entities/fancy.entity';
 
-export interface IFancyRepository extends IRepository<FancyEntity> {
+export interface IFancyAppRepository extends IRepository<FancyEntity> {
   create(data: FancyEntity): Promise<FancyEntity>;
   findOneById(id: number): Promise<any>;
   findAllForPagination(

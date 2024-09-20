@@ -1,4 +1,4 @@
-import { FancyOptionEntity } from '@src/libs/fancy/fancy-options/entity/fancy-option.entity';
+import { FancyOptionEntity } from '@src/libs/fancy/fancy-options/entities/fancy-option.entity';
 import { SubOptionEntity } from '@src/libs/sub-options/entity/sub-option.entity';
 
 export class OptionEntity {

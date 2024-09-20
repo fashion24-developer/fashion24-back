@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { Prisma, UserToken } from '@prisma/client';
-
+import { UserTokenEntity } from '@src/api/auth/entities/token.entity';
 import { ITokenRepository } from '@src/api/auth/repositories/i-token-repository.interface';
 import { PrismaService } from '@src/prisma/prisma.service';
 
@@ -9,27 +8,46 @@ import { PrismaService } from '@src/prisma/prisma.service';
 export class TokenRepository implements ITokenRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(data: Prisma.UserTokenCreateInput): Promise<UserToken> {
-    return this.prisma.userToken.create({ data });
+  async create(data: UserTokenEntity): Promise<UserTokenEntity> {
+    const record = await this.prisma.userToken.create({
+      data: {
+        userId: data.userId,
+        socialAccessToken: data.socialAccessToken,
+        socialRefreshToken: data.socialRefreshToken
+      }
+    });
+
+    return new UserTokenEntity(record);
   }
 
-  findOne(): Promise<any> {
-    return;
+  async findOneById(id: number): Promise<UserTokenEntity | null> {
+    const record = await this.prisma.userToken.findUnique({ where: { id } });
+
+    return record ? new UserTokenEntity(record) : null;
   }
 
-  findAll(): Promise<any> {
-    return;
+  async findAll<T extends keyof UserTokenEntity>(
+    where: Record<T, UserTokenEntity[T]>,
+    include?: Record<keyof Pick<UserTokenEntity, 'user'>, boolean>
+  ): Promise<UserTokenEntity[]> {
+    const records = await this.prisma.userToken.findMany({ where, include });
+
+    return records.map((record) => new UserTokenEntity(record));
   }
 
-  findTokens(userTokenFindUniqueArgs: Prisma.UserTokenFindUniqueArgs): Promise<UserToken | null> {
-    return this.prisma.userToken.findUnique(userTokenFindUniqueArgs);
+  async findOneByUserId(userId: number): Promise<UserTokenEntity | null> {
+    const record = await this.prisma.userToken.findUnique({ where: { userId } });
+
+    return record ? new UserTokenEntity(record) : null;
   }
 
   update(): Promise<any> {
     return;
   }
 
-  delete(userTokenDeleteArgs: Prisma.UserTokenDeleteArgs): Promise<UserToken> {
-    return this.prisma.userToken.delete(userTokenDeleteArgs);
+  async deleteByUserId(userId: number): Promise<UserTokenEntity> {
+    const record = await this.prisma.userToken.delete({ where: { userId } });
+
+    return new UserTokenEntity(record);
   }
 }

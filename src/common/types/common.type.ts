@@ -4,9 +4,7 @@ export type ApiOperationOptionsWithSummary = Required<Pick<ApiOperationOptions, 
   ApiOperationOptions;
 
 export type ApiOperator<M extends string> = {
-  [key in Capitalize<M>]: (
-    apiOperationOptions: ApiOperationOptionsWithSummary
-  ) => PropertyDecorator;
+  [key in Capitalize<M>]: (apiOperationOptions: ApiOperationOptionsWithSummary) => MethodDecorator;
 };
 
 export type ValueOf<T extends Record<string, any>> = T[keyof T];

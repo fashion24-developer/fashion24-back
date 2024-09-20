@@ -1,4 +1,4 @@
-import { FancyEntity } from '@src/api/fancy/entity/fancy.entity';
+import { FancyEntity } from '@src/libs/fancy/entities/fancy.entity';
 
 export class TagEntity {
   /**

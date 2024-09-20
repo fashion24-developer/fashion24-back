@@ -3,10 +3,10 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { AccessTokenAuthGuard } from '@src/api/apps/auth/jwt/jwt-auth.guard';
 import { ApiLookApp } from '@src/api/apps/looks/controllers/look.app.swagger';
-import { LookResponseDto } from '@src/api/apps/looks/dtos/look-response.dto';
 import { LookAppService } from '@src/api/apps/looks/services/look.app.service';
 import { globalPrefix } from '@src/bootstrap.service';
 import { routesV1 } from '@src/configs/app.route';
+import { LookResponseDto } from '@src/libs/looks/dtos/look-response.dto';
 
 @UseGuards(AccessTokenAuthGuard)
 @ApiTags('look')

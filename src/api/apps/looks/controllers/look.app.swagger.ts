@@ -8,8 +8,8 @@ import {
 } from '@nestjs/swagger';
 
 import { LookAppController } from '@src/api/apps/looks/controllers/look.app.controller';
-import { LookResponseDto } from '@src/api/apps/looks/dtos/look-response.dto';
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
+import { LookResponseDto } from '@src/libs/looks/dtos/look-response.dto';
 
 export const ApiLookApp: ApiOperator<keyof LookAppController> = {
   FindAll: (apiOperationOptions: ApiOperationOptionsWithSummary): MethodDecorator => {

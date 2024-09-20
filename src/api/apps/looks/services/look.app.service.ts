@@ -2,9 +2,9 @@ import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/c
 
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
-import { LookEntity } from '@src/api/apps/looks/entity/look.entity';
 import { ILookAppRepository } from '@src/api/apps/looks/respositories/i-look.app.repository.interface';
 import { LOOK_REPOSITORY_DI_TOKEN } from '@src/common/constants/di.tokens';
+import { LookEntity } from '@src/libs/looks/entity/look.entity';
 
 @Injectable()
 export class LookAppService {

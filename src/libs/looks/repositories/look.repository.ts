@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import { LookEntity } from '@src/api/apps/looks/entity/look.entity';
 import { ILookAppRepository } from '@src/api/apps/looks/respositories/i-look.app.repository.interface';
+import { LookEntity } from '@src/libs/looks/entity/look.entity';
 import { PrismaService } from '@src/prisma/prisma.service';
 
 @Injectable()

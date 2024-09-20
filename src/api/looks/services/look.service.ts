@@ -18,9 +18,7 @@ export class LookService {
       return this.lookRepository.findAll();
     } catch (error) {
       this.logger.error(error);
-      throw new HttpException('Failed to find all look', HttpStatus.INTERNAL_SERVER_ERROR, {
-        cause: error
-      });
+      throw new HttpException('Failed to find all look', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

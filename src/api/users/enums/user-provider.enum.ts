@@ -1,5 +1,5 @@
-export enum UserProvider {
-  NAVER = 'naver',
-  KAKAO = 'kakao',
-  GOOGLE = 'google'
-}
+export const UserProvider = {
+  NAVER: 'naver',
+  KAKAO: 'kakao',
+  GOOGLE: 'google'
+} as const;

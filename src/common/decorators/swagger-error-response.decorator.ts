@@ -30,18 +30,17 @@ const messageArrayType = {
 export const SwaggerErrorResponse = (
   statusCode: ValueOf<typeof COMMON_ERROR_HTTP_STATUS_CODE>,
   error: ValueOf<typeof COMMON_ERROR_HTTP_STATUS_MESSAGE>,
-  msgAndDescription: { message: string | string[]; description: string }[] = [
-    { message: '에러에 대한 메세지', description: '에러가 발생한 이유' }
-  ],
+  msgAndDescription: { message: string | string[]; description: string; path: string }[] = [
+    { message: '에러에 대한 메세지', description: '에러가 발생한 이유', path: '/api' }
+  ]
   // 이런 식으로 하나하나 정의해놓은 path만 타입으로 들어올 수 있게 강제할 수 있는데 공수가 좀 드는듯
   // path: ValueOf<typeof routesV1.user>,
-  path: string = '/api'
 ): ClassDecorator & MethodDecorator => {
   const timestamp = new Date().toISOString();
 
   const examples = msgAndDescription.reduce<
     Record<string, Pick<ExampleObject, 'value' | 'description'>>
-  >((acc, { description, message }) => {
+  >((acc, { description, message, path }) => {
     acc[description] = {
       description,
       value: {
@@ -79,7 +78,7 @@ export const SwaggerErrorResponse = (
               path: {
                 description: '요청한 API의 path',
                 type: 'string',
-                example: path
+                example: '/api'
               },
               message: {
                 properties: {

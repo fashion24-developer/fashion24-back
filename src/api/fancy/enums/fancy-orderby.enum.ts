@@ -1,6 +1,6 @@
-export enum FancyOrderBy {
-  COSTPRICE = 'costPrice',
-  PRICE = 'price',
-  DISCOUNTRATE = 'discountRate',
-  CREATEDAT = 'createdAt'
-}
+export const FancyOrderBy = {
+  COST_PRICE: 'costPrice',
+  PRICE: 'price',
+  DISCOUNT_RATE: 'discountRate',
+  CREATED_AT: 'createdAt'
+} as const;

@@ -1,9 +1,8 @@
-import { Prisma, User } from '@prisma/client';
-
+import { UserEntity } from '@src/api/users/entities/user.entity';
 import { IRepository } from '@src/common/interfaces/i-repository.interface';
 
-export interface IUsersRepository extends IRepository {
-  create(data: Prisma.UserCreateInput): Promise<User>;
-  findOne(userFindUniqueArgs: Prisma.UserFindUniqueArgs): Promise<User | null>;
-  update(userUpdateArgs: Prisma.UserUpdateArgs): Promise<User>;
+export interface IUsersRepository extends IRepository<UserEntity> {
+  create(data: UserEntity): Promise<UserEntity>;
+  findOneByUniqueId(uniqueId: string): Promise<UserEntity | null>;
+  update(data: UserEntity): Promise<UserEntity>;
 }

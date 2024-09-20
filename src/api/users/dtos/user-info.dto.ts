@@ -11,6 +11,7 @@ import {
 
 import { UserProvider } from '@src/api/users/enums/user-provider.enum';
 import { UserRole } from '@src/api/users/enums/user-role.enum';
+import { ValueOf } from '@src/common/types/common.type';
 
 export class UserInfoDto {
   @IsNotEmpty()
@@ -35,11 +36,11 @@ export class UserInfoDto {
 
   @IsNotEmpty()
   @IsEnum(UserProvider)
-  provider: UserProvider;
+  provider: ValueOf<typeof UserProvider>;
 
   @IsNotEmpty()
   @IsEnum(UserRole)
-  role: UserRole = UserRole.USER;
+  role: ValueOf<typeof UserRole> = UserRole.USER;
 
   @IsNotEmpty()
   @IsNumber()

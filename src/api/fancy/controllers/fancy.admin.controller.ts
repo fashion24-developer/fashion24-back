@@ -1,22 +1,22 @@
-import { Body, Controller, Inject, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { AdminGuard } from '@src/api/auth/jwt/jwt-auth.guard';
 import { ApiFancy } from '@src/api/fancy/controllers/fancy.swagger';
-import { CreateFancyDto } from '@src/api/fancy/dtos/create-fancy.dto';
-import { FancyDto } from '@src/api/fancy/dtos/fancy.dto';
-import { IFancyService } from '@src/api/fancy/services/i-fancy-service.interface';
-import { FANCY_SERVICE_DI_TOKEN } from '@src/common/constants/di.tokens';
+import { CreateFancyInputDto } from '@src/api/fancy/dtos/create-fancy-input.dto';
+import { CreateFancyResponseDto } from '@src/api/fancy/dtos/create-fancy-response.dto';
+import { FancyService } from '@src/api/fancy/services/fancy.service';
+import { routesV1 } from '@src/configs/app.route';
 
 @ApiTags('admin fancy')
 @UseGuards(AdminGuard)
-@Controller('admin/fancy')
+@Controller(routesV1.version)
 export class FancyAdminController {
-  constructor(@Inject(FANCY_SERVICE_DI_TOKEN) private readonly fancyService: IFancyService) {}
+  constructor(private readonly fancyService: FancyService) {}
 
   @ApiFancy.Create({ summary: 'fancy 생성' })
-  @Post()
-  create(@Body() fancyInfo: CreateFancyDto): Promise<FancyDto> {
-    return this.fancyService.create(fancyInfo);
+  @Post('admin' + routesV1.fancy.create)
+  async create(@Body() fancyInfo: CreateFancyInputDto): Promise<CreateFancyResponseDto> {
+    return new CreateFancyResponseDto(await this.fancyService.create(fancyInfo));
   }
 }

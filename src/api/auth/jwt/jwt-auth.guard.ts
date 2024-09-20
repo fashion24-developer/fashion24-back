@@ -1,6 +1,14 @@
-import { ExecutionContext, HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  ExecutionContext,
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Logger
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Observable } from 'rxjs';
 
 import { UserRole } from '@src/api/users/enums/user-role.enum';
@@ -8,6 +16,10 @@ import { COMMON_ERROR_HTTP_STATUS_MESSAGE } from '@src/common/constants/common.c
 
 @Injectable()
 export class AccessTokenAuthGuard extends AuthGuard('accessToken') {
+  constructor(@Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: Logger) {
+    super();
+  }
+
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     /**
@@ -40,7 +52,7 @@ export class AccessTokenAuthGuard extends AuthGuard('accessToken') {
     } catch (error) {
       if (error instanceof HttpException) throw error;
       else {
-        console.log(error.message);
+        this.logger.error(error);
         throw new HttpException('jwt error', HttpStatus.BAD_REQUEST);
       }
     }
@@ -49,6 +61,10 @@ export class AccessTokenAuthGuard extends AuthGuard('accessToken') {
 
 @Injectable()
 export class RefreshTokenAuthGuard extends AuthGuard('refreshToken') {
+  constructor(@Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: Logger) {
+    super();
+  }
+
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     /**
@@ -95,7 +111,7 @@ export class RefreshTokenAuthGuard extends AuthGuard('refreshToken') {
     } catch (error) {
       if (error instanceof HttpException) throw error;
       else {
-        console.log(error.message);
+        this.logger.error(error);
         throw new HttpException(
           {
             statusCode: HttpStatus.BAD_REQUEST,
@@ -114,6 +130,10 @@ export class AccessTokenOptionalAuthGuard extends AuthGuard('accessToken') {}
 
 @Injectable()
 export class AdminGuard extends AuthGuard('accessToken') {
+  constructor(@Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: Logger) {
+    super();
+  }
+
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
     /**
@@ -150,7 +170,7 @@ export class AdminGuard extends AuthGuard('accessToken') {
     } catch (error) {
       if (error instanceof HttpException) throw error;
       else {
-        console.log(error.message);
+        this.logger.error(error);
         throw new HttpException('jwt error', HttpStatus.BAD_REQUEST);
       }
     }

@@ -117,7 +117,7 @@ model Fancy {
   /// 생성일
   createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamp
   /// 수정일
-  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamp
+  updatedAt    DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamp
 
   fancyImages     FancyImage[]
   fancyStocks     FancyStock[]

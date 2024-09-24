@@ -1,6 +1,6 @@
 import { ApiExtraModels, ApiProperty, getSchemaPath } from '@nestjs/swagger';
 
-import { FancyPaginationResponseDto } from '@src/api/apps/fancy/dtos/find-all-fancy-response.dto';
+import { FindAllFancyResponseDto } from '@src/api/apps/fancy/dtos/find-all-fancy-response.dto';
 import { PaginationMetaDto } from '@src/common/dtos/pagination/pagination-meta.dto';
 
 @ApiExtraModels()
@@ -9,7 +9,7 @@ export class PaginationResponseDto<T> {
   @ApiProperty({
     type: 'array',
     items: {
-      oneOf: [{ $ref: getSchemaPath(FancyPaginationResponseDto) }]
+      oneOf: [{ $ref: getSchemaPath(FindAllFancyResponseDto) }]
     }
   })
   data: Array<T>;

@@ -3,6 +3,7 @@ import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/c
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { FANCY_FIND_ALL_SELECT } from '@src/api/apps/fancy/constants/fancy-find-all-select.const';
+import { FindAllFancyResponseDto } from '@src/api/apps/fancy/dtos/find-all-fancy-response.dto';
 import { FindAllFancyDto } from '@src/api/apps/fancy/dtos/find-all-fancy.dto';
 import { IFancyAppRepository } from '@src/api/apps/fancy/repositories/i-fancy.app.repository.interface';
 import { FANCY_REPOSITORY_DI_TOKEN } from '@src/common/constants/di.tokens';
@@ -23,7 +24,7 @@ export class FancyAppService {
 
   async findAllForPagination(
     paginationData: FindAllFancyDto
-  ): Promise<PaginationResponseDto<FancyEntity>> {
+  ): Promise<PaginationResponseDto<FindAllFancyResponseDto>> {
     try {
       const { page, pageSize: take, orderBy, orderDirection, ...where } = paginationData;
 
@@ -35,13 +36,15 @@ export class FancyAppService {
 
       const skip = take ? take * (page - 1) : 0;
 
-      const data = await this.fancyRepository.findAllForPagination(
-        FancyMapper.paginationWhere(where),
-        FANCY_FIND_ALL_SELECT,
-        take,
-        skip,
-        { [orderBy]: orderDirection }
-      );
+      const data = (
+        await this.fancyRepository.findAllForPagination(
+          FancyMapper.paginationWhere(where),
+          FANCY_FIND_ALL_SELECT,
+          take,
+          skip,
+          { [orderBy]: orderDirection }
+        )
+      ).map((fancy) => this.reformatData(fancy));
 
       return {
         data,
@@ -49,9 +52,7 @@ export class FancyAppService {
       };
     } catch (error) {
       this.logger.error(error);
-      throw new HttpException('Failed to find fancy', HttpStatus.INTERNAL_SERVER_ERROR, {
-        cause: error
-      });
+      throw new HttpException('Failed to find fancy', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -60,4 +61,33 @@ export class FancyAppService {
   }
 
   delete(): void {}
+
+  private reformatData(data: FancyEntity) {
+    const transformedOptions = data.fancyOptions.map((optionObj) => {
+      const subOptions = data.fancySubOptions
+        .filter((subOption) => subOption.subOption.optionId === optionObj.option.id)
+        .map((subOption) => {
+          return subOption.subOption;
+        });
+
+      return {
+        id: optionObj.option.id,
+        name: optionObj.option.name,
+        subOptions
+      };
+    });
+
+    return {
+      id: data.id,
+      name: data.name,
+      price: data.price,
+      costPrice: data.costPrice,
+      discountRate: data.discountRate,
+      status: data.status,
+      fancyImages: data.fancyImages,
+      fancyOptions: transformedOptions,
+      looks: data.looks,
+      tags: data.tags
+    };
+  }
 }

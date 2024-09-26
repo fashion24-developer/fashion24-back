@@ -39,9 +39,10 @@ model User {
   updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp
   /// 탈퇴일
   deletedAt DateTime? @map("deleted_at") @db.Timestamp
+  /// 유저 개인 주소 변경가능성 있음
+  address   String?   @db.VarChar(255)
 
   userToken UserToken?
-  addresses Address[]
   orders    Order[]
 
   @@map("user")
@@ -63,37 +64,6 @@ model UserToken {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_token")
-}
-
-/// 유저 주소 테이블
-model Address {
-  id            Int      @id @default(autoincrement())
-  /// 유저 아이디 (FK)
-  userId        Int      @map("user_id")
-  /// 기본 주소 여부
-  isDefault     Boolean  @default(false) @map("is_default") @db.Boolean
-  /// 도로명 주소 전체
-  roadFullAddr  String   @map("road_full_addr") @db.VarChar(255)
-  /// 도로명 주소 부분1
-  roadAddrPart1 String   @map("road_addr_part1") @db.VarChar(255)
-  /// 상세 주소
-  addrDetail    String?  @map("addr_detail") @db.VarChar(255)
-  /// 우편번호
-  zipNo         Int      @map("zip_no")
-  /// 시도명
-  siNm          String   @map("si_nm") @db.VarChar(20)
-  /// 시군구명
-  sggNm         String   @map("sgg_nm") @db.VarChar(20)
-  /// 읍면동명
-  emdNm         String   @map("emd_nm") @db.VarChar(20)
-  /// 도로명
-  rn            String   @db.VarChar(20)
-  /// 생성일
-  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamp
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("address")
 }
 
 // 완제품 테이블

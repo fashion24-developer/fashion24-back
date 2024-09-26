@@ -63,17 +63,23 @@ export class FancyAppService {
   delete(): void {}
 
   private reformatData(data: FancyEntity) {
-    const transformedOptions = data.fancyOptions.map((optionObj) => {
-      const subOptions = data.fancySubOptions
-        .filter((subOption) => subOption.subOption.optionId === optionObj.option.id)
-        .map((subOption) => {
-          return subOption.subOption;
-        });
+    const subOptionMap = new Map();
 
+    data.fancySubOptions.forEach((fancySubOption) => {
+      const optionId = fancySubOption.subOption.optionId;
+
+      if (!subOptionMap.has(optionId)) {
+        subOptionMap.set(optionId, []);
+      }
+
+      subOptionMap.get(optionId).push(fancySubOption.subOption);
+    });
+
+    const transformedOptions = data.fancyOptions.map((fancyOption) => {
       return {
-        id: optionObj.option.id,
-        name: optionObj.option.name,
-        subOptions
+        id: fancyOption.option.id,
+        name: fancyOption.option.name,
+        subOptions: subOptionMap.get(fancyOption.option.id) || []
       };
     });
 

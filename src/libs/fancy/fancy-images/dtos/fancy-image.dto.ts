@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class FancyImageDto {
   @ApiProperty({ description: 'ID', example: 1 })
@@ -13,6 +13,6 @@ export class FancyImageDto {
   @ApiProperty({ description: '순서', example: 1 })
   order: number;
 
-  @ApiProperty({ description: '생성일', example: '2024-09-11T20:14:50.075Z' })
+  @ApiPropertyOptional({ description: '생성일', example: '2024-09-11T20:14:50.075Z' })
   createdAt: Date;
 }

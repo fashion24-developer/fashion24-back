@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class TagDto {
   @ApiProperty({ description: 'ID', example: 1 })
@@ -7,6 +7,6 @@ export class TagDto {
   @ApiProperty({ description: '태그 이름', example: '여름' })
   name: string;
 
-  @ApiProperty({ description: '생성일', example: '2024-09-05T12:15:54.194Z' })
+  @ApiPropertyOptional({ description: '생성일', example: '2024-09-05T12:15:54.194Z' })
   createdAt: Date;
 }

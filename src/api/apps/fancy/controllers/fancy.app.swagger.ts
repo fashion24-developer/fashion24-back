@@ -1,12 +1,14 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiCookieAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiExtraModels, ApiOperation, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 
 import { FancyAppController } from '@src/api/apps/fancy/controllers/fancy.app.controller';
+import { FindAllFancyResponseDto } from '@src/api/apps/fancy/dtos/find-all-fancy-response.dto';
 import {
   COMMON_ERROR_HTTP_STATUS_CODE,
   COMMON_ERROR_HTTP_STATUS_MESSAGE
 } from '@src/common/constants/common.constant';
 import { SwaggerErrorResponse } from '@src/common/decorators/swagger-error-response.decorator';
+import { PaginationMetaDto } from '@src/common/dtos/pagination/pagination-meta.dto';
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
 
 // 해당 문서 편집 반드시 필요함. Schema 관련 문서화가 제대로 안되어 있음
@@ -16,93 +18,450 @@ export const ApiFancyApp: ApiOperator<keyof FancyAppController> = {
       ApiOperation({
         ...apiOperationOptions
       }),
-
+      ApiExtraModels(FindAllFancyResponseDto, PaginationMetaDto),
       ApiResponse({
         status: 200,
         description: 'Fancy 조회 성공.',
         schema: {
+          type: 'object',
+          properties: {
+            data: {
+              type: 'array',
+              items: { $ref: getSchemaPath(FindAllFancyResponseDto) }
+            },
+            meta: { $ref: getSchemaPath(PaginationMetaDto) }
+          },
           example: {
             data: [
               {
-                id: 'NHTXBZjqFujs4omUc9cGg',
-                name: 'finger ring',
-                price: 24250,
-                costPrice: 25000,
-                discountRate: 3,
-                status: 'ACTIVE',
-                fancyImages: [],
-                fancyOptions: [],
-                fancySubOptions: [],
-                looks: [],
-                tags: []
-              },
-              {
-                id: 'g',
-                name: '방빙',
-                price: 5000,
-                costPrice: 10000,
-                discountRate: 50,
+                id: 'a',
+                name: 'aName',
+                price: 1000,
+                costPrice: 1000,
+                discountRate: 1000,
                 status: 'ACTIVE',
                 fancyImages: [
                   {
-                    id: 7,
-                    imageUrl: 'asd'
+                    id: 1,
+                    imageUrl: 'url'
                   }
                 ],
-                fancyOptions: [],
-                fancySubOptions: [],
-                looks: [],
-                tags: []
-              },
-              {
-                id: 'd',
-                name: '담봉',
-                price: 4000,
-                costPrice: 10000,
-                discountRate: 60,
-                status: 'ACTIVE',
-                fancyImages: [],
                 fancyOptions: [
                   {
-                    option: {
-                      id: 1,
-                      name: '모양'
-                    }
-                  }
-                ],
-                fancySubOptions: [
-                  {
-                    subOption: {
-                      id: 2,
-                      name: '세모',
-                      additionalPrice: 2000
-                    }
+                    id: 1,
+                    name: '모양',
+                    subOptions: [
+                      {
+                        id: 1,
+                        optionId: 1,
+                        name: '세모',
+                        additionalPrice: 100
+                      },
+                      {
+                        id: 2,
+                        optionId: 1,
+                        name: '네모',
+                        additionalPrice: 100
+                      },
+                      {
+                        id: 3,
+                        optionId: 1,
+                        name: '동그라미',
+                        additionalPrice: 100
+                      }
+                    ]
                   },
                   {
-                    subOption: {
-                      id: 1,
-                      name: '네모',
-                      additionalPrice: 1000
-                    }
+                    id: 2,
+                    name: '색',
+                    subOptions: [
+                      {
+                        id: 4,
+                        optionId: 2,
+                        name: '빨강',
+                        additionalPrice: 100
+                      },
+                      {
+                        id: 5,
+                        optionId: 2,
+                        name: '파랑',
+                        additionalPrice: 100
+                      },
+                      {
+                        id: 6,
+                        optionId: 2,
+                        name: '초록',
+                        additionalPrice: 100
+                      }
+                    ]
+                  },
+                  {
+                    id: 3,
+                    name: '질감',
+                    subOptions: [
+                      {
+                        id: 7,
+                        optionId: 3,
+                        name: '부드러움',
+                        additionalPrice: 100
+                      }
+                    ]
                   }
                 ],
                 looks: [
                   {
                     id: 1,
                     name: '1번룩',
-                    imageUrl: 'asd'
+                    imageUrl: '1번url'
                   },
                   {
                     id: 2,
                     name: '2번룩',
-                    imageUrl: 'asd'
-                  },
-                  {
-                    id: 5,
-                    name: '5번룩',
-                    imageUrl: 'asd'
+                    imageUrl: '2번url'
                   }
                 ],
+                tags: [
+                  {
+                    id: 1,
+                    name: '1번태그'
+                  }
+                ]
+              },
+              {
+                id: 'b',
+                name: 'bName',
+                price: 1000,
+                costPrice: 1000,
+                discountRate: 1000,
+                status: 'ACTIVE',
+                fancyImages: [
+                  {
+                    id: 4,
+                    imageUrl: 'url'
+                  }
+                ],
+                fancyOptions: [
+                  {
+                    id: 1,
+                    name: '모양',
+                    subOptions: [
+                      {
+                        id: 1,
+                        optionId: 1,
+                        name: '세모',
+                        additionalPrice: 100
+                      },
+                      {
+                        id: 3,
+                        optionId: 1,
+                        name: '동그라미',
+                        additionalPrice: 100
+                      }
+                    ]
+                  },
+                  {
+                    id: 2,
+                    name: '색',
+                    subOptions: [
+                      {
+                        id: 4,
+                        optionId: 2,
+                        name: '빨강',
+                        additionalPrice: 100
+                      },
+                      {
+                        id: 5,
+                        optionId: 2,
+                        name: '파랑',
+                        additionalPrice: 100
+                      }
+                    ]
+                  },
+                  {
+                    id: 3,
+                    name: '질감',
+                    subOptions: [
+                      {
+                        id: 8,
+                        optionId: 3,
+                        name: '말랑함',
+                        additionalPrice: 100
+                      }
+                    ]
+                  }
+                ],
+                looks: [
+                  {
+                    id: 1,
+                    name: '1번룩',
+                    imageUrl: '1번url'
+                  }
+                ],
+                tags: [
+                  {
+                    id: 2,
+                    name: '2번태그'
+                  }
+                ]
+              },
+              {
+                id: 'c',
+                name: 'cName',
+                price: 1000,
+                costPrice: 1000,
+                discountRate: 1000,
+                status: 'ACTIVE',
+                fancyImages: [
+                  {
+                    id: 6,
+                    imageUrl: 'url'
+                  }
+                ],
+                fancyOptions: [
+                  {
+                    id: 2,
+                    name: '색',
+                    subOptions: [
+                      {
+                        id: 4,
+                        optionId: 2,
+                        name: '빨강',
+                        additionalPrice: 100
+                      }
+                    ]
+                  }
+                ],
+                looks: [
+                  {
+                    id: 2,
+                    name: '2번룩',
+                    imageUrl: '2번url'
+                  }
+                ],
+                tags: [
+                  {
+                    id: 3,
+                    name: '3번태그'
+                  }
+                ]
+              },
+              {
+                id: 'd',
+                name: 'dName',
+                price: 1000,
+                costPrice: 1000,
+                discountRate: 1000,
+                status: 'ACTIVE',
+                fancyImages: [
+                  {
+                    id: 8,
+                    imageUrl: 'url'
+                  }
+                ],
+                fancyOptions: [
+                  {
+                    id: 1,
+                    name: '모양',
+                    subOptions: [
+                      {
+                        id: 2,
+                        optionId: 1,
+                        name: '네모',
+                        additionalPrice: 100
+                      }
+                    ]
+                  },
+                  {
+                    id: 2,
+                    name: '색',
+                    subOptions: [
+                      {
+                        id: 4,
+                        optionId: 2,
+                        name: '빨강',
+                        additionalPrice: 100
+                      }
+                    ]
+                  },
+                  {
+                    id: 3,
+                    name: '질감',
+                    subOptions: [
+                      {
+                        id: 9,
+                        optionId: 3,
+                        name: '거침',
+                        additionalPrice: 100
+                      }
+                    ]
+                  }
+                ],
+                looks: [
+                  {
+                    id: 3,
+                    name: '3번룩',
+                    imageUrl: '3번url'
+                  }
+                ],
+                tags: [
+                  {
+                    id: 1,
+                    name: '1번태그'
+                  }
+                ]
+              },
+              {
+                id: 'e',
+                name: 'eName',
+                price: 1000,
+                costPrice: 1000,
+                discountRate: 1000,
+                status: 'ACTIVE',
+                fancyImages: [
+                  {
+                    id: 10,
+                    imageUrl: 'url'
+                  }
+                ],
+                fancyOptions: [
+                  {
+                    id: 1,
+                    name: '모양',
+                    subOptions: [
+                      {
+                        id: 2,
+                        optionId: 1,
+                        name: '네모',
+                        additionalPrice: 100
+                      }
+                    ]
+                  },
+                  {
+                    id: 2,
+                    name: '색',
+                    subOptions: []
+                  },
+                  {
+                    id: 3,
+                    name: '질감',
+                    subOptions: [
+                      {
+                        id: 7,
+                        optionId: 3,
+                        name: '부드러움',
+                        additionalPrice: 100
+                      }
+                    ]
+                  }
+                ],
+                looks: [
+                  {
+                    id: 2,
+                    name: '2번룩',
+                    imageUrl: '2번url'
+                  },
+                  {
+                    id: 3,
+                    name: '3번룩',
+                    imageUrl: '3번url'
+                  }
+                ],
+                tags: [
+                  {
+                    id: 1,
+                    name: '1번태그'
+                  }
+                ]
+              },
+              {
+                id: 'f',
+                name: 'fName',
+                price: 1000,
+                costPrice: 1000,
+                discountRate: 1000,
+                status: 'ACTIVE',
+                fancyImages: [
+                  {
+                    id: 14,
+                    imageUrl: 'url'
+                  }
+                ],
+                fancyOptions: [
+                  {
+                    id: 1,
+                    name: '모양',
+                    subOptions: [
+                      {
+                        id: 1,
+                        optionId: 1,
+                        name: '세모',
+                        additionalPrice: 100
+                      }
+                    ]
+                  },
+                  {
+                    id: 3,
+                    name: '질감',
+                    subOptions: []
+                  }
+                ],
+                looks: [
+                  {
+                    id: 1,
+                    name: '1번룩',
+                    imageUrl: '1번url'
+                  },
+                  {
+                    id: 3,
+                    name: '3번룩',
+                    imageUrl: '3번url'
+                  }
+                ],
+                tags: [
+                  {
+                    id: 2,
+                    name: '2번태그'
+                  }
+                ]
+              },
+              {
+                id: 'g',
+                name: 'gName',
+                price: 1000,
+                costPrice: 1000,
+                discountRate: 1000,
+                status: 'ACTIVE',
+                fancyImages: [],
+                fancyOptions: [],
+                looks: [
+                  {
+                    id: 1,
+                    name: '1번룩',
+                    imageUrl: '1번url'
+                  },
+                  {
+                    id: 3,
+                    name: '3번룩',
+                    imageUrl: '3번url'
+                  }
+                ],
+                tags: [
+                  {
+                    id: 2,
+                    name: '2번태그'
+                  }
+                ]
+              },
+              {
+                id: 'h',
+                name: 'hName',
+                price: 1000,
+                costPrice: 1000,
+                discountRate: 1000,
+                status: 'ACTIVE',
+                fancyImages: [],
+                fancyOptions: [],
+                looks: [],
                 tags: [
                   {
                     id: 3,
@@ -113,10 +472,10 @@ export const ApiFancyApp: ApiOperator<keyof FancyAppController> = {
             ],
             meta: {
               pageNumber: 1,
-              pageSize: 3,
-              totalPages: 4,
-              totalCount: 10,
-              isLastPage: false,
+              pageSize: 10,
+              totalPages: 1,
+              totalCount: 8,
+              isLastPage: true,
               isFirstPage: true
             }
           }
@@ -222,9 +581,7 @@ export const ApiFancyApp: ApiOperator<keyof FancyAppController> = {
             }
           }
         }
-      }),
-
-      ApiCookieAuth('accessToken')
+      })
     );
   }
 };

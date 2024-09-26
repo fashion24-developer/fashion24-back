@@ -13,8 +13,21 @@ export class OptionEntity {
   /**
    * 생성일
    */
-  private _createdAt: Date;
+  private readonly _createdAt: Date;
 
   private _fancyOptions: FancyOptionEntity[];
+
   private _subOptions: SubOptionEntity[];
+
+  get id(): number {
+    return this._id;
+  }
+
+  get name(): string {
+    return this._name;
+  }
+
+  get createdAt(): Date {
+    return this._createdAt;
+  }
 }

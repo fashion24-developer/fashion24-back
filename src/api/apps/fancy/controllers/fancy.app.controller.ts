@@ -2,10 +2,10 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { ApiFancyApp } from '@src/api/apps/fancy/controllers/fancy.app.swagger';
+import { FancyPaginationResponseDto } from '@src/api/apps/fancy/dtos/fancy-pagination-response.dto';
 import { FindAllFancyDto } from '@src/api/apps/fancy/dtos/find-all-fancy.dto';
 import { FancyAppService } from '@src/api/apps/fancy/services/fancy.app.service';
 import { globalPrefix } from '@src/bootstrap.service';
-import { PaginationResponseDto } from '@src/common/dtos/pagination/pagination-response.dto';
 import { routesV1 } from '@src/configs/app.route';
 
 @ApiTags('fancy')
@@ -20,6 +20,6 @@ export class FancyAppController {
   async findAllForPagination(@Query() paginationData: FindAllFancyDto) {
     const { data, meta } = await this.fancyService.findAllForPagination(paginationData);
 
-    return new PaginationResponseDto(data, meta);
+    return new FancyPaginationResponseDto(data, meta);
   }
 }

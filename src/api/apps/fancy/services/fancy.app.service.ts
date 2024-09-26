@@ -3,11 +3,10 @@ import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/c
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { FANCY_FIND_ALL_SELECT } from '@src/api/apps/fancy/constants/fancy-find-all-select.const';
-import { FindAllFancyResponseDto } from '@src/api/apps/fancy/dtos/find-all-fancy-response.dto';
+import { FancyPaginationResponseDto } from '@src/api/apps/fancy/dtos/fancy-pagination-response.dto';
 import { FindAllFancyDto } from '@src/api/apps/fancy/dtos/find-all-fancy.dto';
 import { IFancyAppRepository } from '@src/api/apps/fancy/repositories/i-fancy.app.repository.interface';
 import { FANCY_REPOSITORY_DI_TOKEN } from '@src/common/constants/di.tokens';
-import { PaginationResponseDto } from '@src/common/dtos/pagination/pagination-response.dto';
 import { FancyEntity } from '@src/libs/fancy/entities/fancy.entity';
 import { FancyMapper } from '@src/utils/mappers/fancy.mapper';
 
@@ -22,9 +21,7 @@ export class FancyAppService {
     return data;
   }
 
-  async findAllForPagination(
-    paginationData: FindAllFancyDto
-  ): Promise<PaginationResponseDto<FindAllFancyResponseDto>> {
+  async findAllForPagination(paginationData: FindAllFancyDto): Promise<FancyPaginationResponseDto> {
     try {
       const { page, pageSize: take, orderBy, orderDirection, ...where } = paginationData;
 

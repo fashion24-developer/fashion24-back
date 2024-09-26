@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common';
-import { ApiExtraModels, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiExtraModels, ApiOperation, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 
 import { FancyAppController } from '@src/api/apps/fancy/controllers/fancy.app.controller';
 import { FindAllFancyResponseDto } from '@src/api/apps/fancy/dtos/find-all-fancy-response.dto';
@@ -8,7 +8,7 @@ import {
   COMMON_ERROR_HTTP_STATUS_MESSAGE
 } from '@src/common/constants/common.constant';
 import { SwaggerErrorResponse } from '@src/common/decorators/swagger-error-response.decorator';
-import { PaginationResponseDto } from '@src/common/dtos/pagination/pagination-response.dto';
+import { PaginationMetaDto } from '@src/common/dtos/pagination/pagination-meta.dto';
 import { ApiOperationOptionsWithSummary, ApiOperator } from '@src/common/types/common.type';
 
 // 해당 문서 편집 반드시 필요함. Schema 관련 문서화가 제대로 안되어 있음
@@ -18,12 +18,19 @@ export const ApiFancyApp: ApiOperator<keyof FancyAppController> = {
       ApiOperation({
         ...apiOperationOptions
       }),
-      ApiExtraModels(FindAllFancyResponseDto),
+      ApiExtraModels(FindAllFancyResponseDto, PaginationMetaDto),
       ApiResponse({
         status: 200,
         description: 'Fancy 조회 성공.',
-        type: PaginationResponseDto,
         schema: {
+          type: 'object',
+          properties: {
+            data: {
+              type: 'array',
+              items: { $ref: getSchemaPath(FindAllFancyResponseDto) }
+            },
+            meta: { $ref: getSchemaPath(PaginationMetaDto) }
+          },
           example: {
             data: [
               {

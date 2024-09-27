@@ -4,7 +4,9 @@ import { PaginationMetaDto } from '@src/common/dtos/pagination/pagination-meta.d
 
 @ApiExtraModels()
 export class PaginationResponseDto<T> {
-  @ApiProperty({ type: 'array' })
+  @ApiProperty({
+    type: 'array'
+  })
   data: Array<T>;
 
   @ApiProperty({ type: PaginationMetaDto })

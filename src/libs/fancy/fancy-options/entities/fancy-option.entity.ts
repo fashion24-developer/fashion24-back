@@ -17,9 +17,33 @@ export class FancyOptionEntity {
   /**
    * 생성일
    */
-  private _createdAt: Date;
+  private readonly _createdAt: Date;
 
-  private fancy: FancyEntity;
+  private _fancy: FancyEntity;
 
-  private option: OptionEntity;
+  private _option: OptionEntity;
+
+  get id() {
+    return this._id;
+  }
+
+  get fancyId() {
+    return this._fancyId;
+  }
+
+  get optionId() {
+    return this._optionId;
+  }
+
+  get createdAt() {
+    return this._createdAt;
+  }
+
+  get option() {
+    return this._option;
+  }
+
+  get fancy() {
+    return this._fancy;
+  }
 }

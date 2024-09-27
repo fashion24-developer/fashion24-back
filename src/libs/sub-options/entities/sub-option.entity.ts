@@ -21,8 +21,28 @@ export class SubOptionEntity {
   /**
    * 생성일
    */
-  private _createdAt: Date;
+  private readonly _createdAt: Date;
 
   private _fancySubOptions: FancySubOptionEntity[];
   private _option: OptionEntity;
+
+  get id(): number {
+    return this._id;
+  }
+
+  get optionId(): number {
+    return this._optionId;
+  }
+
+  get name(): string {
+    return this._name;
+  }
+
+  get additionalPrice(): number {
+    return this._additionalPrice;
+  }
+
+  get createdAt(): Date {
+    return this._createdAt;
+  }
 }

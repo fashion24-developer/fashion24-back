@@ -18,16 +18,16 @@ RUN npm ci --only=production && npm cache clean --force
 # /dist 디렉토리 복사
 COPY ./dist ./dist
 
-# ============================
-# Production Stage
-# ============================
-FROM node:22-alpine3.18
+# # ============================
+# # Production Stage
+# # ============================
+# FROM node:22-alpine3.18
 
-# 작업 디렉토리 설정
-WORKDIR /app
+# # 작업 디렉토리 설정
+# WORKDIR /app
 
-# /app 디렉토리에 필요한 파일 복사
-COPY --from=builder /app .
+# # /app 디렉토리에 필요한 파일 복사
+# COPY --from=builder /app .
 
-# 컨테이너 실행 시 실행될 명령어
-CMD ["npm", "run", "start:migrate:prod"]
+# 컨테이너 실행 시 실행될 명령어 - 추후 migrate는 워크플로우로 따로 관리 예정
+CMD ["npm", "run", "start:prod"]

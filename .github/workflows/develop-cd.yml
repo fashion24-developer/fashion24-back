@@ -11,7 +11,7 @@ jobs:
     runs-on: develop
     steps:
       - name: Delete Old docker image
-        run: sudo docker rmi -f ${{secrets.DOCKER_DEVELOP_IMAGE_NAME}}:latest || true
+        run: sudo docker rmi -f ${{secrets.DOCKER_DEVELOP_IMAGE_NAME}}:latest || true # 동작 제대로 안이뤄지고 있음.
       - name: Delete Old docker container
         run: sudo docker rm -f ${{secrets.DOCKER_DEVELOP_CONTAINER_NAME}} || true
       - name: Pull Docker image

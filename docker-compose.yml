@@ -1,6 +1,7 @@
 services:
   fashion24-develop:
-    image: nicodora/fashion24-develop:latest
+    image: 2swo/fashion24-dev-back
+    container_name: fashion24-dev-back
     env_file:
       - .env.development
     ports:
@@ -12,6 +13,7 @@ services:
 
   redis:
     image: redis:7.2.4-alpine
+    container_name: redis-dev
     volumes:
       - /home/ubuntu/fashion24/redis_data:/usr/local/etc/redis
     env_file:
@@ -22,6 +24,7 @@ services:
 
   postgresql:
     image: postgres:14.1-alpine
+    container_name: postgresql-dev
     env_file:
       - .env.development
     volumes:

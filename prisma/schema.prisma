@@ -40,12 +40,12 @@ model User {
   /// 성별
   gender   Boolean?  @db.Boolean
   /// 생년월일
-  birth    DateTime? @db.Timestamp
+  birth    DateTime?
 
   /// 가입일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
   /// 수정일
-  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   userToken            UserToken?
   orders               Order[]
@@ -69,7 +69,7 @@ model UserToken {
   socialRefreshToken String @unique @map("social_refresh_token") @db.VarChar(255)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -93,16 +93,16 @@ model Fancy {
   /// 할인율
   discountRate Int           @default(0) @map("discount_rate") @db.SmallInt
   /// 설명1
-  description1 String?       @db.Text
+  description1 String?
   /// 설명2
-  description2 String?       @db.Text
+  description2 String?
   /// 상태
   status       ProductStatus @default(INACTIVE)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
   /// 수정일
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   fancyImages     FancyImage[]
   fancyStocks     FancySizeStock[]
@@ -129,7 +129,7 @@ model FancyImage {
   order    Int    @db.SmallInt
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   fancy Fancy @relation(fields: [fancyId], references: [id], onDelete: Cascade)
 
@@ -148,9 +148,9 @@ model FancySizeStock {
   quantity Int    @default(0) @db.SmallInt
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
   /// 수정일
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   fancy Fancy @relation(fields: [fancyId], references: [id], onDelete: Cascade)
   size  Size  @relation(fields: [sizeId], references: [id], onDelete: Cascade)
@@ -167,7 +167,7 @@ model Size {
   name String @unique @db.VarChar(20)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   fancySizeStocks FancySizeStock[]
 
@@ -184,7 +184,7 @@ model FancyOption {
   optionId Int    @map("option_id")
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   fancy  Fancy  @relation(fields: [fancyId], references: [id], onDelete: Cascade)
   option Option @relation(fields: [optionId], references: [id], onDelete: Cascade)
@@ -201,7 +201,7 @@ model Option {
   name String @unique @db.VarChar(100)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   fancyOptions FancyOption[]
   subOptions   SubOption[]
@@ -219,7 +219,7 @@ model FancySubOption {
   subOptionId Int    @map("sub_option_id")
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   fancy     Fancy     @relation(fields: [fancyId], references: [id], onDelete: Cascade)
   subOption SubOption @relation(fields: [subOptionId], references: [id], onDelete: Cascade)
@@ -240,7 +240,7 @@ model SubOption {
   additionalPrice Int    @default(0) @map("additional_price") @db.Integer
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   fancySubOptions FancySubOption[]
   option          Option           @relation(fields: [optionId], references: [id], onDelete: Cascade)
@@ -256,7 +256,7 @@ model FancyType {
   name String @unique @db.VarChar(100)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   fancy Fancy[]
 
@@ -273,7 +273,7 @@ model FancyLook {
   imageUrl String @map("image_url") @db.VarChar(1024)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   fancy Fancy[]
 
@@ -288,7 +288,7 @@ model Tag {
   name String @unique @db.VarChar(50)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   fancy Fancy[]
 
@@ -307,7 +307,7 @@ model CanceledOrder {
   reason  String @db.VarChar(255)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
@@ -329,7 +329,7 @@ model Order {
   invoiceNumber String @map("invoice_number") @db.VarChar(255)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   fancyOrderItems    FancyOrderItem[]
   whateverOrderItems WhateverOrderItem[]
@@ -351,7 +351,7 @@ model Package {
   additionalPrice Int    @default(0) @map("additional_price")
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   fancyOrderItems    FancyOrderItem[]
   whateverOrderItems WhateverOrderItem[]
@@ -377,7 +377,7 @@ model FancyOrderItem {
   price     Int
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   fancy       Fancy         @relation(fields: [fancyId], references: [id], onDelete: Cascade)
   order       Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
@@ -403,7 +403,7 @@ model WhateverOrderItem {
   price     Int  @db.Integer
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   order         Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
   package       Package        @relation(fields: [packageId], references: [id])
@@ -423,12 +423,12 @@ model FancyReview {
   /// 완제품 주문 상세내역 아이디 (FK)
   fancyOrderItemId Int      @map("fancy_order_item_id")
   /// 내용
-  content          String   @db.Text
+  content          String
   /// 이미지
   imageUrls        String[] @map("image_urls") @db.VarChar(1024)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   fancy          Fancy          @relation(fields: [fancyId], references: [id], onDelete: Cascade)
   fancyOrderItem FancyOrderItem @relation(fields: [fancyOrderItemId], references: [id], onDelete: Cascade)
@@ -448,12 +448,12 @@ model WhateverReiew {
   /// 커스텀 제품 주문 상세내역 아이디 (FK)
   whateverOrderItemId Int      @unique @map("whatever_order_item_id")
   /// 내용
-  content             String   @db.Text
+  content             String
   /// 이미지
   imageUrls           String[] @map("image_urls") @db.VarChar(1024)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   item              Item              @relation(fields: [itemId], references: [id], onDelete: Cascade)
   whateverOrderItem WhateverOrderItem @relation(fields: [whateverOrderItemId], references: [id], onDelete: Cascade)
@@ -474,7 +474,7 @@ model Item {
   threeDUrl String @map("three_d_url") @db.VarChar(1024)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   itemExamples   ItemExample[]
   finishings     Finishing[]
@@ -498,9 +498,9 @@ model ItemExample {
   imageUrl String @map("image_url") @db.VarChar(1024)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
   /// 수정일
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
@@ -531,9 +531,9 @@ model Finishing {
   imageUrl     String @map("image_url") @db.VarChar(1024)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
   /// 수정일
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
@@ -564,9 +564,9 @@ model Chain {
   imageUrl     String @map("image_url") @db.VarChar(1024)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
   /// 수정일
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
@@ -595,9 +595,9 @@ model Pendant {
   imageUrl     String @map("image_url") @db.VarChar(1024)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
   /// 수정일
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   @@map("pendant")
 }
@@ -609,18 +609,18 @@ model Terms {
   /// 제목
   title     String   @db.VarChar(255)
   /// 내용
-  content   String   @db.Text
+  content   String
   /// 버전
   version   String   @db.VarChar(50)
   /// 유효성
   isValid   Boolean  @default(false) @map("is_valid")
   /// 약관 적용 날짜
-  startedAt DateTime @map("started_at") @db.Timestamp
+  startedAt DateTime @map("started_at")
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
   /// 수정일
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   userTearmsAgreements UserTearmsAgreement[]
 
@@ -637,7 +637,7 @@ model UserTearmsAgreement {
   termsId Int @map("terms_id") @db.SmallInt
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   ///-------------------------이거 유저가 삭제되면 같이 삭제되게끔 해주는게 맞겠죠?
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -655,12 +655,12 @@ model AdminBoard {
   /// 제목
   title                String @db.VarChar(255)
   /// 내용
-  content              String @db.Text
+  content              String
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
   /// 수정일
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamp
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   adminBoardCategory AdminBoardCategory @relation(fields: [adminBoardCategoryId], references: [id])
 
@@ -703,7 +703,7 @@ model UserExitReason {
   answer   String @db.VarChar(255)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   userExitOption UserExitOption @relation(fields: [optionId], references: [id])
 
@@ -738,9 +738,9 @@ model Coupon {
   discountRate  Int    @default(0) @map("discount_rate") @db.SmallInt
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
   /// 만료일
-  expiredAt DateTime @map("expired_at") @db.Timestamp
+  expiredAt DateTime @map("expired_at")
 
   @@map("coupon")
 }
@@ -757,7 +757,7 @@ model ProductQuestion {
   content       String @db.VarChar(255)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("product_question")
 }
@@ -772,7 +772,7 @@ model ProductAnswer {
   content           String @db.VarChar(255)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("product_answer")
 }
@@ -785,7 +785,7 @@ model QNAcategory {
   name String @db.VarChar(100)
 
   /// 생성일
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("QNA_category")
 }

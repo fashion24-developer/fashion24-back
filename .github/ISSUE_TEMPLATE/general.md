@@ -1,10 +1,14 @@
 ---
 name: new issue
 about: issue template
-title: ""
-labels: ""
-assignees: ""
+title: ''
+labels: ''
+assignees: ''
 ---
+
+## 설명
+
+- 비개발자(PM,디자이너 확인용)입니다. 알아보기 쉽게 적어주세요 (어떤 이슈인지.)
 
 ## 개요
 

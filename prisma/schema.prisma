@@ -53,6 +53,7 @@ model User {
   userTearmsAgreements UserTearmsAgreement[]
   whateverReiews       WhateverReiew[]
   fancyReviews         FancyReview[]
+  productQuestions     ProductQuestion[]
 
   @@map("user")
 }
@@ -97,22 +98,22 @@ model Fancy {
   /// 설명2
   description2 String?
   /// 상태
-  status       ProductStatus @default(INACTIVE)
+  status       ProductStatus @default(NOT_FOR_SALE)
 
   /// 생성일
   createdAt DateTime @default(now()) @map("created_at")
   /// 수정일
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  fancyImages     FancyImage[]
-  fancyStocks     FancySizeStock[]
-  fancyOptions    FancyOption[]
-  fancySubOptions FancySubOption[]
-  fancytags       Tag[]
-  fancyOrderItems FancyOrderItem[]
-  fancyReviews    FancyReview[]
-  fancylook       FancyLook?       @relation(fields: [lookId], references: [id])
-  fancyType       FancyType?       @relation(fields: [fancyTypeId], references: [id])
+  fancyImages       FancyImage[]
+  fancyStocks       FancySizeStock[]
+  fancytags         Tag[]
+  fancyOrderItems   FancyOrderItem[]
+  fancyReviews      FancyReview[]
+  fancyBaseColors   BaseColor[]
+  fancyAccentColors AccentColor[]
+  fancylook         FancyLook?       @relation(fields: [lookId], references: [id])
+  fancyType         FancyType?       @relation(fields: [fancyTypeId], references: [id])
 
   @@map("fancy")
 }
@@ -122,14 +123,11 @@ model FancyImage {
   /// Primary Key
   id       Int    @id @default(autoincrement())
   /// 완제품 아이디 (FK)
-  fancyId  String @map("fancy_uuid") @db.VarChar(50)
+  fancyId  String @map("fancy_id") @db.VarChar(50)
   /// 이미지
   imageUrl String @map("image_url") @db.VarChar(1024)
   /// 순서
   order    Int    @db.SmallInt
-
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
 
   fancy Fancy @relation(fields: [fancyId], references: [id], onDelete: Cascade)
 
@@ -141,7 +139,7 @@ model FancySizeStock {
   /// Primary Key
   id       Int    @id @default(autoincrement())
   /// 완제품 아이디 (FK)
-  fancyId  String @map("fancy_uuid") @db.VarChar(50)
+  fancyId  String @map("fancy_id") @db.VarChar(50)
   /// 사이즈 아이디 (FK)
   sizeId   Int    @map("size_id")
   /// 재고량
@@ -166,86 +164,9 @@ model Size {
   /// 사이즈 이름
   name String @unique @db.VarChar(20)
 
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
-
   fancySizeStocks FancySizeStock[]
 
   @@map("size")
-}
-
-/// 완제품 옵션 매핑 테이블
-model FancyOption {
-  /// Primary Key
-  id       Int    @id @default(autoincrement())
-  /// 완제품 아이디 (FK)
-  fancyId  String @map("fancy_uuid") @db.VarChar(50)
-  /// 옵션 아이디 (FK)
-  optionId Int    @map("option_id")
-
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
-
-  fancy  Fancy  @relation(fields: [fancyId], references: [id], onDelete: Cascade)
-  option Option @relation(fields: [optionId], references: [id], onDelete: Cascade)
-
-  @@unique([fancyId, optionId])
-  @@map("fancy_option")
-}
-
-/// 옵션 테이블
-model Option {
-  /// Primary Key
-  id   Int    @id @default(autoincrement())
-  /// 옵션 이름
-  name String @unique @db.VarChar(100)
-
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
-
-  fancyOptions FancyOption[]
-  subOptions   SubOption[]
-
-  @@map("option")
-}
-
-/// 완제품 소옵션 매핑 테이블
-model FancySubOption {
-  /// Primary Key
-  id          Int    @id @default(autoincrement())
-  /// 완제품 아이디 (FK)
-  fancyId     String @map("fancy_uuid") @db.VarChar(50)
-  /// 소옵션 아이디 (FK)
-  subOptionId Int    @map("sub_option_id")
-
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
-
-  fancy     Fancy     @relation(fields: [fancyId], references: [id], onDelete: Cascade)
-  subOption SubOption @relation(fields: [subOptionId], references: [id], onDelete: Cascade)
-
-  @@unique([fancyId, subOptionId])
-  @@map("fancy_sub_option")
-}
-
-/// 소옵션 테이블
-model SubOption {
-  /// Primary Key
-  id              Int    @id @default(autoincrement())
-  /// 옵션 아이디 (FK)
-  optionId        Int    @map("option_id")
-  /// 소옵션 이름
-  name            String @unique @db.VarChar(100)
-  /// 소옵션 추가 금액
-  additionalPrice Int    @default(0) @map("additional_price") @db.Integer
-
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
-
-  fancySubOptions FancySubOption[]
-  option          Option           @relation(fields: [optionId], references: [id], onDelete: Cascade)
-
-  @@map("sub_option")
 }
 
 /// 완제품 품목 테이블
@@ -254,9 +175,6 @@ model FancyType {
   id   Int    @id @default(autoincrement())
   /// 완제품 타입 이름
   name String @unique @db.VarChar(100)
-
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
 
   fancy Fancy[]
 
@@ -272,9 +190,6 @@ model FancyLook {
   /// 이미지
   imageUrl String @map("image_url") @db.VarChar(1024)
 
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
-
   fancy Fancy[]
 
   @@map("fancy_look")
@@ -287,13 +202,40 @@ model Tag {
   /// 태그 이름
   name String @unique @db.VarChar(50)
 
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
-
   fancy Fancy[]
 
   @@map("tag")
 }
+
+/// 기본 색 (도금 색)
+model BaseColor {
+  /// Primary Key
+  id       Int    @id @default(autoincrement())
+  /// 색 이름
+  name     String @unique @db.VarChar(50)
+  /// 이미지
+  imageUrl String @map("image_url") @db.VarChar(1024)
+
+  fancy Fancy[]
+
+  @@map("base_color")
+}
+
+/// 완제품 기본 색 (도금 색)
+
+/// 강조 색
+model AccentColor {
+  /// Primary Key
+  id   Int    @id @default(autoincrement())
+  /// 색 이름
+  name String @unique @db.VarChar(50)
+
+  fancy Fancy[]
+
+  @@map("accent_color")
+}
+
+/// 완제품 강조 색
 
 /// 주문취소
 model CanceledOrder {
@@ -322,7 +264,7 @@ model Order {
   /// 유저 아이디 (FK)
   userId        Int    @map("user_id")
   /// 총 가격
-  totalPrice    Int    @map("total_price") @db.Integer
+  totalPrice    Int    @map("total_price")
   /// 주소지
   address       String @db.VarChar(255)
   /// 송장 번호
@@ -350,9 +292,6 @@ model Package {
   /// 추가 금액
   additionalPrice Int    @default(0) @map("additional_price")
 
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
-
   fancyOrderItems    FancyOrderItem[]
   whateverOrderItems WhateverOrderItem[]
 
@@ -362,27 +301,27 @@ model Package {
 /// 완제품 주문 상세내역 테이블
 model FancyOrderItem {
   /// Primary Key
-  id        Int      @id @default(autoincrement())
+  id        Int    @id @default(autoincrement())
   /// 완제품 아이디 (FK)
-  fancyId   String   @map("fancy_uuid") @db.VarChar(50)
+  fancyId   String @map("fancy_id") @db.VarChar(50)
   /// 주문 아이디 (FK)
-  orderId   Int      @map("order_id")
+  orderId   Int?   @map("order_id")
   /// 포장 방식 아이디(FK)
-  packageId Int      @map("package_id") @db.SmallInt
+  packageId Int    @map("package_id") @db.SmallInt
   /// 수량
-  quantity  Int      @db.SmallInt
+  quantity  Int    @db.SmallInt
   /// 옵션
-  option    String[] @db.VarChar(255)
+  option    Json
   /// 가격
   price     Int
 
   /// 생성일
   createdAt DateTime @default(now()) @map("created_at")
 
-  fancy       Fancy         @relation(fields: [fancyId], references: [id], onDelete: Cascade)
-  order       Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  package     Package       @relation(fields: [packageId], references: [id], onDelete: Cascade)
-  FancyReview FancyReview[]
+  fancy       Fancy        @relation(fields: [fancyId], references: [id])
+  order       Order?       @relation(fields: [orderId], references: [id])
+  package     Package      @relation(fields: [packageId], references: [id])
+  FancyReview FancyReview?
 
   @@map("fancy_order_item")
 }
@@ -391,21 +330,24 @@ model FancyOrderItem {
 model WhateverOrderItem {
   /// Primary Key
   id        Int  @id @default(autoincrement())
+  /// 아이템 아이디 (FK)
+  itemId    Int  @map("item_id")
   /// 주문 아이디 (FK)
-  orderId   Int  @map("order_id")
-  /// 패키지 아이디 (FK)
+  orderId   Int? @map("order_id")
+  /// 포장 방식 아이디 (FK)
   packageId Int  @map("package_id") @db.SmallInt
   /// 파츠 (조합된 것들)
   parts     Json
   /// 수량
   quantity  Int  @db.SmallInt
   /// 가격
-  price     Int  @db.Integer
+  price     Int
 
   /// 생성일
   createdAt DateTime @default(now()) @map("created_at")
 
-  order         Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  item          Item           @relation(fields: [itemId], references: [id])
+  order         Order?         @relation(fields: [orderId], references: [id])
   package       Package        @relation(fields: [packageId], references: [id])
   WhateverReiew WhateverReiew?
 
@@ -414,14 +356,14 @@ model WhateverOrderItem {
 
 /// 완제품 리뷰
 model FancyReview {
-  /// 완제품 리뷰 아이디
+  /// Primary Key
   id               Int      @id @default(autoincrement())
   /// 완제품 아이디 (FK)
-  fancyId          String   @map("fancy_uuid") @db.VarChar(50)
+  fancyId          String   @map("fancy_id") @db.VarChar(50)
   /// 유저 아이디 (FK)
   userId           Int?     @map("user_id")
   /// 완제품 주문 상세내역 아이디 (FK)
-  fancyOrderItemId Int      @map("fancy_order_item_id")
+  fancyOrderItemId Int      @unique @map("fancy_order_item_id")
   /// 내용
   content          String
   /// 이미지
@@ -439,7 +381,7 @@ model FancyReview {
 
 /// 커스텀 제품 리뷰
 model WhateverReiew {
-  /// 리뷰 아이디
+  /// Primary Key
   id                  Int      @id @default(autoincrement())
   /// 유저 아이디 (FK)
   userId              Int?     @map("user_id")
@@ -464,7 +406,7 @@ model WhateverReiew {
 
 /// 아이템(커스텀 제품)
 model Item {
-  /// 아이템 아이디
+  /// Primary Key
   id        Int    @id @default(autoincrement()) @db.SmallInt
   /// 이름
   name      String @db.VarChar(100)
@@ -472,21 +414,21 @@ model Item {
   slots     Json
   /// 3D URL (기본으로 보여줄 것)
   threeDUrl String @map("three_d_url") @db.VarChar(1024)
+  /// 순서
+  order     Int    @unique @db.SmallInt
 
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
-
-  itemExamples   ItemExample[]
-  finishings     Finishing[]
-  chains         Chain[]
-  WhateverReiews WhateverReiew[]
+  itemExamples      ItemExample[]
+  finishings        Finishing[]
+  chains            Chain[]
+  WhateverReiews    WhateverReiew[]
+  WhateverOrderItem WhateverOrderItem[]
 
   @@map("item")
 }
 
-/// 완성품 예시
+/// 커스텀 제품 완성품 예시
 model ItemExample {
-  /// 완성품 예시 아이디
+  /// Primary Key
   id       Int    @id @default(autoincrement()) @db.SmallInt
   /// 아이템 아이디 (FK)
   itemId   Int    @map("item_id") @db.SmallInt
@@ -494,13 +436,10 @@ model ItemExample {
   name     String @db.VarChar(50)
   /// 파츠 (조합된 것들)
   parts    Json
+  /// 순서
+  order    Int    @unique @db.SmallInt
   /// 이미지
   imageUrl String @map("image_url") @db.VarChar(1024)
-
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
-  /// 수정일
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
@@ -509,31 +448,30 @@ model ItemExample {
 
 /// 마감
 model Finishing {
-  /// 마감
-  id           Int    @id @default(autoincrement())
+  /// Primary Key
+  id           Int           @id @default(autoincrement())
   /// 아이템 아이디 (FK)
-  itemId       Int    @map("item_id") @db.SmallInt
+  itemId       Int           @map("item_id") @db.SmallInt
   /// 이름
-  name         String @unique @db.VarChar(100)
+  name         String        @unique @db.VarChar(100)
   /// 설명
-  description  String @db.VarChar(255)
+  description  String        @db.VarChar(255)
   /// 원가
-  costPrice    Int    @map("cost_price")
+  costPrice    Int           @map("cost_price")
   /// 판매가
   price        Int
   /// 할인율
-  discountRate Int    @default(0) @map("discount_rate") @db.SmallInt
+  discountRate Int           @default(0) @map("discount_rate") @db.SmallInt
   /// 수량
-  quantity     Int    @default(0)
+  quantity     Int           @default(0)
+  /// 상태
+  status       ProductStatus @default(NOT_FOR_SALE)
+  /// 순서
+  order        Int           @db.SmallInt
   /// 3D URL
-  threeDUrl    String @map("three_d_url") @db.VarChar(1024)
+  threeDUrl    String        @map("three_d_url") @db.VarChar(1024)
   /// 이미지
-  imageUrl     String @map("image_url") @db.VarChar(1024)
-
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
-  /// 수정일
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  imageUrl     String        @map("image_url") @db.VarChar(1024)
 
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
@@ -542,31 +480,30 @@ model Finishing {
 
 /// 체인
 model Chain {
-  /// 체인 아이디
-  id           Int    @id @default(autoincrement())
+  /// Primary Key
+  id           Int           @id @default(autoincrement())
   /// 아이템 아이디 (FK)
-  itemId       Int    @map("item_id") @db.SmallInt
+  itemId       Int           @map("item_id") @db.SmallInt
   /// 이름
-  name         String @unique @db.VarChar(100)
+  name         String        @unique @db.VarChar(100)
   /// 설명
-  description  String @db.VarChar(255)
+  description  String        @db.VarChar(255)
   /// 원가
-  costPrice    Int    @map("cost_price")
+  costPrice    Int           @map("cost_price")
   /// 판매가
   price        Int
   /// 할인율
-  discountRate Int    @default(0) @map("discount_rate") @db.SmallInt
+  discountRate Int           @default(0) @map("discount_rate") @db.SmallInt
   /// 수량
-  quantity     Int    @default(0)
+  quantity     Int           @default(0)
+  /// 상태
+  status       ProductStatus @default(NOT_FOR_SALE)
+  /// 순서
+  order        Int           @db.SmallInt
   /// 3D URL
-  threeDUrl    String @map("three_d_url") @db.VarChar(1024)
+  threeDUrl    String        @map("three_d_url") @db.VarChar(1024)
   /// 이미지
-  imageUrl     String @map("image_url") @db.VarChar(1024)
-
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
-  /// 수정일
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  imageUrl     String        @map("image_url") @db.VarChar(1024)
 
   item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
 
@@ -575,36 +512,35 @@ model Chain {
 
 /// 펜던트
 model Pendant {
-  /// 펜던트 아이디
-  id           Int    @id @default(autoincrement())
+  /// Primary Key
+  id           Int           @id @default(autoincrement())
   /// 이름
-  name         String @unique @db.VarChar(100)
+  name         String        @unique @db.VarChar(100)
   /// 설명
-  description  String @db.VarChar(255)
+  description  String        @db.VarChar(255)
   /// 원가
-  costPrice    Int    @map("cost_price")
+  costPrice    Int           @map("cost_price")
   /// 판매가
   price        Int
   /// 할인율
-  discountRate Int    @default(0) @map("discount_rate") @db.SmallInt
+  discountRate Int           @default(0) @map("discount_rate") @db.SmallInt
   /// 수량
-  quantity     Int    @default(0)
+  quantity     Int           @default(0)
+  /// 상태
+  status       ProductStatus @default(NOT_FOR_SALE)
+  /// 순서
+  order        Int           @db.SmallInt
   /// 3D URL
-  threeDUrl    String @map("three_d_url") @db.VarChar(1024)
+  threeDUrl    String        @map("three_d_url") @db.VarChar(1024)
   /// 이미지
-  imageUrl     String @map("image_url") @db.VarChar(1024)
-
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
-  /// 수정일
-  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+  imageUrl     String        @map("image_url") @db.VarChar(1024)
 
   @@map("pendant")
 }
 
 /// 이용약관
 model Terms {
-  /// 약관 아이디
+  /// Primary Key
   id        Int      @id @default(autoincrement()) @db.SmallInt
   /// 제목
   title     String   @db.VarChar(255)
@@ -629,7 +565,7 @@ model Terms {
 
 /// 유저 약관 동의
 model UserTearmsAgreement {
-  /// 유저 약관 동의내역 아이디
+  /// Primary Key
   id      Int @id @default(autoincrement())
   /// 유저 아이디 (FK)
   userId  Int @map("user_id")
@@ -639,16 +575,16 @@ model UserTearmsAgreement {
   /// 생성일
   createdAt DateTime @default(now()) @map("created_at")
 
-  ///-------------------------이거 유저가 삭제되면 같이 삭제되게끔 해주는게 맞겠죠?
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   terms Terms @relation(fields: [termsId], references: [id], onDelete: Cascade)
 
+  @@unique([userId, termsId])
   @@map("user_terms_agreement")
 }
 
 /// 관리자 게시글
 model AdminBoard {
-  /// 관리자 게시글 아이디
+  /// Primary Key
   id                   Int    @id @default(autoincrement())
   /// 관리자 게시글 카테고리 아이디 (FK)
   adminBoardCategoryId Int    @map("admin_board_category_id") @db.SmallInt
@@ -669,7 +605,7 @@ model AdminBoard {
 
 /// 관리자 게시글 카테고리
 model AdminBoardCategory {
-  /// 관지자 게시글 카테고리 아이디
+  /// Primary Key
   id          Int    @id @default(autoincrement()) @db.SmallInt
   /// 이름
   name        String @unique @db.VarChar(100)
@@ -683,7 +619,7 @@ model AdminBoardCategory {
 
 /// 자주묻는 질문
 model FAQ {
-  /// 질문 아이디
+  /// Primary Key
   id       Int    @id @default(autoincrement()) @db.SmallInt
   /// 질문
   question String @db.VarChar(255)
@@ -695,7 +631,7 @@ model FAQ {
 
 /// 회원 탈퇴 사유
 model UserExitReason {
-  /// 탈퇴 사유 아이디
+  /// Primary Key
   id       Int    @id @default(autoincrement()) @db.SmallInt
   /// 선택지 아이디 (FK)
   optionId Int    @map("option_id") @db.SmallInt
@@ -712,7 +648,7 @@ model UserExitReason {
 
 /// 회원 탈퇴 선택지
 model UserExitOption {
-  /// 선택지 아이디
+  /// Primary Key
   id      Int    @id @default(autoincrement()) @db.SmallInt
   /// 선택지 내용
   content String @db.VarChar(255)
@@ -724,7 +660,7 @@ model UserExitOption {
 
 /// 쿠폰
 model Coupon {
-  /// 쿠폰 아이디
+  /// Primary Key
   id            Int    @id @default(autoincrement())
   /// 이름
   name          String @db.VarChar(255)
@@ -747,7 +683,7 @@ model Coupon {
 
 /// 제품 질문
 model ProductQuestion {
-  //// 제품 QNA 아이디
+  /// Primary Key
   id            Int    @id @default(autoincrement())
   /// QNA 카테고리 아이디 (FK)
   QNACategoryId Int    @map("QNA_category_id") @db.SmallInt
@@ -759,33 +695,38 @@ model ProductQuestion {
   /// 생성일
   createdAt DateTime @default(now()) @map("created_at")
 
+  user          User           @relation(fields: [userId], references: [id])
+  QNAcategory   QNAcategory    @relation(fields: [QNACategoryId], references: [id])
+  productAnswer ProductAnswer?
+
   @@map("product_question")
 }
 
 ///제품 답변
 model ProductAnswer {
-  /// 제품 QNA 아이디
+  /// Primary Key
   id                Int    @id @default(autoincrement())
-  /// 제품 QNA 아이디 (FK)
-  productQuestionId Int    @map("product_question_id") @db.SmallInt
+  /// 제품 질문 아이디 (FK)
+  productQuestionId Int    @unique @map("product_question_id") @db.SmallInt
   /// 답변 내용
   content           String @db.VarChar(255)
 
   /// 생성일
   createdAt DateTime @default(now()) @map("created_at")
 
+  productQuestion ProductQuestion @relation(fields: [productQuestionId], references: [id])
+
   @@map("product_answer")
 }
 
 /// QNA 카테고리
 model QNAcategory {
-  /// QNA 카테고리 아이디
+  /// Primary Key
   id   Int    @id @default(autoincrement())
   /// 이름
   name String @db.VarChar(100)
 
-  /// 생성일
-  createdAt DateTime @default(now()) @map("created_at")
+  productQuestions ProductQuestion[]
 
   @@map("QNA_category")
 }
@@ -796,7 +737,7 @@ enum Role {
   ADMIN
 }
 
-/// 유저 정보 제공자 ENUM
+/// 유저 정보 제공자 ENUM 
 enum Provider {
   naver
   kakao
@@ -805,6 +746,7 @@ enum Provider {
 
 /// 상품 상태 ENUM
 enum ProductStatus {
-  ACTIVE
-  INACTIVE
+  FOR_SALE
+  NOT_FOR_SALE
+  SOLD_OUT
 }

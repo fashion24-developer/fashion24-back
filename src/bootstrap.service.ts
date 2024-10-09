@@ -6,9 +6,9 @@ import cookieParser from 'cookie-parser';
 import { singularize } from 'inflection';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
-import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
-import { AppConfigService } from '@src/core/app-config/services/app-config.service';
 import { HttpExceptionFilter } from '@src/exceptions/exception-filters/http-exception.filter';
+import { ENV_KEY } from '@src/libs/core/app-config/constants/app-config.constant';
+import { AppConfigService } from '@src/libs/core/app-config/services/app-config.service';
 import { CustomValidationPipe } from '@src/pipes/custom-validation.pipe';
 
 export const globalPrefix = 'api';

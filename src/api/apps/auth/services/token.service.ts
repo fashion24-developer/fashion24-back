@@ -13,8 +13,8 @@ import { TokenRepository } from '@src/api/apps/auth/repositories/token.repositor
 import { ITokenService } from '@src/api/apps/auth/services/i-token-service.interface';
 import { COMMON_ERROR_HTTP_STATUS_MESSAGE } from '@src/common/constants/common.constant';
 import { RedisService } from '@src/common/redis/services/redis.service';
-import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
-import { AppConfigService } from '@src/core/app-config/services/app-config.service';
+import { ENV_KEY } from '@src/libs/core/app-config/constants/app-config.constant';
+import { AppConfigService } from '@src/libs/core/app-config/services/app-config.service';
 
 @Injectable()
 export class TokenService implements ITokenService {

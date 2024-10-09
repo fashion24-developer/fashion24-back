@@ -6,8 +6,8 @@ import { Strategy } from 'passport-jwt';
 import { TokenPayloadDto } from '@src/api/apps/auth/dtos/token-payload.dto';
 import { COMMON_ERROR_HTTP_STATUS_MESSAGE } from '@src/common/constants/common.constant';
 import { RedisService } from '@src/common/redis/services/redis.service';
-import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
-import { AppConfigService } from '@src/core/app-config/services/app-config.service';
+import { ENV_KEY } from '@src/libs/core/app-config/constants/app-config.constant';
+import { AppConfigService } from '@src/libs/core/app-config/services/app-config.service';
 
 @Injectable()
 export class AccessTokenStrategy extends PassportStrategy(Strategy, 'accessToken') {

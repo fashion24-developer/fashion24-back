@@ -19,4 +19,4 @@ jobs:
       - name: Pull Docker image
         run: sudo docker pull ${{secrets.DOCKER_DEVELOP_IMAGE_NAME}}:latest
       - name: Run Docker container
-        run: sudo docker compose -f /home/ubuntu/fashion24/docker-compose.yml up -d
+        run: sudo docker compose -f /home/ubuntu/fashion24/docker-compose.yml up -d fashion24-develop

@@ -13,14 +13,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// 관리자
+model Admin {
+  /// Primary Key
+  id String @id @db.VarChar(50)
+
+  /// 패스워드
+  password String @db.VarChar(255)
+
+  /// 생성일
+  createdAt DateTime @default(now()) @map("created_at")
+
+  /// 마지막 접속일
+  lastLoginAt DateTime? @map("last_login_at")
+
+  @@map("admin")
+}
+
 /// 유저 테이블
 model User {
   /// Primary Key
   id       Int       @id @default(autoincrement())
   /// 이름
-  name     String    @db.VarChar(20)
+  name     String?   @db.VarChar(20)
   /// 닉네임
-  nickname String    @unique @db.VarChar(20)
+  nickname String?   @unique @db.VarChar(20)
   /// 이메일
   email    String    @unique @db.VarChar(100)
   /// 전화번호
@@ -35,8 +52,8 @@ model User {
   role     Role      @default(USER)
   /// 고유 아이디
   uniqueId String    @unique @map("unique_id") @db.VarChar(100)
-  /// 유저 개인 주소
-  address  String    @db.VarChar(255)
+  /// 주소
+  address  String?   @db.VarChar(255)
   /// 성별
   gender   Boolean?  @db.Boolean
   /// 생년월일
@@ -105,15 +122,14 @@ model Fancy {
   /// 수정일
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  fancyImages       FancyImage[]
-  fancyStocks       FancySizeStock[]
-  fancytags         Tag[]
-  fancyOrderItems   FancyOrderItem[]
-  fancyReviews      FancyReview[]
-  fancyBaseColors   BaseColor[]
-  fancyAccentColors AccentColor[]
-  fancylook         FancyLook?       @relation(fields: [lookId], references: [id])
-  fancyType         FancyType?       @relation(fields: [fancyTypeId], references: [id])
+  fancyImages        FancyImage[]
+  fancyStocks        FancySizeStock[]
+  fancyTags          Tag[]
+  fancyOrderItems    FancyOrderItem[]
+  fancyReviews       FancyReview[]
+  fancyPlatingColors FancyPlatingColor[]
+  fancylook          FancyLook?          @relation(fields: [lookId], references: [id])
+  fancyType          FancyType?          @relation(fields: [fancyTypeId], references: [id])
 
   @@map("fancy")
 }
@@ -121,15 +137,18 @@ model Fancy {
 // 완제품 이미지 테이블
 model FancyImage {
   /// Primary Key
-  id       Int    @id @default(autoincrement())
+  id             Int    @id @default(autoincrement())
   /// 완제품 아이디 (FK)
-  fancyId  String @map("fancy_id") @db.VarChar(50)
+  fancyId        String @map("fancy_id") @db.VarChar(50)
+  /// 도금 색 아이디 (FK)
+  platingColorId Int    @map("plating_color_id")
   /// 이미지
-  imageUrl String @map("image_url") @db.VarChar(1024)
+  imageUrl       String @map("image_url") @db.VarChar(1024)
   /// 순서
-  order    Int    @db.SmallInt
+  order          Int    @db.SmallInt
 
-  fancy Fancy @relation(fields: [fancyId], references: [id], onDelete: Cascade)
+  fancy             Fancy             @relation(fields: [fancyId], references: [id], onDelete: Cascade)
+  fancyPlatingColor FancyPlatingColor @relation(fields: [platingColorId], references: [id], onDelete: Cascade)
 
   @@map("fancy_image")
 }
@@ -207,8 +226,8 @@ model Tag {
   @@map("tag")
 }
 
-/// 기본 색 (도금 색)
-model BaseColor {
+/// 도금 색
+model PlatingColor {
   /// Primary Key
   id       Int    @id @default(autoincrement())
   /// 색 이름
@@ -216,26 +235,29 @@ model BaseColor {
   /// 이미지
   imageUrl String @map("image_url") @db.VarChar(1024)
 
-  fancy Fancy[]
+  FancyPlatingColors FancyPlatingColor[]
 
-  @@map("base_color")
+  @@map("plating_color")
 }
 
-/// 완제품 기본 색 (도금 색)
-
-/// 강조 색
-model AccentColor {
+/// 완제품 도금 색
+model FancyPlatingColor {
   /// Primary Key
-  id   Int    @id @default(autoincrement())
-  /// 색 이름
-  name String @unique @db.VarChar(50)
+  id                  Int    @id @default(autoincrement())
+  /// 완제품 아이디 (FK)
+  fancyId             String @map("fancy_id") @db.VarChar(50)
+  /// 기본 색 아이디 (FK)
+  fancyPlatingColorId Int    @map("fancy_plating_color_id")
+  /// 순서
+  order               Int    @db.SmallInt
 
-  fancy Fancy[]
+  fancy        Fancy        @relation(fields: [fancyId], references: [id], onDelete: Cascade)
+  platingColor PlatingColor @relation(fields: [fancyPlatingColorId], references: [id], onDelete: Cascade)
+  FancyImage   FancyImage[]
 
-  @@map("accent_color")
+  @@unique([fancyId, fancyPlatingColorId])
+  @@map("fancy_plating_color")
 }
-
-/// 완제품 강조 색
 
 /// 주문취소
 model CanceledOrder {
@@ -420,6 +442,7 @@ model Item {
   itemExamples      ItemExample[]
   finishings        Finishing[]
   chains            Chain[]
+  pendants          Pendant[]
   WhateverReiews    WhateverReiew[]
   WhateverOrderItem WhateverOrderItem[]
 
@@ -534,6 +557,8 @@ model Pendant {
   threeDUrl    String        @map("three_d_url") @db.VarChar(1024)
   /// 이미지
   imageUrl     String        @map("image_url") @db.VarChar(1024)
+
+  items Item[]
 
   @@map("pendant")
 }

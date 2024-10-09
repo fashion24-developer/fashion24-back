@@ -13,9 +13,9 @@ jobs:
       - name: Stop Docker container
         run: sudo docker stop ${{secrets.DOCKER_DEVELOP_CONTAINER_NAME}}
       - name: Delete Old docker container
-        run: sudo docker rm -f ${{secrets.DOCKER_DEVELOP_CONTAINER_NAME}}
+        run: sudo docker rm ${{secrets.DOCKER_DEVELOP_CONTAINER_NAME}}
       - name: Delete Old docker image
-        run: sudo docker rmi -f ${{secrets.DOCKER_DEVELOP_IMAGE_NAME}}
+        run: sudo docker rmi ${{secrets.DOCKER_DEVELOP_IMAGE_NAME}}
       - name: Pull Docker image
         run: sudo docker pull ${{secrets.DOCKER_DEVELOP_IMAGE_NAME}}:latest
       - name: Run Docker container

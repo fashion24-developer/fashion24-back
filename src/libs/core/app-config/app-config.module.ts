@@ -35,7 +35,8 @@ import { Key } from '@src/libs/core/app-config/types/app-config.type';
         [ENV_KEY.REDIS_HOST]: Joi.string().required(),
         [ENV_KEY.REDIS_PORT]: Joi.number().required(),
         [ENV_KEY.REDIS_PASSWORD]: Joi.optional(),
-        [ENV_KEY.COOKIE_PARSER_SECRET]: Joi.string().required()
+        [ENV_KEY.COOKIE_PARSER_SECRET]: Joi.string().required(),
+        [ENV_KEY.SLACK_SERVER_ERROR_WEBHOOK]: Joi.string().required()
       }),
       isGlobal: true
     })

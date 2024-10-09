@@ -1,10 +1,24 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+  Inject
+} from '@nestjs/common';
 
 import { Request, Response } from 'express';
 
+import { IMessengerService } from '@src/libs/core/messenger/services/i-messenger-service.interface';
+import { MESSENGER_SERVICE_DI_TOKEN } from '@src/libs/core/messenger/tokens/messenger-service.di-token';
+
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter<HttpException> {
-  catch(exception: HttpException, host: ArgumentsHost) {
+  constructor(
+    @Inject(MESSENGER_SERVICE_DI_TOKEN) private readonly messengerService: IMessengerService
+  ) {}
+
+  async catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const request = ctx.getRequest<Request>();
     const response = ctx.getResponse<Response>();
@@ -18,6 +32,10 @@ export class HttpExceptionFilter implements ExceptionFilter<HttpException> {
       path: request.url,
       message
     };
+
+    if (statusCode === HttpStatus.INTERNAL_SERVER_ERROR && exception.cause) {
+      await this.messengerService.sendInternalServerError(exception.cause);
+    }
 
     response.status(statusCode).json(responseData);
   }

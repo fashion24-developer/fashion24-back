@@ -11,6 +11,7 @@ import { IAppConfigService } from '@src/libs/core/app-config/services/i-app-conf
 import { APP_CONFIG_SERVICE_DI_TOKEN } from '@src/libs/core/app-config/tokens/app-config.di-token';
 import { Key } from '@src/libs/core/app-config/types/app-config.type';
 import { HttpExceptionFilter } from '@src/libs/exceptions/exception-filters/http-exception.filter';
+import { HttpProcessErrorExceptionFilter } from '@src/libs/exceptions/exception-filters/process-error-exception.filter';
 import { CustomValidationPipe } from '@src/pipes/custom-validation.pipe';
 
 export const globalPrefix = 'api';
@@ -48,7 +49,7 @@ export class BootstrapService {
   }
 
   setFilter(app: INestApplication) {
-    app.useGlobalFilters(app.get(HttpExceptionFilter));
+    app.useGlobalFilters(app.get(HttpProcessErrorExceptionFilter), app.get(HttpExceptionFilter));
   }
 
   setSwagger(app: INestApplication) {

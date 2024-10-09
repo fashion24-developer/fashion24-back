@@ -5,7 +5,9 @@ import winston from 'winston';
 import winstonDaily from 'winston-daily-rotate-file';
 
 import { AppConfigModule } from '@src/libs/core/app-config/app-config.module';
-import { AppConfigService } from '@src/libs/core/app-config/services/app-config.service';
+import { IAppConfigService } from '@src/libs/core/app-config/services/i-app-config-service.interface';
+import { APP_CONFIG_SERVICE_DI_TOKEN } from '@src/libs/core/app-config/tokens/app-config.di-token';
+import { Key } from '@src/libs/core/app-config/types/app-config.type';
 
 const dirname = `${process.cwd()}/../logs`; //node를 실행시킨 경로 바깥의 logs 폴더
 
@@ -36,8 +38,8 @@ const dailyOptions = (level: string) => {
   imports: [
     AppConfigModule,
     WinstonModule.forRootAsync({
-      inject: [AppConfigService],
-      useFactory: (appConfigService: AppConfigService) => {
+      inject: [APP_CONFIG_SERVICE_DI_TOKEN],
+      useFactory: (appConfigService: IAppConfigService<Key>) => {
         return {
           transports: [
             new winston.transports.Console({

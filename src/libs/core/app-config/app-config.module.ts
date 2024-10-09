@@ -1,10 +1,13 @@
-import { Global, Module, OnApplicationBootstrap } from '@nestjs/common';
+import { Global, Inject, Module, OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import Joi from 'joi';
 
 import { ENV_KEY } from '@src/libs/core/app-config/constants/app-config.constant';
 import { AppConfigService } from '@src/libs/core/app-config/services/app-config.service';
+import { IAppConfigService } from '@src/libs/core/app-config/services/i-app-config-service.interface';
+import { APP_CONFIG_SERVICE_DI_TOKEN } from '@src/libs/core/app-config/tokens/app-config.di-token';
+import { Key } from '@src/libs/core/app-config/types/app-config.type';
 
 @Global()
 @Module({
@@ -37,11 +40,13 @@ import { AppConfigService } from '@src/libs/core/app-config/services/app-config.
       isGlobal: true
     })
   ],
-  providers: [ConfigService, AppConfigService],
-  exports: [AppConfigService]
+  providers: [ConfigService, { provide: APP_CONFIG_SERVICE_DI_TOKEN, useClass: AppConfigService }],
+  exports: [APP_CONFIG_SERVICE_DI_TOKEN]
 })
 export class AppConfigModule implements OnApplicationBootstrap {
-  constructor(private readonly appConfigService: AppConfigService) {}
+  constructor(
+    @Inject(APP_CONFIG_SERVICE_DI_TOKEN) private readonly appConfigService: IAppConfigService<Key>
+  ) {}
 
   onApplicationBootstrap() {
     console.info(this.appConfigService.getAllMap());

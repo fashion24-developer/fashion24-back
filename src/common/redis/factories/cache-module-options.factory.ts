@@ -1,14 +1,18 @@
 import { CacheModuleOptions, CacheOptionsFactory } from '@nestjs/cache-manager';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import * as redisStore from 'cache-manager-ioredis';
 
 import { ENV_KEY } from '@src/libs/core/app-config/constants/app-config.constant';
-import { AppConfigService } from '@src/libs/core/app-config/services/app-config.service';
+import { IAppConfigService } from '@src/libs/core/app-config/services/i-app-config-service.interface';
+import { APP_CONFIG_SERVICE_DI_TOKEN } from '@src/libs/core/app-config/tokens/app-config.di-token';
+import { Key } from '@src/libs/core/app-config/types/app-config.type';
 
 @Injectable()
 export class CacheModuleOptionsFactory implements CacheOptionsFactory {
-  constructor(private readonly appConfigService: AppConfigService) {}
+  constructor(
+    @Inject(APP_CONFIG_SERVICE_DI_TOKEN) private readonly appConfigService: IAppConfigService<Key>
+  ) {}
 
   createCacheOptions(): CacheModuleOptions<Record<string, any>> {
     return {

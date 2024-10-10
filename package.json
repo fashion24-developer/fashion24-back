@@ -16,7 +16,7 @@
     "url": "https://github.com/fashion24-developer/fashion24-back"
   },
   "engines": {
-    "node": "20.14.0"
+    "node": "20.18.0"
   },
   "scripts": {
     "build": "nest build",

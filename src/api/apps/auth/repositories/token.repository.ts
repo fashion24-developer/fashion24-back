@@ -9,8 +9,13 @@ export class TokenRepository implements ITokenRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: UserTokenEntity): Promise<UserTokenEntity> {
-    const record = await this.prisma.userToken.create({
-      data: {
+    const record = await this.prisma.userToken.upsert({
+      where: { userId: data.userId },
+      update: {
+        socialAccessToken: data.socialAccessToken,
+        socialRefreshToken: data.socialRefreshToken
+      },
+      create: {
         userId: data.userId,
         socialAccessToken: data.socialAccessToken,
         socialRefreshToken: data.socialRefreshToken

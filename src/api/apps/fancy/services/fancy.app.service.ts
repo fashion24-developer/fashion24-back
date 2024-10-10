@@ -49,9 +49,7 @@ export class FancyAppService {
       };
     } catch (error) {
       this.logger.error(error);
-      throw new HttpException('Failed to find fancy', HttpStatus.INTERNAL_SERVER_ERROR, {
-        cause: 'asd'
-      });
+      throw new HttpException('Failed to find fancy', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

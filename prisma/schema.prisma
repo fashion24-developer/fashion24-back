@@ -55,9 +55,9 @@ model User {
   /// 주소
   address  String?   @db.VarChar(255)
   /// 성별
-  gender   Boolean?  @db.Boolean
+  gender   GENDER    @default(UNKNOWN)
   /// 생년월일
-  birth    DateTime?
+  birth    DateTime? @db.Date
 
   /// 가입일
   createdAt DateTime @default(now()) @map("created_at")
@@ -767,6 +767,12 @@ enum Provider {
   naver
   kakao
   google
+}
+
+enum GENDER {
+  MALE
+  FEMALE
+  UNKNOWN
 }
 
 /// 상품 상태 ENUM

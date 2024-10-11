@@ -9,7 +9,7 @@ export class UsersRepository implements IUsersRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(data: UserEntity): Promise<UserEntity> {
-    const record = await this.prisma.user.create({ data });
+    const record = await this.prisma.user.create({ data: data.getProps() });
 
     return new UserEntity(record);
   }
@@ -22,6 +22,10 @@ export class UsersRepository implements IUsersRepository {
 
   async findOneByUniqueId(uniqueId: string): Promise<UserEntity | null> {
     const record = await this.prisma.user.findUnique({ where: { uniqueId } });
+
+    if (!record) {
+      return null;
+    }
 
     return new UserEntity(record);
   }

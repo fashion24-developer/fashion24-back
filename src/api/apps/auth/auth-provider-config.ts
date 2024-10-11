@@ -28,7 +28,7 @@ export function createAuthProviderConfig() {
       }),
       extractUserInfo: (userInfoResponse: any) => ({
         uniqueId: userInfoResponse.response.id,
-        nickname: userInfoResponse.response.nickname,
+        name: userInfoResponse.response.name,
         email: userInfoResponse.response.email,
         phone: userInfoResponse.response.mobile,
         provider: UserProvider.NAVER

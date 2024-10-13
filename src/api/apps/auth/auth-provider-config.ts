@@ -1,8 +1,8 @@
 import { ConfigService } from '@nestjs/config';
 
 import { UserProvider } from '@src/api/apps/users/enums/user-provider.enum';
-import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
-import { AppConfigService } from '@src/core/app-config/services/app-config.service';
+import { ENV_KEY } from '@src/libs/core/app-config/constants/app-config.constant';
+import { AppConfigService } from '@src/libs/core/app-config/services/app-config.service';
 
 export function createAuthProviderConfig() {
   const configService = new ConfigService();

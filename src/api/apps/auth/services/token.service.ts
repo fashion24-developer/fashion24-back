@@ -13,14 +13,16 @@ import { TokenRepository } from '@src/api/apps/auth/repositories/token.repositor
 import { ITokenService } from '@src/api/apps/auth/services/i-token-service.interface';
 import { COMMON_ERROR_HTTP_STATUS_MESSAGE } from '@src/common/constants/common.constant';
 import { RedisService } from '@src/common/redis/services/redis.service';
-import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
-import { AppConfigService } from '@src/core/app-config/services/app-config.service';
+import { ENV_KEY } from '@src/libs/core/app-config/constants/app-config.constant';
+import { IAppConfigService } from '@src/libs/core/app-config/services/i-app-config-service.interface';
+import { APP_CONFIG_SERVICE_DI_TOKEN } from '@src/libs/core/app-config/tokens/app-config.di-token';
+import { Key } from '@src/libs/core/app-config/types/app-config.type';
 
 @Injectable()
 export class TokenService implements ITokenService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly appConfigService: AppConfigService,
+    @Inject(APP_CONFIG_SERVICE_DI_TOKEN) private readonly appConfigService: IAppConfigService<Key>,
     private readonly redisService: RedisService,
     @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: Logger,
     @Inject(TokenRepository) private readonly tokenRepository: ITokenRepository

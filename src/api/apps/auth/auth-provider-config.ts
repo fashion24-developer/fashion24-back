@@ -79,7 +79,6 @@ export function createAuthProviderConfig() {
       }),
       extractUserInfo: (userInfoResponse: any) => ({
         uniqueId: userInfoResponse.id,
-        nickname: userInfoResponse.name,
         email: userInfoResponse.email,
         provider: UserProvider.GOOGLE
       })

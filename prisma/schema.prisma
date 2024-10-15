@@ -99,7 +99,7 @@ model Fancy {
   /// Primary Key
   id           String        @id @db.VarChar(50)
   /// 룩 아이디 (FK)
-  lookId       Int?          @map("look_id")
+  fancyLookId  Int?          @map("fancy_look_id")
   /// 품목 아이디 (FK)
   fancyTypeId  Int?          @map("fancy_type_id")
   /// 상품명
@@ -123,12 +123,12 @@ model Fancy {
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
   fancyImages        FancyImage[]
-  fancyStocks        FancySizeStock[]
+  fancySizeStocks    FancySizeStock[]
   fancyTags          Tag[]
   fancyOrderItems    FancyOrderItem[]
   fancyReviews       FancyReview[]
   fancyPlatingColors FancyPlatingColor[]
-  fancylook          FancyLook?          @relation(fields: [lookId], references: [id])
+  fancyLook          FancyLook?          @relation(fields: [fancyLookId], references: [id])
   fancyType          FancyType?          @relation(fields: [fancyTypeId], references: [id])
 
   @@map("fancy")
@@ -169,15 +169,15 @@ model FancySizeStock {
   /// 수정일
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
-  fancy Fancy @relation(fields: [fancyId], references: [id], onDelete: Cascade)
-  size  Size  @relation(fields: [sizeId], references: [id], onDelete: Cascade)
+  fancy     Fancy     @relation(fields: [fancyId], references: [id], onDelete: Cascade)
+  fancySize FancySize @relation(fields: [sizeId], references: [id], onDelete: Cascade)
 
   @@unique([fancyId, sizeId])
   @@map("fancy_size_stock")
 }
 
 /// 사이즈 테이블
-model Size {
+model FancySize {
   /// Primary Key
   id   Int    @id @default(autoincrement())
   /// 사이즈 이름
@@ -185,7 +185,7 @@ model Size {
 
   fancySizeStocks FancySizeStock[]
 
-  @@map("size")
+  @@map("fancy_size")
 }
 
 /// 완제품 품목 테이블

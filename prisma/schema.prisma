@@ -55,9 +55,9 @@ model User {
   /// 주소
   address  String?   @db.VarChar(255)
   /// 성별
-  gender   Boolean?  @db.Boolean
+  gender   GENDER    @default(UNKNOWN)
   /// 생년월일
-  birth    DateTime?
+  birth    DateTime? @db.Date
 
   /// 가입일
   createdAt DateTime @default(now()) @map("created_at")
@@ -78,13 +78,13 @@ model User {
 /// 유저 토큰 테이블
 model UserToken {
   /// Primary Key
-  id                 Int    @id @default(autoincrement())
+  id                 Int     @id @default(autoincrement())
   /// 유저 아이디 (FK)
-  userId             Int    @unique @map("user_id")
+  userId             Int     @unique @map("user_id")
   /// 소셜 액세스 토큰
-  socialAccessToken  String @unique @map("social_access_token") @db.VarChar(255)
+  socialAccessToken  String  @unique @map("social_access_token") @db.VarChar(255)
   /// 소셜 리프레시 토큰
-  socialRefreshToken String @unique @map("social_refresh_token") @db.VarChar(255)
+  socialRefreshToken String? @unique @map("social_refresh_token") @db.VarChar(255)
 
   /// 생성일
   createdAt DateTime @default(now()) @map("created_at")
@@ -767,6 +767,12 @@ enum Provider {
   naver
   kakao
   google
+}
+
+enum GENDER {
+  MALE
+  FEMALE
+  UNKNOWN
 }
 
 /// 상품 상태 ENUM

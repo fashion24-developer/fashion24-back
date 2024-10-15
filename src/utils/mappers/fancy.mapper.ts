@@ -1,4 +1,3 @@
-import { FindAllFancyDto } from '@src/api/apps/fancy/dtos/find-all-fancy.dto';
 import { FancyEntity } from '@src/libs/fancy/entities/fancy.entity';
 
 export class FancyMapper {
@@ -14,48 +13,7 @@ export class FancyMapper {
       status: data.status,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
-      fancyImages: data.fancyImages,
-      fancyOptions: data.fancyOptions,
-      fancySubOptions: data.fancySubOptions,
-      looks: data.looks,
-      tags: data.tags
+      fancyImages: data.fancyImages
     });
-  }
-
-  static paginationWhere(
-    data: Omit<FindAllFancyDto, 'page' | 'pageSize' | 'orderBy' | 'orderDirection'>
-  ) {
-    const { name, status, optionId, subOptionId, lookId, tagId } = data;
-
-    return {
-      name: { contains: name },
-      status,
-      AND: [
-        ...(optionId
-          ? optionId.map((id) => ({
-              fancyOptions: {
-                some: {
-                  option: {
-                    id
-                  }
-                }
-              }
-            }))
-          : []),
-        ...(subOptionId
-          ? subOptionId.map((id) => ({
-              fancySubOptions: {
-                some: {
-                  subOption: {
-                    id
-                  }
-                }
-              }
-            }))
-          : []),
-        ...(lookId ? lookId.map((id) => ({ looks: { some: { id } } })) : []),
-        ...(tagId ? tagId.map((id) => ({ tags: { some: { id } } })) : [])
-      ]
-    };
   }
 }

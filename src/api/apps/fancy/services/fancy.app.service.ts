@@ -1,14 +1,12 @@
-import { HttpException, HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
-import { FANCY_FIND_ALL_SELECT } from '@src/api/apps/fancy/constants/fancy-find-all-select.const';
-import { FancyPaginationResponseDto } from '@src/api/apps/fancy/dtos/fancy-pagination-response.dto';
-import { FindAllFancyDto } from '@src/api/apps/fancy/dtos/find-all-fancy.dto';
+import { FancyPaginationDto } from '@src/api/apps/fancy/dtos/fancy-pagination.dto';
 import { IFancyAppRepository } from '@src/api/apps/fancy/repositories/i-fancy.app.repository.interface';
 import { FANCY_REPOSITORY_DI_TOKEN } from '@src/common/constants/di.tokens';
+import { PaginationMetaDto } from '@src/common/dtos/pagination/pagination-meta.dto';
 import { FancyEntity } from '@src/libs/fancy/entities/fancy.entity';
-import { FancyMapper } from '@src/utils/mappers/fancy.mapper';
 
 @Injectable()
 export class FancyAppService {
@@ -21,36 +19,24 @@ export class FancyAppService {
     return data;
   }
 
-  async findAllForPagination(paginationData: FindAllFancyDto): Promise<FancyPaginationResponseDto> {
-    try {
-      const { page, pageSize: take, orderBy, orderDirection, ...where } = paginationData;
+  async findAllForPagination(
+    paginationData: FancyPaginationDto
+  ): Promise<{ data: FancyEntity[]; meta: PaginationMetaDto }> {
+    const { page, pageSize: take } = paginationData;
 
-      const totalCount = await this.fancyRepository.count(FancyMapper.paginationWhere(where));
-      const totalPages = take ? Math.ceil(totalCount / take) : 1;
+    const skip = take ? take * (page - 1) : 0;
 
-      const isFirstPage = page === 1 ? true : false;
-      const isLastPage = page === totalPages ? true : false;
+    const { totalCount, data } = await this.fancyRepository.paginate(paginationData, skip);
 
-      const skip = take ? take * (page - 1) : 0;
+    const totalPages = take ? Math.ceil(totalCount / take) : 1;
 
-      const data = (
-        await this.fancyRepository.findAllForPagination(
-          FancyMapper.paginationWhere(where),
-          FANCY_FIND_ALL_SELECT,
-          take,
-          skip,
-          { [orderBy]: orderDirection }
-        )
-      ).map((fancy) => this.reformatData(fancy));
+    const isFirstPage = page === 1 ? true : false;
+    const isLastPage = page === totalPages || totalPages === 0 ? true : false;
 
-      return {
-        data,
-        meta: { pageNumber: page, pageSize: take, totalPages, totalCount, isLastPage, isFirstPage }
-      };
-    } catch (error) {
-      this.logger.error(error);
-      throw new HttpException('Failed to find fancy', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    return {
+      data,
+      meta: { pageNumber: page, pageSize: take, totalPages, totalCount, isLastPage, isFirstPage }
+    };
   }
 
   async update(data) {
@@ -58,39 +44,4 @@ export class FancyAppService {
   }
 
   delete(): void {}
-
-  private reformatData(data: FancyEntity) {
-    const subOptionMap = new Map();
-
-    data.fancySubOptions.forEach((fancySubOption) => {
-      const optionId = fancySubOption.subOption.optionId;
-
-      if (!subOptionMap.has(optionId)) {
-        subOptionMap.set(optionId, []);
-      }
-
-      subOptionMap.get(optionId).push(fancySubOption.subOption);
-    });
-
-    const transformedOptions = data.fancyOptions.map((fancyOption) => {
-      return {
-        id: fancyOption.option.id,
-        name: fancyOption.option.name,
-        subOptions: subOptionMap.get(fancyOption.option.id) || []
-      };
-    });
-
-    return {
-      id: data.id,
-      name: data.name,
-      price: data.price,
-      costPrice: data.costPrice,
-      discountRate: data.discountRate,
-      status: data.status,
-      fancyImages: data.fancyImages,
-      fancyOptions: transformedOptions,
-      looks: data.looks,
-      tags: data.tags
-    };
-  }
 }

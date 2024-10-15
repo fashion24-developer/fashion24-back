@@ -1,8 +1,6 @@
 import { FancyProductStatus } from '@src/api/apps/fancy/enums/fancy-product-status.enum';
 import { ValueOf } from '@src/common/types/common.type';
 import { FancyImageEntity } from '@src/libs/fancy/fancy-images/entities/fancy-image.entity';
-import { FancyOptionEntity } from '@src/libs/fancy/fancy-options/entities/fancy-option.entity';
-import { FancySubOptionEntity } from '@src/libs/fancy/fancy-sub-options/entities/fancy-sub-option.entity';
 import { LookEntity } from '@src/libs/looks/entities/look.entity';
 import { TagEntity } from '@src/libs/tags/entities/tag.entity';
 
@@ -12,21 +10,29 @@ export class FancyEntity {
    */
   private readonly _id?: string;
   /**
+   * 룩 ID
+   */
+  private _fancyLookId?: number | never;
+  /**
+   * 상품 타입 ID
+   */
+  private _fancyTypeId?: number | never;
+  /**
    * 상품명
    */
   private _name: string;
   /**
    * 원가
    */
-  private _price: number;
+  private _costPrice: number;
   /**
    * 판매가
    */
-  private _costPrice: number;
+  private _price: number;
   /**
    * 할인율
    */
-  private _discountRate?: number;
+  private _discountRate: number;
   /**
    * 설명1
    */
@@ -52,28 +58,40 @@ export class FancyEntity {
 
   private _fancyStocks?: any[];
 
-  private _fancyOptions?: FancyOptionEntity[];
+  private _fancyTags?: TagEntity[];
 
-  private _fancySubOptions?: FancySubOptionEntity[];
+  private _fancyOrderItems?: any[];
 
-  private _looks?: LookEntity[];
+  private _fancyReviews?: any[];
 
-  private _tags?: TagEntity[];
+  private _fancyPlatingColors?: any[];
+
+  private _fancyLook?: LookEntity;
+
+  private _fancyType?: any;
 
   get id(): string | undefined {
     return this._id;
+  }
+
+  get fancyLookId(): number | undefined {
+    return this._fancyLookId;
+  }
+
+  get fancyTypeId(): number | undefined {
+    return this._fancyTypeId;
   }
 
   get name(): string {
     return this._name;
   }
 
-  get price(): number {
-    return this._price;
-  }
-
   get costPrice(): number {
     return this._costPrice;
+  }
+
+  get price(): number {
+    return this._price;
   }
 
   get discountRate(): number {
@@ -108,39 +126,47 @@ export class FancyEntity {
     return this._fancyStocks;
   }
 
-  get fancyOptions(): FancyOptionEntity[] | undefined {
-    return this._fancyOptions;
+  get fancyTags() {
+    return this._fancyTags;
   }
 
-  get fancySubOptions(): FancySubOptionEntity[] | undefined {
-    return this._fancySubOptions;
+  get fancyOrderItems() {
+    return this._fancyOrderItems;
   }
 
-  get looks(): LookEntity[] | undefined {
-    return this._looks;
+  get fancyPlatingColors() {
+    return this._fancyPlatingColors;
   }
 
-  get tags(): TagEntity[] | undefined {
-    return this._tags;
+  get fancyLook() {
+    return this._fancyLook;
+  }
+
+  get fancyType() {
+    return this._fancyType;
   }
 
   getProps(): {
     id: string;
+    fancyLookId: number | null;
+    fancyTypeId: number | null;
     name: string;
-    price: number;
     costPrice: number;
+    price: number;
     discountRate: number;
-    description1?: string;
-    description2?: string;
+    description1: string | null;
+    description2: string | null;
     status: ValueOf<typeof FancyProductStatus>;
     createdAt: Date;
     updatedAt: Date;
   } {
     return {
       id: this._id,
+      fancyLookId: this._fancyLookId,
+      fancyTypeId: this._fancyTypeId,
       name: this._name,
-      price: this._price,
       costPrice: this._costPrice,
+      price: this._price,
       discountRate: this._discountRate,
       description1: this._description1,
       description2: this._description2,
@@ -152,26 +178,33 @@ export class FancyEntity {
 
   getPropsWithForeign(): {
     id: string;
+    fancyLookId: number | null;
+    fancyTypeId: number | null;
     name: string;
-    price: number;
     costPrice: number;
+    price: number;
     discountRate: number;
-    description1?: string;
-    description2?: string;
+    description1: string | null;
+    description2: string | null;
     status: ValueOf<typeof FancyProductStatus>;
     createdAt: Date;
     updatedAt: Date;
     fancyImages?: FancyImageEntity[];
-    fancyOptions?: FancyOptionEntity[];
-    fancySubOptions?: FancySubOptionEntity[];
-    looks?: LookEntity[];
-    tags?: TagEntity[];
+    fancyStocks?: any[];
+    fancyTags?: TagEntity[];
+    fancyOrderItems?: any[];
+    fancyReviews?: any[];
+    fancyPlatingColors?: any[];
+    fancyLook?: LookEntity;
+    fancyType?: any;
   } {
     return {
       id: this._id,
+      fancyLookId: this._fancyLookId,
+      fancyTypeId: this._fancyTypeId,
       name: this._name,
-      price: this._price,
       costPrice: this._costPrice,
+      price: this._price,
       discountRate: this._discountRate,
       description1: this._description1,
       description2: this._description2,
@@ -179,18 +212,23 @@ export class FancyEntity {
       createdAt: this._createdAt,
       updatedAt: this._updatedAt,
       fancyImages: this._fancyImages,
-      fancyOptions: this._fancyOptions,
-      fancySubOptions: this._fancySubOptions,
-      looks: this._looks,
-      tags: this._tags
+      fancyStocks: this._fancyStocks,
+      fancyTags: this._fancyTags,
+      fancyOrderItems: this._fancyOrderItems,
+      fancyReviews: this._fancyReviews,
+      fancyPlatingColors: this._fancyPlatingColors,
+      fancyLook: this._fancyLook,
+      fancyType: this._fancyType
     };
   }
 
   constructor(props: {
     id: string;
+    fancyLookId?: number;
+    fancyTypeId?: number;
     name: string;
-    price: number;
     costPrice: number;
+    price: number;
     discountRate: number;
     description1?: string;
     description2?: string;
@@ -198,16 +236,21 @@ export class FancyEntity {
     createdAt?: Date;
     updatedAt?: Date;
     fancyImages?: FancyImageEntity[];
-    fancyOptions?: FancyOptionEntity[];
-    fancySubOptions?: FancySubOptionEntity[];
-    looks?: LookEntity[];
-    tags?: TagEntity[];
+    fancyStocks?: any[];
+    fancyTags?: TagEntity[];
+    fancyOrderItems?: any[];
+    fancyReviews?: any[];
+    fancyPlatingColors?: any[];
+    fancyLook?: LookEntity;
+    fancyType?: TagEntity;
   }) {
     const {
       id,
+      fancyLookId,
+      fancyTypeId,
       name,
-      price,
       costPrice,
+      price,
       discountRate,
       description1,
       description2,
@@ -215,18 +258,23 @@ export class FancyEntity {
       createdAt,
       updatedAt,
       fancyImages,
-      fancyOptions,
-      fancySubOptions,
-      looks,
-      tags
+      fancyStocks,
+      fancyTags,
+      fancyOrderItems,
+      fancyReviews,
+      fancyPlatingColors,
+      fancyLook,
+      fancyType
     } = props;
 
     const now = new Date();
 
     this._id = id;
+    this._fancyLookId = fancyLookId;
+    this._fancyTypeId = fancyTypeId;
     this._name = name;
-    this._price = price;
     this._costPrice = costPrice;
+    this._price = price;
     this._discountRate = discountRate;
     this._description1 = description1;
     this._description2 = description2;
@@ -234,9 +282,12 @@ export class FancyEntity {
     this._createdAt = createdAt || now;
     this._updatedAt = updatedAt || now;
     this._fancyImages = fancyImages;
-    this._fancyOptions = fancyOptions;
-    this._fancySubOptions = fancySubOptions;
-    this._looks = looks;
-    this._tags = tags;
+    this._fancyStocks = fancyStocks;
+    this._fancyTags = fancyTags;
+    this._fancyOrderItems = fancyOrderItems;
+    this._fancyReviews = fancyReviews;
+    this._fancyPlatingColors = fancyPlatingColors;
+    this._fancyLook = fancyLook;
+    this._fancyType = fancyType;
   }
 }

@@ -9,6 +9,7 @@ import {
   IsString
 } from 'class-validator';
 
+import { UserGender } from '@src/api/apps/users/enums/user-gender.enum';
 import { UserProvider } from '@src/api/apps/users/enums/user-provider.enum';
 import { UserRole } from '@src/api/apps/users/enums/user-role.enum';
 import { ValueOf } from '@src/common/types/common.type';
@@ -24,7 +25,11 @@ export class UserInfoDto {
 
   @IsNotEmpty()
   @IsString()
-  nickname: string;
+  name: string;
+
+  @IsOptional()
+  @IsString()
+  nickname?: string;
 
   @IsNotEmpty()
   @IsEmail()
@@ -50,6 +55,18 @@ export class UserInfoDto {
   @IsNumber()
   point: number = 0;
 
+  @IsOptional()
+  @IsString()
+  address?: string;
+
+  @IsNotEmpty()
+  @IsEnum(UserGender)
+  gender: ValueOf<typeof UserGender> = UserGender.UNKNOWN;
+
+  @IsOptional()
+  @IsDateString()
+  birth?: Date;
+
   @IsNotEmpty()
   @IsDateString()
   createdAt: Date;
@@ -57,7 +74,4 @@ export class UserInfoDto {
   @IsNotEmpty()
   @IsDateString()
   updatedAt: Date;
-
-  @IsDateString()
-  deletedAt?: Date;
 }

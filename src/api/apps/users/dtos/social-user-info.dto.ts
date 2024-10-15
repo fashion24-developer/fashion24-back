@@ -7,6 +7,5 @@ export class SocialUserInfoDto extends OmitType(UserInfoDto, [
   'point',
   'role',
   'createdAt',
-  'updatedAt',
-  'deletedAt'
+  'updatedAt'
 ]) {}

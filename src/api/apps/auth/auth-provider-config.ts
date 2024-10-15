@@ -1,8 +1,8 @@
 import { ConfigService } from '@nestjs/config';
 
 import { UserProvider } from '@src/api/apps/users/enums/user-provider.enum';
-import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
-import { AppConfigService } from '@src/core/app-config/services/app-config.service';
+import { ENV_KEY } from '@src/libs/core/app-config/constants/app-config.constant';
+import { AppConfigService } from '@src/libs/core/app-config/services/app-config.service';
 
 export function createAuthProviderConfig() {
   const configService = new ConfigService();
@@ -28,7 +28,7 @@ export function createAuthProviderConfig() {
       }),
       extractUserInfo: (userInfoResponse: any) => ({
         uniqueId: userInfoResponse.response.id,
-        nickname: userInfoResponse.response.nickname,
+        name: userInfoResponse.response.name,
         email: userInfoResponse.response.email,
         phone: userInfoResponse.response.mobile,
         provider: UserProvider.NAVER
@@ -50,9 +50,10 @@ export function createAuthProviderConfig() {
         Authorization: `Bearer ${socialAccessToken}`
       }),
       extractUserInfo: (userInfoResponse: any) => ({
-        uniqueId: userInfoResponse.response.id,
-        nickname: userInfoResponse.response.name,
-        email: userInfoResponse.response.email,
+        uniqueId: String(userInfoResponse.id),
+        name: userInfoResponse.kakao_account.name,
+        email: userInfoResponse.kakao_account.email,
+        phone: userInfoResponse.kakao_account.phone_number,
         provider: UserProvider.KAKAO
       }),
       logoutUrl: 'https://kapi.kakao.com/v1/user/logout',
@@ -78,7 +79,6 @@ export function createAuthProviderConfig() {
       }),
       extractUserInfo: (userInfoResponse: any) => ({
         uniqueId: userInfoResponse.id,
-        nickname: userInfoResponse.name,
         email: userInfoResponse.email,
         provider: UserProvider.GOOGLE
       })

@@ -6,9 +6,12 @@ import cookieParser from 'cookie-parser';
 import { singularize } from 'inflection';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
-import { ENV_KEY } from '@src/core/app-config/constants/app-config.constant';
-import { AppConfigService } from '@src/core/app-config/services/app-config.service';
-import { HttpExceptionFilter } from '@src/exceptions/exception-filters/http-exception.filter';
+import { ENV_KEY } from '@src/libs/core/app-config/constants/app-config.constant';
+import { IAppConfigService } from '@src/libs/core/app-config/services/i-app-config-service.interface';
+import { APP_CONFIG_SERVICE_DI_TOKEN } from '@src/libs/core/app-config/tokens/app-config.di-token';
+import { Key } from '@src/libs/core/app-config/types/app-config.type';
+import { HttpExceptionFilter } from '@src/libs/exceptions/exception-filters/http-exception.filter';
+import { HttpProcessErrorExceptionFilter } from '@src/libs/exceptions/exception-filters/process-error-exception.filter';
 import { CustomValidationPipe } from '@src/pipes/custom-validation.pipe';
 
 export const globalPrefix = 'api';
@@ -46,11 +49,11 @@ export class BootstrapService {
   }
 
   setFilter(app: INestApplication) {
-    app.useGlobalFilters(app.get(HttpExceptionFilter));
+    app.useGlobalFilters(app.get(HttpProcessErrorExceptionFilter), app.get(HttpExceptionFilter));
   }
 
   setSwagger(app: INestApplication) {
-    const appConfigService = app.get<AppConfigService>(AppConfigService);
+    const appConfigService = app.get<IAppConfigService<Key>>(APP_CONFIG_SERVICE_DI_TOKEN);
 
     if (appConfigService.isProduction()) {
       return;
@@ -123,13 +126,13 @@ export class BootstrapService {
   }
 
   setCookieParser(app: INestApplication) {
-    const appConfigService = app.get<AppConfigService>(AppConfigService);
+    const appConfigService = app.get<IAppConfigService<Key>>(APP_CONFIG_SERVICE_DI_TOKEN);
     const secret = appConfigService.get<string>(ENV_KEY.COOKIE_PARSER_SECRET);
     app.use(cookieParser(secret));
   }
 
   async startingServer(app: INestApplication) {
-    const appConfigService = app.get<AppConfigService>(AppConfigService);
+    const appConfigService = app.get<IAppConfigService<Key>>(APP_CONFIG_SERVICE_DI_TOKEN);
 
     const PORT = appConfigService.get<number>(ENV_KEY.PORT);
 
